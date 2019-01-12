@@ -18,11 +18,34 @@ std::vector< std::vector<char> > process(std::ifstream &in_str)
     return vec;
 }
 
+// Edge tester
+// When accessing the vector, use this method for comparison to prevent undefined behavior
+bool compare(int row, 
+            int col,
+            std::vector< std::vector<char> > &vec,
+            char targetChar) 
+{
+    int vecRow = (int)vec.size() - 1;
+    int vecCol = (int)vec[0].size() - 1;
+
+    if (row < 0 || row > vecRow || col < 0 || col > vecCol) {
+        // Unable to access target location
+        // Return false by default
+        return false;
+    }
+    else if (vec[row][col] == targetChar)
+    {
+        return true;
+    } else {
+        return false;
+    }
+}
+
 // Write 2D Vector to destination
 void writeVec(std::vector< std::vector<char> > &vec, std::ofstream &out_str) 
 {
-    for (unsigned int i = 0; i < vec.size(); i++) {
-        for (unsigned int j = 0; j < vec[i].size(); j++) {
+    for (int i = 0; i < (int)vec.size(); i++) {
+        for (int j = 0; j < (int)vec[i].size(); j++) {
             out_str << vec[i][j];
         }
 
@@ -32,8 +55,8 @@ void writeVec(std::vector< std::vector<char> > &vec, std::ofstream &out_str)
 }
 
 
-void replace(char &char1, 
-             char &char2, 
+void replace(char char1, 
+             char char2, 
              std::vector< std::vector<char> > &vec, 
              std::vector< std::vector<char> > &result) 
 {
@@ -57,27 +80,28 @@ void erosion(char char1,
              std::vector< std::vector<char> > &result) 
 {
     // Remove the first and the last coordinate
-    for (unsigned int i = 1; i < vec.size() - 1; i++) 
+
+    for (int i = 0; i < (int)vec.size(); i++) 
     {
-        for (unsigned int j = 1; j < vec[i].size() - 1; j++) 
+        for (int j = 0; j < (int)vec[i].size(); j++) 
         {
             char current = vec[i][j];
 
-            // Skip if current is not targeted
+            // Skip if current is not target char
             if (current != char2) 
             {
                 // Four candicates
-                char up = vec[i - 1][j];
-                char down = vec[i + 1][j];
-                char left = vec[i][j - 1];
-                char right = vec[i][j + 1];
+                bool up = compare(i - 1, j, vec, char1);
+                bool down = compare(i + 1, j, vec, char1);
+                bool left = compare(i, j - 1, vec, char1);
+                bool right = compare(i, j + 1, vec, char1);
 
                 // If any candicate match target
-                if (left == char1 && right == char1 && up == char1 && down == char1) 
+                if (left && right && up && down) 
                 {
                     // Special: when all cancidate matched, do nothing
                 } 
-                else if (left == char1 || right == char1 || up == char1 || down == char1) 
+                else if (left || right || up || down ) 
                 {
                     // Replace when target appears
                     result[i][j] = char2;
@@ -92,9 +116,9 @@ void dilation(char char1,
               std::vector< std::vector<char> > &result) 
 {
     // Remove the first and the last coordinate
-    for (unsigned int i = 1; i < vec.size() - 1; i++) 
+    for (int i = 0; i < (int)vec.size(); i++) 
     {
-        for (unsigned int j = 1; j < vec[i].size() - 1; j++) 
+        for (int j = 0; j < (int)vec[i].size(); j++) 
         {
             char current = vec[i][j];
 
@@ -102,13 +126,13 @@ void dilation(char char1,
             if (current != char1) 
             {
                 // Four candicates
-                char up = vec[i - 1][j];
-                char down = vec[i + 1][j];
-                char left = vec[i][j - 1];
-                char right = vec[i][j + 1];
+                bool up = compare(i - 1, j, vec, char1);
+                bool down = compare(i + 1, j, vec, char1);
+                bool left = compare(i, j - 1, vec, char1);
+                bool right = compare(i, j + 1, vec, char1);
 
                 // If any candicate matches target
-                if (left == char1 || right == char1 || up == char1 || down == char1) 
+                if (left || right || up || down) 
                 {
                     // Replace that pixel!
                     result[i][j] = char1;
@@ -124,6 +148,12 @@ void dilation(char char1,
 // ./image_processing.out input4.txt output4_erosion.txt erosion X \.
 int main(int argc, char* argv[]) 
 {
+    if (argc < 4) 
+    {
+        std::cerr << "Program required at least 4 parameters to run." << std::endl;
+        exit(1);
+    }
+
     // Input file name
     std::string input = argv[1];
     
@@ -131,7 +161,7 @@ int main(int argc, char* argv[])
     std::ifstream in_str(input);
     if (!in_str.good()) 
     {
-        std::cerr << "Can't open " << argv[3] << " to read.\n";
+        std::cerr << "Can't open " << input << " to read." << std::endl;
         exit(1);
     }
 
@@ -142,14 +172,14 @@ int main(int argc, char* argv[])
     std::ofstream out_str(output);
     if (!out_str.good()) 
     {
-        std::cerr << "Can't open " << argv[4] << " to write.\n";
+        std::cerr << "Can't open " << output << " to write." << std::endl;
         exit(1);
     }
 
     // Possible operation: replace, dilation, or erosion
     std::string operation = argv[3];
 
-    // Read the first char
+    // Read the chars
     char char1 = argv[4][0];
 
     // Process Input 
@@ -158,20 +188,40 @@ int main(int argc, char* argv[])
     std::vector< std::vector<char> > result = vec;
 
     // Decide which operation to go
-    if (operation == "replace") 
+    if (operation == "replace")
     {
-        char char2 = argv[5][0];
-        replace(char1, char2, vec, result);
+        if (argc > 5)
+        {
+            char char2 = argv[5][0];
+            replace(char1, char2, vec, result);
+        }
+        else 
+        {
+            std::cerr << "The function you enters requires 5 parameters." << std::endl;
+            exit(1);
+        }
     } 
     else if (operation == "erosion") 
     {
-        char char2 = argv[5][0];
-        erosion(char1, char2, vec, result);
+        if (argc > 5)
+        {
+            char char2 = argv[5][0];
+            erosion(char1, char2, vec, result);
+        }
+        else
+        {
+            std::cerr << "The function you enters requires 5 parameters." << std::endl;
+            exit(1);
+        }
     } 
-    else 
+    else if (operation == "dilation")
     {
-        // fallback to dilation
         dilation(char1, vec, result);
+    }
+    else
+    {
+        std::cerr << "The function you enters is not recognized." << std::endl;
+        exit(1);
     }
 
     writeVec(result, out_str);
