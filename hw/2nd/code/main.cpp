@@ -88,13 +88,13 @@ void erosion(char char1,
             char current = vec[i][j];
 
             // Skip if current is not target char
-            if (current != char2) 
+            if (current == char1) 
             {
                 // Four candicates
-                bool up = compare(i - 1, j, vec, char1);
-                bool down = compare(i + 1, j, vec, char1);
-                bool left = compare(i, j - 1, vec, char1);
-                bool right = compare(i, j + 1, vec, char1);
+                bool up = compare(i - 1, j, vec, char2);
+                bool down = compare(i + 1, j, vec, char2);
+                bool left = compare(i, j - 1, vec, char2);
+                bool right = compare(i, j + 1, vec, char2);
 
                 // If any candicate match target
                 if (left && right && up && down) 
