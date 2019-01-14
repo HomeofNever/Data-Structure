@@ -2,7 +2,14 @@
 #include <fstream>
 #include <vector>
 
-// Convert input stream into 2D vector
+/*
+    @Goal: Convert input stream into 2D vector
+    
+    @Parameters:
+        in_str: The input stream that needed to be processed
+    
+    @Return: A vector contains vectors of single characters.
+*/
 std::vector< std::vector<char> > process(std::ifstream &in_str) 
 {
     std::string line;
@@ -18,8 +25,19 @@ std::vector< std::vector<char> > process(std::ifstream &in_str)
     return vec;
 }
 
-// Edge tester
-// When accessing the vector, use this method for comparison to prevent undefined behavior
+/*
+    @Goal: 
+        1.When accessing the vector, use this method for comparison to prevent undefined behavior
+        2.Return the compare result with the specific character.
+    
+    @Parameters:
+        row:        Represent the row that needs to compare
+        col:        Represent the column that needs to compare
+        vec:        The vector contains the raw data
+        targetChar: The specific character that will be used to compare.
+    
+    @Return: A bool value that represents if the character is the same as the character at target location.
+*/
 bool compare(int row, 
             int col,
             std::vector< std::vector<char> > &vec,
@@ -33,15 +51,19 @@ bool compare(int row,
         // Return false by default
         return false;
     }
-    else if (vec[row][col] == targetChar)
-    {
-        return true;
-    } else {
-        return false;
-    }
+    
+    return vec[row][col] == targetChar;
 }
 
-// Write 2D Vector to destination
+/*
+    @Goal: Write 2D Vector to destination
+    
+    @Parameters:
+        vec:        The result in form of 2D Vector
+        out_str:    Output stream
+    
+    @Return: void
+*/
 void writeVec(std::vector< std::vector<char> > &vec, std::ofstream &out_str) 
 {
     for (int i = 0; i < (int)vec.size(); i++) {
@@ -54,7 +76,17 @@ void writeVec(std::vector< std::vector<char> > &vec, std::ofstream &out_str)
     }
 }
 
-
+/*
+    @Goal: Replace specific 2D vector with specific keyword
+    
+    @Parameters:
+        char1:      Char needed to be replaced
+        char2:      Char that will be used for replacement
+        vec:        The origin 2D vector
+        result:    The result of the process
+    
+    @Return: void
+*/
 void replace(char char1, 
              char char2, 
              std::vector< std::vector<char> > &vec, 
@@ -74,20 +106,29 @@ void replace(char char1,
     }
 }
 
+/*
+    @Goal: Do erosion on the specific image
+    
+    @Parameters:
+        char1:      Char needed to be erode
+        char2:      Char that will be used to replace eroded pixel
+        vec:        The origin 2D vector
+        result:     The result of the process
+    
+    @Return: void
+*/
 void erosion(char char1, 
              char char2, 
              std::vector< std::vector<char> > &vec, 
              std::vector< std::vector<char> > &result) 
 {
-    // Remove the first and the last coordinate
-
     for (int i = 0; i < (int)vec.size(); i++) 
     {
         for (int j = 0; j < (int)vec[i].size(); j++) 
         {
             char current = vec[i][j];
 
-            // Skip if current is not target char
+            // Skip if current is target char to be changed (X -> .)
             if (current == char1) 
             {
                 // Four candicates
@@ -99,7 +140,7 @@ void erosion(char char1,
                 // If any candicate match target
                 if (left && right && up && down) 
                 {
-                    // Special: when all cancidate matched, do nothing
+                    // Special: when all cancidates matched, do nothing
                 } 
                 else if (left || right || up || down ) 
                 {
@@ -111,18 +152,28 @@ void erosion(char char1,
     }
 }
 
+
+/*
+    @Goal: Do dilation on the specific image
+    
+    @Parameters:
+        char1:      Char needed to be expended
+        vec:        The origin 2D vector
+        result:     The result of the process
+    
+    @Return: void
+*/
 void dilation(char char1, 
               std::vector< std::vector<char> > &vec, 
               std::vector< std::vector<char> > &result) 
 {
-    // Remove the first and the last coordinate
     for (int i = 0; i < (int)vec.size(); i++) 
     {
         for (int j = 0; j < (int)vec[i].size(); j++) 
         {
             char current = vec[i][j];
 
-            // Skip if current is not target char
+            // Skip if current is not target char (. -> X)
             if (current != char1) 
             {
                 // Four candicates
@@ -142,12 +193,17 @@ void dilation(char char1,
     }
 }
 
-// Commandline Format
-// argv[0]                argv[1]    argv[2]              argv[3]  argv[4] argv[5]
-// ./image_processing.out input4.txt output4_dilation.txt dilation X
-// ./image_processing.out input4.txt output4_erosion.txt erosion X \.
+/* Commandline Format Example
+|------------------------------------------------------------------------------------------—-|
+| argv[0]                | argv[1]    | argv[2]              | argv[3]  | argv[4] | argv[5]  |
+|------------------------|------------|----------------------|----------|---------|--------—-|
+| ./image_processing.out | input4.txt | output4_dilation.txt | dilation | X       |          |
+| ./image_processing.out | input4.txt | output4_erosion.txt  | erosion  | X       |\.        |
+|------------------------------------------------------------------------------------------—-|
+*/
 int main(int argc, char* argv[]) 
 {
+    // No matter what happened, 4 parameters are required.
     if (argc < 4) 
     {
         std::cerr << "Program required at least 4 parameters to run." << std::endl;
@@ -184,7 +240,7 @@ int main(int argc, char* argv[])
 
     // Process Input 
     std::vector< std::vector<char> > vec = process(in_str);
-    // Copy new Vec (memory boom?)
+    // Copy to new Vec
     std::vector< std::vector<char> > result = vec;
 
     // Decide which operation to go
