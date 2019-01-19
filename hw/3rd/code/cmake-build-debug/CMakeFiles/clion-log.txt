@@ -1,0 +1,4 @@
+"/Users/neverbehave/Library/Application Support/JetBrains/Toolbox/apps/CLion/ch-0/182.3911.40/CLion.app/Contents/bin/cmake/mac/bin/cmake" -DCMAKE_BUILD_TYPE=Debug -G "CodeBlocks - Unix Makefiles" /Users/neverbehave/Documents/Projects/ds/hw/3rd/code
+-- Configuring done
+-- Generating done
+-- Build files have been written to: /Users/neverbehave/Documents/Projects/ds/hw/3rd/code/cmake-build-debug

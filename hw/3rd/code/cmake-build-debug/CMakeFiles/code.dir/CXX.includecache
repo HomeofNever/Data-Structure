@@ -1,0 +1,26 @@
+#IncludeRegexLine: ^[ 	]*[#%][ 	]*(include|import)[ 	]*[<"]([^">]+)([">])
+
+#IncludeRegexScan: ^.*$
+
+#IncludeRegexComplain: ^$
+
+#IncludeRegexTransform: 
+
+/Users/neverbehave/Documents/Projects/ds/hw/3rd/code/schedule.cpp
+iostream
+-
+string
+-
+sstream
+-
+vector
+-
+algorithm
+-
+schedule.h
+/Users/neverbehave/Documents/Projects/ds/hw/3rd/code/schedule.h
+
+/Users/neverbehave/Documents/Projects/ds/hw/3rd/code/schedule.h
+string
+-
+
