@@ -11,27 +11,25 @@ class Schedule {
                 std::string &dept_code,
                 std::string &course_code,
                 std::string &course_name,
-                std::string &day,
+                char day,
                 std::string &start_time,
                 std::string &end_time,
                 std::string &room
         );
-        Schedule(std::string &line);
 
         // Accessor
         int getCRN() const;
         std::string getDeptCode() const;
         std::string getCourseCode() const;
         std::string getCourseName() const;
-        std::string getDay() const;
+        char getDay() const;
         std::string getStartTime() const;
         std::string getEndTime() const;
         std::string getRoom() const;
 
+        // Other methods
         int getDayIndex() const;
         std::string getCompleteDay() const;
-
-        // Other methods
         void print();
 
     private:
@@ -39,20 +37,18 @@ class Schedule {
         std::string dept_code;
         std::string course_code;
         std::string course_name;
-        std::string day;
+        char day;
         std::string start_time;
         std::string end_time;
         std::string room;
 
         // Parse input
-        void parse(std::string &line);
-
         // Init function
         void init(int CRN,
                   std::string &dept_code,
                   std::string &course_code,
                   std::string &course_name,
-                  std::string &day,
+                  char day,
                   std::string &start_time,
                   std::string &end_time,
                   std::string &room);

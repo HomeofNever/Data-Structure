@@ -13,7 +13,7 @@ Schedule::Schedule() {
     dept_code = "CTSM";
     course_code = "0000-00";
     course_name = "PLACEHOLDER";
-    day = "NA";
+    day = 'N';
     start_time = "99:99AM";
     end_time = "99:99PM";
     room = "PLACEHOLDER_ROOM";
@@ -23,7 +23,7 @@ Schedule::Schedule(int CRN,
          std::string &dept_code,
          std::string &course_code,
          std::string &course_name,
-         std::string &day,
+         char day,
          std::string &start_time,
          std::string &end_time,
          std::string &room) 
@@ -31,17 +31,12 @@ Schedule::Schedule(int CRN,
     init(CRN, dept_code, course_code, course_name, day, start_time, end_time, room);
 }
 
-Schedule::Schedule(std::string &line) 
-{
-    parse(line);
-}
-
 // Init
 void Schedule::init(int CRN,
           std::string &dept_code,
           std::string &course_code,
           std::string &course_name,
-          std::string &day,
+          char day,
           std::string &start_time,
           std::string &end_time,
           std::string &room)
@@ -57,28 +52,11 @@ void Schedule::init(int CRN,
 }
 
 // Methods
-void Schedule::parse(std::string &line) 
-{
-    int CRN;
-    std::string dept_code;
-    std::string course_code;
-    std::string course_name;
-    std::string day;
-    std::string start_time;
-    std::string end_time;
-    std::string room;
-
-    std::istringstream isline(line);
-
-    isline >> CRN >> dept_code >> course_code >> course_name >> day >> start_time >> end_time >> room;
-
-    init(CRN, dept_code, course_code, course_name, day, start_time, end_time, room);
-}
-
+// Get a printable version of a schedule.
 // 61557 ECSE 4900-02 MULTIDISCIPLINARY_CAP_DESIGN MR 12:00PM 01:50PM JONSSN_3332
 void Schedule::print()
 {
-    std::cout << CRN << ' ' << getDeptCode() << ' ' << course_code << ' ' << course_name << ' ' << day << ' ' << start_time << ' ' << end_time << ' ' << room << std::endl;
+    std::cout << CRN << ' ' << dept_code << ' ' << course_code << ' ' << course_name << ' ' << day << ' ' << start_time << ' ' << end_time << ' ' << room << std::endl;
 }
 
 // Accessor
@@ -102,7 +80,7 @@ std::string Schedule::getCourseName() const
     return course_name;
 }
 
-std::string Schedule::getDay() const
+char Schedule::getDay() const
 {
     return day;
 }
@@ -126,7 +104,7 @@ int Schedule::getDayIndex() const
 {
     std::vector<char> days({ 'M', 'T', 'W', 'R', 'F'});
 
-    return std::find(days.begin(), days.end(), day[0]) - days.begin();
+    return std::find(days.begin(), days.end(), day) - days.begin();
 }
 
 std::string Schedule::getCompleteDay() const
@@ -165,7 +143,7 @@ bool compareStartHour(Schedule &one, Schedule &other)
     if (t1[5] != t2[5])
     {
         // the later the letter the lager it is.
-        return t1[5] > t2[5];
+        return t1[5] < t2[5];
     } else {
         int t1_hour, t1_min, t2_hour, t2_min;
 
@@ -175,13 +153,21 @@ bool compareStartHour(Schedule &one, Schedule &other)
         t1_stream >> t1_hour >> t1_min;
         t2_stream >> t2_hour >> t2_min;
 
+        // 12 < 1 < 2 < 3..., so we change it into 0 to make things easier
+        if (t1_hour == 12) {
+            t1_hour = 0;
+        }
+
+        if (t2_hour == 12) {
+            t2_hour = 0;
+        }
+
         if (t1_hour != t2_hour)
         {
             return t1_hour < t2_hour;
         } else if (t1_min != t2_min) {
-            return t1_min < t2_min;
+            return t1_min > t2_min;
         }
-
     }
 
     // Should not be here.
@@ -212,12 +198,12 @@ bool compareCourseCode(Schedule &one, Schedule &other)
         {
             return t1_first < t2_first;
         } else if (t1_second != t2_second) {
-            // Since parse will read `-`, which cause it as negative.
+            // Since parse will read `-`, which will be recognized as negative number
             // Reverse the comparison
             return t1_second > t2_second;
-        } else {
-            // Should not happened;
-            std::cerr << "Error when comparing Course Code.";
-            return false;
         }
+
+        // Should not happen;
+        std::cerr << "Error when comparing Course Code.";
+        return false;
 }
