@@ -35,18 +35,21 @@ int calculateDayLength(std::vector<Schedule> &vec)
     return day_length;
 }
 
+// day -> start_time -> course_code -> dept
 void sortRoomTable(std::vector<Schedule> &vec)
 {
-    std::sort(vec.begin(), vec.end(), [](Schedule &a, Schedule &b) {
-        return compareDay(a, b);
-    });
+    std::sort(vec.begin(), vec.end(), compareDeptCode);
+    std::sort(vec.begin(), vec.end(), compareCourseCode);
+    std::sort(vec.begin(), vec.end(), compareStartTime);
+    std::sort(vec.begin(), vec.end(), compareDay);
 }
 
+// course_code -> day -> start_time
 void sortDeptTable(std::vector<Schedule> &vec)
 {
-    std::sort(vec.begin(), vec.end(), [](Schedule &a, Schedule &b) {
-        return compareCourseCode(a, b);
-    });
+    std::sort(vec.begin(), vec.end(), compareStartTime);
+    std::sort(vec.begin(), vec.end(), compareDay);
+    std::sort(vec.begin(), vec.end(), compareCourseCode);
 }
 
 

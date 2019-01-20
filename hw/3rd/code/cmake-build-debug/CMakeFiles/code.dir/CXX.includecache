@@ -6,14 +6,12 @@
 
 #IncludeRegexTransform: 
 
-/mnt/c/Users/luox6/OneDrive - Rensselaer Polytechnic Institute/Documents/Project/DS/hw/3rd/code/main.cpp
+/mnt/c/Users/luox6/OneDrive - Rensselaer Polytechnic Institute/Documents/Project/DS/hw/3rd/code/schedule.cpp
 iostream
 -
-fstream
+string
 -
 vector
--
-iomanip
 -
 algorithm
 -

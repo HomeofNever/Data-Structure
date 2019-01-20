@@ -28,8 +28,17 @@ class Schedule {
         std::string getRoom() const;
 
         // Other methods
+        // Day Helper
         int getDayIndex() const;
         std::string getCompleteDay() const;
+        // StartTime Helper
+        char getStartTimeZone() const;
+        int getStartTimeHour() const;
+        int getStartTimeMinute() const;
+        // Course Code Helper
+        int getCourseCodePrefix() const;
+        int getCourseCodeSuffix() const;
+        // Object Stringify
         void print();
 
     private:
@@ -54,8 +63,9 @@ class Schedule {
                   std::string &room);
 };
 
-bool compareDay(Schedule &one, Schedule &other);
-bool compareStartHour(Schedule &one, Schedule &other);
-bool compareCourseCode(Schedule &one, Schedule &other);
+bool compareDay(const Schedule &one, const Schedule &other);
+bool compareStartTime(const Schedule &one, const Schedule &other);
+bool compareCourseCode(const Schedule &one, const Schedule &other);
+bool compareDeptCode(const Schedule &one, const Schedule &other);
 
 #endif

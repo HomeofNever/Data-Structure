@@ -1,6 +1,5 @@
 #include <iostream>
 #include <string>
-#include <sstream>
 #include <vector>
 #include <algorithm>
 
@@ -100,6 +99,8 @@ std::string Schedule::getRoom() const
     return room;
 }
 
+// Helper Accessor
+// Day Helper
 int Schedule::getDayIndex() const
 {
     std::vector<char> days({ 'M', 'T', 'W', 'R', 'F'});
@@ -114,96 +115,121 @@ std::string Schedule::getCompleteDay() const
     return complete_days[getDayIndex()];
 }
 
+
+// StartTime Helper
+char Schedule::getStartTimeZone() const
+{
+    return start_time[5];
+}
+
+int Schedule::getStartTimeHour() const
+{
+    return (int)start_time[0] * 10 + (int)start_time[1];
+}
+
+int Schedule::getStartTimeMinute() const
+{
+    return (int)start_time[3] * 10 + (int)start_time[4];
+}
+
+// Course Code Helper
+int Schedule::getCourseCodePrefix() const
+{
+    return (int)course_code[0] * 1000 + (int)course_code[1] * 100 + (int)course_code[2] * 10 + (int)course_code[3];
+}
+
+int Schedule::getCourseCodeSuffix() const
+{
+    return (int)course_code[5] * 10 + (int)course_code[6];
+}
+
 // Compare
-bool compareDay(Schedule &one, Schedule &other)
+bool compareDay(const Schedule &one, const Schedule &other)
 {
     int p = one.getDayIndex();
     int q = other.getDayIndex();
 
-    if (p == q)
-    {
-        return compareStartHour(one, other);
-    } else {
-        return p < q;
-    }
+    return p < q;
 }
 
 // E.g. 04:50PM 05:49AM
-bool compareStartHour(Schedule &one, Schedule &other)
+bool compareStartTime(const Schedule &one, const Schedule &other)
 {
     std::string t1 = one.getStartTime();
     std::string t2 = other.getStartTime();
 
     if (t1 == t2)
     {
-        return compareCourseCode(one, other);
+        // It doesn't matter because they are the same
+        return false;
     }
+
+    char one_zone = one.getStartTimeZone();
+    char other_zone = other.getStartTimeZone();
 
     // AM > PM
-    if (t1[5] != t2[5])
+    if (one_zone != other_zone)
     {
         // the later the letter the lager it is.
-        return t1[5] < t2[5];
+        return one_zone < other_zone;
     } else {
-        int t1_hour, t1_min, t2_hour, t2_min;
-
-        std::istringstream t1_stream(t1);
-        std::istringstream t2_stream(t2);
-
-        t1_stream >> t1_hour >> t1_min;
-        t2_stream >> t2_hour >> t2_min;
+        int one_hour = one.getStartTimeHour();
+        int other_hour = other.getStartTimeHour();
+        int one_minute = one.getStartTimeMinute();
+        int other_minute = other.getStartTimeMinute();
 
         // 12 < 1 < 2 < 3..., so we change it into 0 to make things easier
-        if (t1_hour == 12) {
-            t1_hour = 0;
+        if (one_hour == 12) {
+            other_hour = 0;
         }
 
-        if (t2_hour == 12) {
-            t2_hour = 0;
+        if (one_hour == 12) {
+            other_hour = 0;
         }
 
-        if (t1_hour != t2_hour)
+        if (one_hour != other_hour)
         {
-            return t1_hour < t2_hour;
-        } else if (t1_min != t2_min) {
-            return t1_min > t2_min;
+            return one_hour < other_hour;
+        } else if (one_minute != other_minute) {
+            return one_minute > other_minute;
         }
+
+        // Should not be here.
+        std::cerr << "error when comparing Hours" << std::endl;
+        return false;
     }
 
-    // Should not be here.
-    std::cerr << "error when comparing Hours" << std::endl;
-    return false;
 }
 
-bool compareCourseCode(Schedule &one, Schedule &other)
+bool compareCourseCode(const Schedule &one, const Schedule &other)
 {
     std::string t1 = one.getCourseCode();
     std::string t2 = other.getCourseCode();
 
     if (t1 == t2)
     {
-        return compareDay(one, other);
+        return false;
     }
 
     // 1200-01 < 1200-02
-    int t1_first, t1_second, t2_first, t2_second;
+    int t1_prefix = one.getCourseCodePrefix();
+    int t1_suffix = one.getCourseCodeSuffix();
+    int t2_prefix = other.getCourseCodePrefix();
+    int t2_suffix = other.getCourseCodeSuffix();
 
-        std::istringstream t1_stream(t1);
-        std::istringstream t2_stream(t2);
+    if (t1_prefix != t2_prefix)
+    {
+        return t1_prefix < t2_prefix;
+    } else if (t1_suffix != t2_suffix) {
+        return t1_suffix < t2_suffix;
+    }
 
-        t1_stream >> t1_first >> t1_second;
-        t2_stream >> t2_first >> t2_second;
+    // Should not happen;
+    std::cerr << "Error when comparing Course Code.";
+    return false;
+}
 
-        if (t1_first != t2_first)
-        {
-            return t1_first < t2_first;
-        } else if (t1_second != t2_second) {
-            // Since parse will read `-`, which will be recognized as negative number
-            // Reverse the comparison
-            return t1_second > t2_second;
-        }
-
-        // Should not happen;
-        std::cerr << "Error when comparing Course Code.";
-        return false;
+bool compareDeptCode(const Schedule &one, const Schedule &other)
+{
+    return one.getDeptCode() < other.getDeptCode();
 }
