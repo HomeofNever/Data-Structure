@@ -123,6 +123,114 @@ code/fast:
 	$(MAKE) -f CMakeFiles/code.dir/build.make CMakeFiles/code.dir/build
 .PHONY : code/fast
 
+Day.o: Day.cpp.o
+
+.PHONY : Day.o
+
+# target to build an object file
+Day.cpp.o:
+	$(MAKE) -f CMakeFiles/code.dir/build.make CMakeFiles/code.dir/Day.cpp.o
+.PHONY : Day.cpp.o
+
+Day.i: Day.cpp.i
+
+.PHONY : Day.i
+
+# target to preprocess a source file
+Day.cpp.i:
+	$(MAKE) -f CMakeFiles/code.dir/build.make CMakeFiles/code.dir/Day.cpp.i
+.PHONY : Day.cpp.i
+
+Day.s: Day.cpp.s
+
+.PHONY : Day.s
+
+# target to generate assembly for a file
+Day.cpp.s:
+	$(MAKE) -f CMakeFiles/code.dir/build.make CMakeFiles/code.dir/Day.cpp.s
+.PHONY : Day.cpp.s
+
+Schedule.o: Schedule.cpp.o
+
+.PHONY : Schedule.o
+
+# target to build an object file
+Schedule.cpp.o:
+	$(MAKE) -f CMakeFiles/code.dir/build.make CMakeFiles/code.dir/Schedule.cpp.o
+.PHONY : Schedule.cpp.o
+
+Schedule.i: Schedule.cpp.i
+
+.PHONY : Schedule.i
+
+# target to preprocess a source file
+Schedule.cpp.i:
+	$(MAKE) -f CMakeFiles/code.dir/build.make CMakeFiles/code.dir/Schedule.cpp.i
+.PHONY : Schedule.cpp.i
+
+Schedule.s: Schedule.cpp.s
+
+.PHONY : Schedule.s
+
+# target to generate assembly for a file
+Schedule.cpp.s:
+	$(MAKE) -f CMakeFiles/code.dir/build.make CMakeFiles/code.dir/Schedule.cpp.s
+.PHONY : Schedule.cpp.s
+
+ScheduleCollection.o: ScheduleCollection.cpp.o
+
+.PHONY : ScheduleCollection.o
+
+# target to build an object file
+ScheduleCollection.cpp.o:
+	$(MAKE) -f CMakeFiles/code.dir/build.make CMakeFiles/code.dir/ScheduleCollection.cpp.o
+.PHONY : ScheduleCollection.cpp.o
+
+ScheduleCollection.i: ScheduleCollection.cpp.i
+
+.PHONY : ScheduleCollection.i
+
+# target to preprocess a source file
+ScheduleCollection.cpp.i:
+	$(MAKE) -f CMakeFiles/code.dir/build.make CMakeFiles/code.dir/ScheduleCollection.cpp.i
+.PHONY : ScheduleCollection.cpp.i
+
+ScheduleCollection.s: ScheduleCollection.cpp.s
+
+.PHONY : ScheduleCollection.s
+
+# target to generate assembly for a file
+ScheduleCollection.cpp.s:
+	$(MAKE) -f CMakeFiles/code.dir/build.make CMakeFiles/code.dir/ScheduleCollection.cpp.s
+.PHONY : ScheduleCollection.cpp.s
+
+SearchCollection.o: SearchCollection.cpp.o
+
+.PHONY : SearchCollection.o
+
+# target to build an object file
+SearchCollection.cpp.o:
+	$(MAKE) -f CMakeFiles/code.dir/build.make CMakeFiles/code.dir/SearchCollection.cpp.o
+.PHONY : SearchCollection.cpp.o
+
+SearchCollection.i: SearchCollection.cpp.i
+
+.PHONY : SearchCollection.i
+
+# target to preprocess a source file
+SearchCollection.cpp.i:
+	$(MAKE) -f CMakeFiles/code.dir/build.make CMakeFiles/code.dir/SearchCollection.cpp.i
+.PHONY : SearchCollection.cpp.i
+
+SearchCollection.s: SearchCollection.cpp.s
+
+.PHONY : SearchCollection.s
+
+# target to generate assembly for a file
+SearchCollection.cpp.s:
+	$(MAKE) -f CMakeFiles/code.dir/build.make CMakeFiles/code.dir/SearchCollection.cpp.s
+.PHONY : SearchCollection.cpp.s
+
 main.o: main.cpp.o
 
 .PHONY : main.o
@@ -150,33 +258,6 @@ main.cpp.s:
 	$(MAKE) -f CMakeFiles/code.dir/build.make CMakeFiles/code.dir/main.cpp.s
 .PHONY : main.cpp.s
 
-schedule.o: schedule.cpp.o
-
-.PHONY : schedule.o
-
-# target to build an object file
-schedule.cpp.o:
-	$(MAKE) -f CMakeFiles/code.dir/build.make CMakeFiles/code.dir/schedule.cpp.o
-.PHONY : schedule.cpp.o
-
-schedule.i: schedule.cpp.i
-
-.PHONY : schedule.i
-
-# target to preprocess a source file
-schedule.cpp.i:
-	$(MAKE) -f CMakeFiles/code.dir/build.make CMakeFiles/code.dir/schedule.cpp.i
-.PHONY : schedule.cpp.i
-
-schedule.s: schedule.cpp.s
-
-.PHONY : schedule.s
-
-# target to generate assembly for a file
-schedule.cpp.s:
-	$(MAKE) -f CMakeFiles/code.dir/build.make CMakeFiles/code.dir/schedule.cpp.s
-.PHONY : schedule.cpp.s
-
 # Help Target
 help:
 	@echo "The following are some of the valid targets for this Makefile:"
@@ -186,12 +267,21 @@ help:
 	@echo "... rebuild_cache"
 	@echo "... edit_cache"
 	@echo "... code"
+	@echo "... Day.o"
+	@echo "... Day.i"
+	@echo "... Day.s"
+	@echo "... Schedule.o"
+	@echo "... Schedule.i"
+	@echo "... Schedule.s"
+	@echo "... ScheduleCollection.o"
+	@echo "... ScheduleCollection.i"
+	@echo "... ScheduleCollection.s"
+	@echo "... SearchCollection.o"
+	@echo "... SearchCollection.i"
+	@echo "... SearchCollection.s"
 	@echo "... main.o"
 	@echo "... main.i"
 	@echo "... main.s"
-	@echo "... schedule.o"
-	@echo "... schedule.i"
-	@echo "... schedule.s"
 .PHONY : help
 
 

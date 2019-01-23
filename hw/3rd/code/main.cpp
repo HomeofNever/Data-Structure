@@ -1,211 +1,20 @@
 #include <iostream>
 #include <fstream>
 #include <vector>
-#include <iomanip>
-#include <algorithm>
 
-#include "schedule.h"
+#include "ScheduleCollection.h"
 
-// Helper functions
-int calculateCourseLength(std::vector<Schedule> &vec)
-{
-    int course_length = 11;
-
-    for (int i = 0; i < vec.size(); i++) {
-        if (vec[i].getCourseName().size() > course_length)
-        {
-            course_length = vec[i].getCourseName().size();
-        }
-    }
-
-    return course_length;
-}
-
-int calculateDayLength(std::vector<Schedule> &vec)
-{
-    int day_length = 6;
-
-    for (int i = 0; i < vec.size(); i++) {
-        if (vec[i].getCompleteDay().size() > day_length)
-        {
-            day_length = vec[i].getCompleteDay().size();
-        }
-    }
-
-    return day_length;
-}
-
-// day -> start_time -> course_code -> dept
-void sortRoomTable(std::vector<Schedule> &vec)
-{
-    std::sort(vec.begin(), vec.end(), compareDeptCode);
-    std::sort(vec.begin(), vec.end(), compareCourseCode);
-    std::sort(vec.begin(), vec.end(), compareStartTime);
-    std::sort(vec.begin(), vec.end(), compareDay);
-}
-
-// course_code -> day -> start_time
-void sortDeptTable(std::vector<Schedule> &vec)
-{
-    std::sort(vec.begin(), vec.end(), compareStartTime);
-    std::sort(vec.begin(), vec.end(), compareDay);
-    std::sort(vec.begin(), vec.end(), compareCourseCode);
-}
-
-
-void noDataNotice(std::ofstream &out_str)
+/**
+ * General output for no data available situation
+ * @param out_str
+ */
+void noData(std::ofstream &out_str)
 {
     out_str << "No data available." << std::endl;
 }
 
-void process(std::ifstream &in_str, std::vector<Schedule> &vec)
-{
-    int CRN;
-    std::string dept_code;
-    std::string course_code;
-    std::string course_name;
-    std::string day;
-    std::string start_time;
-    std::string end_time;
-    std::string room;
-
-    while (in_str >> CRN >> dept_code >> course_code >> course_name >> day >> start_time >> end_time >> room)
-    {
-        for (unsigned i = 0; i < day.size(); i++)
-        {
-            char d = day[i];
-            vec.push_back(Schedule(CRN, dept_code, course_code, course_name, d, start_time, end_time, room));
-        }
-    }
-}
-
-// Room parser
-void room(std::string &key, std::vector<Schedule> &vec, std::vector<Schedule> &result)
-{
-    for (unsigned int i = 0; i < vec.size(); i++) 
-    {
-       if (vec[i].getRoom() == key)
-       {
-           result.push_back(vec[i]);
-       }
-    }
-}
-
-void room(std::vector<Schedule> &vec, std::vector<std::string> &room_list, std::vector< std::vector<Schedule> > &result)
-{
-    for (unsigned int i = 0; i < vec.size(); i++)
-    {
-        // If room is not in the list, add to the list.
-        if(std::find(room_list.begin(), room_list.end(), vec[i].getRoom()) == room_list.end()) {
-            room_list.push_back(vec[i].getRoom());
-        }
-    }
-
-    // Sort name
-    std::sort(room_list.begin(), room_list.end());
-
-    for (unsigned int i = 0; i < room_list.size(); i++) {
-        std::vector<Schedule> single_room;
-        room(room_list[i], vec, single_room);
-        result.push_back(single_room);
-    }
-}
-
-void dept(std::string &dept, std::vector<Schedule> &vec, std::vector<Schedule> &result)
-{
-    for (unsigned int i = 0; i < vec.size(); i++)
-    {
-        if (vec[i].getDeptCode() == dept)
-        {
-            result.push_back(vec[i]);
-        }
-    }
-}
-
-// Draw Methods
-/*
-Room DARRIN_330
-Dept  Coursenum  Class Title        Day      Start Time  End Time
-----  ---------  -----------------  -------  ----------  --------
-ECSE  2010-01    ELECTRIC_CIRCUITS  Monday   07:00PM     08:50PM
-ECSE  2410-01    SIGNALS_&_SYSTEMS  Tuesday  08:30AM     09:50AM
-ECSE  2410-01    SIGNALS_&_SYSTEMS  Friday   08:30AM     09:50AM
-3 entries
-*/
-void drawRoomTable(std::string &room_name, std::vector<Schedule> &vec, std::ofstream &out_str)
-{
-    if (vec.size() == 0)
-    {
-        //noDataNotice(out_str);
-    } else {
-        out_str << "Room" << ' ' << room_name << std::endl;
-
-        int course_length = calculateCourseLength(vec);
-        int day_length = calculateDayLength(vec);
-        sortRoomTable(vec);
-
-        // Draw
-        out_str << std::left;
-        out_str << "Dept" << "  " << "Coursenum" << "  " << std::setw(course_length) << "Class Title" << "  " << std::setw(day_length) << "Day" << "  " << "Start Time" << "  " << "End Time" << std::endl;
-        out_str << std::string(4, '-') << "  " << std::string(9, '-') << "  " << std::string(course_length, '-') << "  " << std::string(day_length, '-') << "  " << std::string(10, '-') << "  " << std::string(8, '-') << std::endl;
-
-        for (int i = 0; i < vec.size(); i++)
-        {
-            Schedule &s = vec[i];
-            out_str << s.getDeptCode() << "  " << std::setw(9) << s.getCourseCode() << "  " << std::setw(course_length) << s.getCourseName() << "  " << std::setw(day_length) << s.getCompleteDay() << "  " << std::setw(10) << s.getStartTime() << "  " << std::setw(8) << s.getEndTime() << std::endl;
-        }
-
-        // Size
-        out_str << vec.size() << ' ' << "entries" << std::endl;
-        out_str << std::endl;
-    }
-}
-
-void drawMultipleRoomTable(std::vector<std::string> &room_list, std::vector< std::vector<Schedule> > result, std::ofstream &out_str)
-{
-    if (room_list.size() == 0) {
-        noDataNotice(out_str);
-    } else {
-        for (unsigned int i = 0; i < room_list.size(); i++)
-        {
-            drawRoomTable(room_list[i], result[i], out_str);
-        }
-    }
-}
-
-void drawDeptTable(std::string &dept_name, std::vector<Schedule> &vec, std::ofstream &out_str)
-{
-    if (vec.size() == 0)
-    {
-        noDataNotice(out_str);
-    } else {
-        out_str << "Dept" << ' ' << dept_name << std::endl;
-
-        int course_length = calculateCourseLength(vec);
-        int day_length = calculateDayLength(vec);
-
-        sortDeptTable(vec);
-
-        // Draw
-        out_str << std::left;
-        out_str << "Coursenum" << "  " << std::setw(course_length) << "Class Title" << "  " << std::setw(day_length) << "Day" << "  " << "Start Time" << "  " << "End Time" << std::endl;
-        out_str << std::string(9, '-') << "  " << std::string(course_length, '-') << "  " << std::string(day_length, '-') << "  " << std::string(10, '-') << "  " << std::string(8, '-') << std::endl;
-
-        for (int i = 0; i < vec.size(); i++)
-        {
-            Schedule &s = vec[i];
-            out_str << std::setw(9) << s.getCourseCode() << "  " << std::setw(course_length) << s.getCourseName() << "  " << std::setw(day_length) << s.getCompleteDay() << "  " << std::setw(10) << s.getStartTime() << "  " << std::setw(8) << s.getEndTime() << std::endl;
-        }
-
-        // Size
-        out_str << vec.size() << ' ' << "entries" << std::endl;
-        out_str << std::endl;
-    }
-}
-
-
 // Main Entry
-/*
+/* Command line example:
 scheduling.exe simple2.txt out_simple2_room.txt room
 scheduling.exe simple2.txt out_simple2_room.txt room ACADMY_AUD
 scheduling.exe simple2.txt out_simple2_dept_ECSE.txt dept ECSE
@@ -246,39 +55,61 @@ int main(int argc, char *argv[])
     std::string operation = argv[3];
 
     // Process Input
-    std::vector<Schedule> vec;
-    process(in_str, vec);
+    ScheduleCollection collection = ScheduleCollection(in_str);
 
     // Decide which operation to go
     if (operation == "room")
     {
         if (argc > 4)
         {
-            std::vector<Schedule> result;
             std::string key(argv[4]);
 
-            room(key, vec, result);
-            drawRoomTable(key, result, out_str);
+            SearchCollection result = collection.getRoomCollection(key);
+
+            if (result.getCollectionSize() > 0)
+            {
+                if (!result.draw(out_str))
+                {
+                    std::cerr << "Unable to finished action." << std::endl;
+                    return 1;
+                }
+            } else {
+                noData(out_str);
+            }
         }
         else
         {
             // All Room
-            std::vector<std::string> room_list;
-            std::vector< std::vector<Schedule> > result;
+            std::vector<SearchCollection> result = collection.getRoomCollection();
 
-            room(vec, room_list, result);
-            drawMultipleRoomTable(room_list, result, out_str);
+            if (result.size() > 0)
+            {
+                for (unsigned int i = 0; i < result.size(); i++)
+                {
+                    result[i].draw(out_str);
+                }
+            } else {
+                noData(out_str);
+            }
         }
     }
     else if (operation == "dept")
     {
         if (argc > 4)
         {
-            std::vector<Schedule> result;
             std::string key(argv[4]);
+            SearchCollection result = collection.getDeptCollection(key);
 
-            dept(key, vec, result);
-            drawDeptTable(key, result, out_str);
+            if (result.getCollectionSize() > 0)
+            {
+                if (!result.draw(out_str))
+                {
+                    std::cerr << "Unable to finished action." << std::endl;
+                    return 1;
+                }
+            } else {
+                noData(out_str);
+            }
         }
         else
         {
@@ -289,6 +120,17 @@ int main(int argc, char *argv[])
     else if (operation == "custom")
     {
         // Custom
+        std::vector<SearchCollection> result = collection.getDayCollection();
+
+        if (result.size() > 0)
+        {
+            for (unsigned int i = 0; i < result.size(); i++)
+            {
+                result[i].draw(out_str);
+            }
+        } else {
+            noData(out_str);
+        }
     }
     else
     {

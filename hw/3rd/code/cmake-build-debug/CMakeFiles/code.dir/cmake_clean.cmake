@@ -1,6 +1,9 @@
 file(REMOVE_RECURSE
   "CMakeFiles/code.dir/main.cpp.o"
-  "CMakeFiles/code.dir/schedule.cpp.o"
+  "CMakeFiles/code.dir/Schedule.cpp.o"
+  "CMakeFiles/code.dir/ScheduleCollection.cpp.o"
+  "CMakeFiles/code.dir/SearchCollection.cpp.o"
+  "CMakeFiles/code.dir/Day.cpp.o"
   "code.pdb"
   "code"
 )

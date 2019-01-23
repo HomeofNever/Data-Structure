@@ -7,5 +7,5 @@ include_directories(.)
 
 add_executable(code
         main.cpp
-        schedule.cpp
-        schedule.h)
+        Schedule.cpp
+        Schedule.h ScheduleCollection.cpp ScheduleCollection.h SearchCollection.cpp SearchCollection.h Day.cpp Day.h)

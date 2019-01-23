@@ -1,7 +1,7 @@
 HOMEWORK 2: SCHEDULE CLASSES
 
 
-NAME:  < insert name >
+NAME:  Xinhao Luo
 
 
 COLLABORATORS AND OTHER RESOURCES:
@@ -10,22 +10,25 @@ List the names of everyone you talked to about this assignment
 LMS, etc.), and all of the resources (books, online reference
 material, etc.) you consulted in completing this assignment.
 
-< insert collaborators / resources >
+Site: StackOverflow
+Student: Changdi Chen
 
 Remember: Your implementation for this assignment must be done on your
 own, as described in "Academic Integrity for Homework" handout.
 
 
-ESTIMATE OF # OF HOURS SPENT ON THIS ASSIGNMENT:  < insert # hours >
+ESTIMATE OF # OF HOURS SPENT ON THIS ASSIGNMENT:  12
 
 
 
 DESCRIPTION OF YOUR CREATIVE STATISTIC:
-Please be concise!
-
+Sort dataset with day provided.
+Sample output can be found at SearchCollection.cpp -> drawDayTable
+Columns include CRN, Dept, Coursenum, Class Title, Start Time, End Time and Room.
 
 
 MISC. COMMENTS TO GRADER:  
-Optional, please be concise!
+I don't put comments on some simple accessor functions (just a line for return).
+Hope this is not considered as "lack of comments"
 
 

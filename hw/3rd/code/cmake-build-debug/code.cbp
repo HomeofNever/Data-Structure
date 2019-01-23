@@ -86,13 +86,31 @@
 				</MakeCommands>
 			</Target>
 		</Build>
+		<Unit filename="/mnt/c/Users/luox6/OneDrive - Rensselaer Polytechnic Institute/Documents/Project/DS/hw/3rd/code/Day.cpp">
+			<Option target="code"/>
+		</Unit>
+		<Unit filename="/mnt/c/Users/luox6/OneDrive - Rensselaer Polytechnic Institute/Documents/Project/DS/hw/3rd/code/Day.h">
+			<Option target="code"/>
+		</Unit>
+		<Unit filename="/mnt/c/Users/luox6/OneDrive - Rensselaer Polytechnic Institute/Documents/Project/DS/hw/3rd/code/Schedule.cpp">
+			<Option target="code"/>
+		</Unit>
+		<Unit filename="/mnt/c/Users/luox6/OneDrive - Rensselaer Polytechnic Institute/Documents/Project/DS/hw/3rd/code/Schedule.h">
+			<Option target="code"/>
+		</Unit>
+		<Unit filename="/mnt/c/Users/luox6/OneDrive - Rensselaer Polytechnic Institute/Documents/Project/DS/hw/3rd/code/ScheduleCollection.cpp">
+			<Option target="code"/>
+		</Unit>
+		<Unit filename="/mnt/c/Users/luox6/OneDrive - Rensselaer Polytechnic Institute/Documents/Project/DS/hw/3rd/code/ScheduleCollection.h">
+			<Option target="code"/>
+		</Unit>
+		<Unit filename="/mnt/c/Users/luox6/OneDrive - Rensselaer Polytechnic Institute/Documents/Project/DS/hw/3rd/code/SearchCollection.cpp">
+			<Option target="code"/>
+		</Unit>
+		<Unit filename="/mnt/c/Users/luox6/OneDrive - Rensselaer Polytechnic Institute/Documents/Project/DS/hw/3rd/code/SearchCollection.h">
+			<Option target="code"/>
+		</Unit>
 		<Unit filename="/mnt/c/Users/luox6/OneDrive - Rensselaer Polytechnic Institute/Documents/Project/DS/hw/3rd/code/main.cpp">
-			<Option target="code"/>
-		</Unit>
-		<Unit filename="/mnt/c/Users/luox6/OneDrive - Rensselaer Polytechnic Institute/Documents/Project/DS/hw/3rd/code/schedule.cpp">
-			<Option target="code"/>
-		</Unit>
-		<Unit filename="/mnt/c/Users/luox6/OneDrive - Rensselaer Polytechnic Institute/Documents/Project/DS/hw/3rd/code/schedule.h">
 			<Option target="code"/>
 		</Unit>
 		<Unit filename="/mnt/c/Users/luox6/OneDrive - Rensselaer Polytechnic Institute/Documents/Project/DS/hw/3rd/code/CMakeLists.txt">
