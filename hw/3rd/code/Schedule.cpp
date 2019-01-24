@@ -31,20 +31,20 @@ Schedule::Schedule() {
  * @param end_time
  * @param room
  */
-Schedule::Schedule(int CRN,
+Schedule::Schedule(std::string &CRN,
          std::string &dept_code,
          std::string &course_code,
          std::string &course_name,
-         Day day,
+         char day,
          std::string &start_time,
          std::string &end_time,
-         std::string &room) 
+         std::string &room)
 {
     this->CRN = CRN;
     this->dept_code = dept_code;
     this->course_code = course_code;
     this->course_name = course_name;
-    this->day = day;
+    this->day = Day(day);
     this->start_time = start_time;
     this->end_time = end_time;
     this->room = room;
@@ -59,24 +59,25 @@ Schedule::Schedule(int CRN,
  */
 void Schedule::print()
 {
-    std::cout << CRN << ' '
-              << dept_code << ' '
-              << getCourseCodePrefix() << '-' << getCourseCodeSuffix() << ' '
-              << course_name << ' '
-              << day.getCompleteDay() << ' '
+    std::cout << getCRN() << ' '
+              << getDeptCode() << ' '
+              << getCourseCode() << ' '
+              << getCourseName() << ' '
+              << getDay().getCompleteDay() << ' '
+              << getStartTime() << ' '
               << getStartTimeHour() << ':' << getStartTimeMinute() << getStartTimeZone() << 'M' << ' '
-              << end_time << ' '
-              << room
+              << getEndTime() << ' '
+              << getRoom()
               << std::endl;
 }
 
 // Accessors
-int Schedule::getCRN() const
+std::string Schedule::getCRN() const
 {
     return CRN;
 }
 
-std::string Schedule::getDeptCode() const 
+std::string Schedule::getDeptCode() const
 {
     return dept_code;
 }
@@ -91,7 +92,7 @@ std::string Schedule::getCourseName() const
     return course_name;
 }
 
-Day Schedule::getDay() const
+const Day& Schedule::getDay() const
 {
     return day;
 }
@@ -137,23 +138,6 @@ int Schedule::getStartTimeMinute() const
     return std::stoi(start_time.substr(3, 2));
 }
 
-// Course Code Helper
-/**
- * Get the first four digits and parse into int
- */
-int Schedule::getCourseCodePrefix() const
-{
-    return std::stoi(course_code.substr(0, 4));
-}
-
-/**
- * Get the last two digits and parse into int
- */
-int Schedule::getCourseCodeSuffix() const
-{
-    return std::stoi(course_code.substr(5, 2));
-}
-
 // Compare
 /**
  * Use Day class operator< for comparison
@@ -182,7 +166,6 @@ bool compareStartTime(const Schedule &one, const Schedule &other)
 
     if (t1 == t2)
     {
-        // It doesn't matter because they are the same
         return false;
     }
 
@@ -225,8 +208,6 @@ bool compareStartTime(const Schedule &one, const Schedule &other)
 
 /**
  * Compare course_code
- * 1. Compare prefix (1000 < 2000)
- * 2. Compare suffix (01 < 02)
  *
  * @param one
  * @param other
@@ -236,27 +217,7 @@ bool compareCourseCode(const Schedule &one, const Schedule &other)
     std::string t1 = one.getCourseCode();
     std::string t2 = other.getCourseCode();
 
-    if (t1 == t2)
-    {
-        return false;
-    }
-
-    // 1200-01 < 1200-02
-    int t1_prefix = one.getCourseCodePrefix();
-    int t1_suffix = one.getCourseCodeSuffix();
-    int t2_prefix = other.getCourseCodePrefix();
-    int t2_suffix = other.getCourseCodeSuffix();
-
-    if (t1_prefix != t2_prefix)
-    {
-        return t1_prefix < t2_prefix;
-    } else if (t1_suffix != t2_suffix) {
-        return t1_suffix < t2_suffix;
-    }
-
-    // Should not happen;
-    std::cerr << "Error when comparing Course Code.";
-    return false;
+    return t1 < t2;
 }
 
 /**

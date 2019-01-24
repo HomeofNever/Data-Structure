@@ -22,13 +22,14 @@ ESTIMATE OF # OF HOURS SPENT ON THIS ASSIGNMENT:  12
 
 
 DESCRIPTION OF YOUR CREATIVE STATISTIC:
-Sort dataset with day provided.
+Sort dataset with day. No extra command line parameter required.
 Sample output can be found at SearchCollection.cpp -> drawDayTable
 Columns include CRN, Dept, Coursenum, Class Title, Start Time, End Time and Room.
+Sort with dept_code -> start_time -> course_code
 
 
 MISC. COMMENTS TO GRADER:  
 I don't put comments on some simple accessor functions (just a line for return).
-Hope this is not considered as "lack of comments"
+Hope this is not considered as "lack of comments".
 
 

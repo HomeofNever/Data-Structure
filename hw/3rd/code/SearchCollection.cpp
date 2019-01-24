@@ -27,7 +27,7 @@ std::vector<Schedule> SearchCollection::getSchedules() const
     return schedules;
 }
 
-std::string SearchCollection::getSearchFirld() const
+std::string SearchCollection::getSearchField() const
 {
     return search_field;
 }
@@ -46,10 +46,29 @@ int SearchCollection::getCollectionSize() const
 }
 
 /**
+ * Loop through Schedules and find if a CRN is longer than the existing value
+ */
+int SearchCollection::getLongestCRNLength() const
+{
+    // CRN
+    int CRN_length = 3;
+
+    for (unsigned int i = 0; i < schedules.size(); i++) {
+        if (schedules[i].getCRN().size() > CRN_length)
+        {
+            CRN_length = (int)schedules[i].getCRN().size();
+        }
+    }
+
+    return CRN_length;
+}
+
+/**
  * Loop through Schedules and find if a name is longer than the existing value
  */
 int SearchCollection::getLongestCourseNameLength() const
 {
+    // Class Title
     int course_length = 11;
 
     for (unsigned int i = 0; i < schedules.size(); i++) {
@@ -60,6 +79,42 @@ int SearchCollection::getLongestCourseNameLength() const
     }
 
     return course_length;
+}
+
+/**
+ * Loop through Schedules and find if a course code is longer than the existing value
+ */
+int SearchCollection::getLongestCourseCodeLength() const
+{
+    // Coursenum
+    int course_code_length = 9;
+
+    for (unsigned int i = 0; i < schedules.size(); i++) {
+        if (schedules[i].getCourseCode().size() > course_code_length)
+        {
+            course_code_length = (int)schedules[i].getCourseCode().size();
+        }
+    }
+
+    return course_code_length;
+}
+
+/**
+ * Loop through Schedules and find if a dept_code is longer than the existing value
+ */
+int SearchCollection::getLongestDeptLength() const
+{
+    // Dept
+    int dept_length = 4;
+
+    for (unsigned int i = 0; i < schedules.size(); i++) {
+        if (schedules[i].getDeptCode().size() > dept_length)
+        {
+            dept_length = (int)schedules[i].getDeptCode().size();
+        }
+    }
+
+    return dept_length;
 }
 
 /**
@@ -103,15 +158,15 @@ int SearchCollection::getLongestRoomLength() const
  */
 bool SearchCollection::sort()
 {
-    if (search_field == "room")
+    if (getSearchField() == "room")
     {
         sortForRoomTable();
         return true;
-    } else if (search_field == "dept")
+    } else if (getSearchField() == "dept")
     {
         sortForDeptTable();
         return true;
-    } else if (search_field == "day")
+    } else if (getSearchField() == "day")
     {
         sortForDayTable();
         return true;
@@ -132,15 +187,15 @@ bool SearchCollection::draw(std::ofstream &out_str)
 {
     if (sort())
     {
-        if (search_field == "room")
+        if (getSearchField() == "room")
         {
             drawRoomTable(out_str);
             return true;
-        } else if (search_field == "dept")
+        } else if (getSearchField() == "dept")
         {
             drawDeptTable(out_str);
             return true;
-        } else if (search_field == "day")
+        } else if (getSearchField() == "day")
         {
             drawDayTable(out_str);
             return true;
@@ -155,10 +210,11 @@ bool SearchCollection::draw(std::ofstream &out_str)
 }
 
 /**
- * Print all Schedules
+ * Print Search fields and all Schedules
  */
 void SearchCollection::print()
 {
+    std::cout << getSearchField() << ' ' << getSearchValue() << std::endl;
     for (unsigned int i = 0; i < schedules.size(); i++)
     {
         schedules[i].print();
@@ -183,22 +239,24 @@ void SearchCollection::drawRoomTable(std::ofstream &out_str)
 {
     if (schedules.size() != 0)
     {
-        out_str << "Room" << ' ' << search_value << std::endl;
+        out_str << "Room" << ' ' << getSearchValue() << std::endl;
 
         int course_length = getLongestCourseNameLength();
+        int course_code_length = getLongestCourseCodeLength();
+        int dept_code_length = getLongestDeptLength();
         int day_length = getLongestDayLength();
 
         // Draw
         out_str << std::left;
-        out_str << "Dept" << "  "
-                << "Coursenum" << "  "
+        out_str << std::setw(dept_code_length) << "Dept" << "  "
+                << std::setw(course_code_length) << "Coursenum" << "  "
                 << std::setw(course_length) << "Class Title" << "  "
                 << std::setw(day_length) << "Day" << "  "
                 << "Start Time" << "  "
                 << "End Time"
                 << std::endl;
-        out_str << std::string(4, '-') << "  "
-                << std::string(9, '-') << "  "
+        out_str << std::string(dept_code_length, '-') << "  "
+                << std::string(course_code_length, '-') << "  "
                 << std::string(course_length, '-') << "  "
                 << std::string(day_length, '-') << "  "
                 << std::string(10, '-') << "  "
@@ -208,8 +266,8 @@ void SearchCollection::drawRoomTable(std::ofstream &out_str)
         for (unsigned int i = 0; i < schedules.size(); i++)
         {
             Schedule s = schedules[i];
-            out_str << s.getDeptCode() << "  "
-                    << std::setw(9) << s.getCourseCode() << "  "
+            out_str << std::setw(dept_code_length) << s.getDeptCode() << "  "
+                    << std::setw(course_code_length) << s.getCourseCode() << "  "
                     << std::setw(course_length) << s.getCourseName() << "  "
                     << std::setw(day_length) << s.getDay().getCompleteDay() << "  "
                     << std::setw(10) << s.getStartTime() << "  "
@@ -238,20 +296,21 @@ void SearchCollection::drawRoomTable(std::ofstream &out_str)
 void SearchCollection::drawDeptTable(std::ofstream &out_str) {
     if (getCollectionSize() != 0) {
         // Title
-        out_str << "Dept" << ' ' << search_value << std::endl;
+        out_str << "Dept" << ' ' << getSearchValue() << std::endl;
 
         int course_length = getLongestCourseNameLength();
+        int course_code_length = getLongestCourseCodeLength();
         int day_length = getLongestDayLength();
 
         // Table header
         out_str << std::left;
-        out_str << "Coursenum" << "  "
+        out_str << std::setw(course_code_length) << "Coursenum" << "  "
                 << std::setw(course_length) << "Class Title" << "  "
                 << std::setw(day_length) << "Day" << "  "
                 << "Start Time" << "  "
                 << "End Time"
                 << std::endl;
-        out_str << std::string(9, '-') << "  "
+        out_str << std::string(course_code_length, '-') << "  "
                 << std::string(course_length, '-') << "  "
                 << std::string(day_length, '-') << "  "
                 << std::string(10, '-') << "  "
@@ -261,7 +320,7 @@ void SearchCollection::drawDeptTable(std::ofstream &out_str) {
         for (int i = 0; i < schedules.size(); i++) {
             Schedule s = schedules[i];
             // Fields
-            out_str << std::setw(9) << s.getCourseCode() << "  "
+            out_str << std::setw(course_code_length) << s.getCourseCode() << "  "
                     << std::setw(course_length) << s.getCourseName() << "  "
                     << std::setw(day_length) << s.getDay().getCompleteDay() << "  "
                     << std::setw(10) << s.getStartTime() << "  "
@@ -278,37 +337,40 @@ void SearchCollection::drawDeptTable(std::ofstream &out_str) {
 /**
  * Loop over Collection and draw day Table
  * Example:
-Day Monday
-CRN    Dept  Coursenum  Class Title                   Start Time  End Time  Room
------  ----  ---------  ----------------------------  ----------  --------  -----------
-64226  ECSE  4110-01    POWER_ENGINEERING_ANALYSIS    10:00AM     11:20AM   JONSSN_6309
-63144  ECSE  4530-01    DIGITAL_SIGNAL_PROCESSING     10:00AM     11:20AM   JONSSN_4104
-61556  ECSE  4900-01    MULTIDISCIPLINARY_CAP_DESIGN  10:00AM     11:50AM   JONSSN_3332
-...
-22 entries
+    Day Monday
+    CRN    Dept  Coursenum  Class Title                   Start Time  End Time  Room
+    -----  ----  ---------  ----------------------------  ----------  --------  -----------
+    64226  ECSE  4110-01    POWER_ENGINEERING_ANALYSIS    10:00AM     11:20AM   JONSSN_6309
+    63144  ECSE  4530-01    DIGITAL_SIGNAL_PROCESSING     10:00AM     11:20AM   JONSSN_4104
+    61556  ECSE  4900-01    MULTIDISCIPLINARY_CAP_DESIGN  10:00AM     11:50AM   JONSSN_3332
+    ...
+    22 entries
  */
 void SearchCollection::drawDayTable(std::ofstream &out_str)
 {
     if (getCollectionSize() != 0) {
         // Title
-        out_str << "Day" << ' ' << search_value << std::endl;
+        out_str << "Day" << ' ' << getSearchValue() << std::endl;
 
+        int CRN_length = getLongestCRNLength();
+        int dept_code_length = getLongestDeptLength();
+        int course_code_length = getLongestCourseCodeLength();
         int course_length = getLongestCourseNameLength();
         int room_length = getLongestRoomLength();
 
         // Draw
         out_str << std::left;
-        out_str << std::setw(5) << "CRN" << "  "
-                << "Dept" << "  "
-                << "Coursenum" << "  "
+        out_str << std::setw(CRN_length) << "CRN" << "  "
+                << std::setw(dept_code_length) << "Dept" << "  "
+                << std::setw(course_code_length) << "Coursenum" << "  "
                 << std::setw(course_length) << "Class Title" << "  "
                 << "Start Time" << "  "
                 << "End Time" << "  "
                 << "Room"
                 << std::endl;
-        out_str << std::string(5, '-') << "  "
-                << std::string(4, '-') << "  "
-                << std::string(9, '-') << "  "
+        out_str << std::string(CRN_length, '-') << "  "
+                << std::string(dept_code_length, '-') << "  "
+                << std::string(course_code_length, '-') << "  "
                 << std::string(course_length, '-') << "  "
                 << std::string(10, '-') << "  "
                 << std::string(8, '-') << "  "
@@ -318,9 +380,9 @@ void SearchCollection::drawDayTable(std::ofstream &out_str)
         for (unsigned int i = 0; i < schedules.size(); i++)
         {
             Schedule s = schedules[i];
-            out_str << s.getCRN() << "  "
-                    << s.getDeptCode() << "  "
-                    << std::setw(9) << s.getCourseCode() << "  "
+            out_str << std::setw(CRN_length) << s.getCRN() << "  "
+                    << std::setw(dept_code_length) << s.getDeptCode() << "  "
+                    << std::setw(course_code_length) << s.getCourseCode() << "  "
                     << std::setw(course_length) << s.getCourseName()<< "  "
                     << std::setw(10) << s.getStartTime() << "  "
                     << std::setw(8) << s.getEndTime() << "  "
@@ -337,7 +399,6 @@ void SearchCollection::drawDayTable(std::ofstream &out_str)
 
 
 // Sort Methods
-
 /**
  * Sequence: day -> start_time -> course_code -> dept
  */

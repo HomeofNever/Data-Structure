@@ -23,7 +23,7 @@ ScheduleCollection::ScheduleCollection(std::vector<Schedule> &vec)
  */
 ScheduleCollection::ScheduleCollection(std::ifstream &in_str)
 {
-    int CRN;
+    std::string CRN;
     std::string dept_code;
     std::string course_code;
     std::string course_name;
@@ -36,8 +36,7 @@ ScheduleCollection::ScheduleCollection(std::ifstream &in_str)
         for (unsigned i = 0; i < day.size(); i++)
         {
             char d = day[i];
-            Day d1 = Day(d);
-            Schedule s = Schedule(CRN, dept_code, course_code, course_name, d1, start_time, end_time, room);
+            Schedule s = Schedule(CRN, dept_code, course_code, course_name, d, start_time, end_time, room);
             addSchedule(s);
         }
     }

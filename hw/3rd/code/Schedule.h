@@ -19,11 +19,11 @@ class Schedule {
          * @param end_time
          * @param room
          */
-        Schedule(int CRN,
+        Schedule(std::string &CRN,
                 std::string &dept_code,
                 std::string &course_code,
                 std::string &course_name,
-                Day day,
+                char day,
                 std::string &start_time,
                 std::string &end_time,
                 std::string &room
@@ -33,7 +33,7 @@ class Schedule {
         /**
          * Get CRN from private variable
          */
-        int getCRN() const;
+        std::string getCRN() const;
 
         /**
          * Get dept_code from private variable
@@ -53,7 +53,7 @@ class Schedule {
         /**
          * Get Day object from private variable
          */
-        Day getDay() const;
+        const Day& getDay() const;
 
         /**
          * Get start_time string from private variable
@@ -87,17 +87,6 @@ class Schedule {
          */
         int getStartTimeMinute() const;
 
-        // Course Code Helper
-        /**
-         * Get course_code prefix (xxxx-yy first four digits)
-         */
-        int getCourseCodePrefix() const;
-
-        /**
-         * Get course_code suffix (xxxx-yy last two digits)
-         */
-        int getCourseCodeSuffix() const;
-
         /**
          * Print current object
          */
@@ -107,7 +96,7 @@ class Schedule {
         /**
          * Attributes for Schedules
          */
-        int CRN;
+        std::string CRN;
         std::string dept_code;
         std::string course_code;
         std::string course_name;

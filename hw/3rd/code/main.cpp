@@ -15,15 +15,22 @@ void noData(std::ofstream &out_str)
 
 // Main Entry
 /* Command line example:
-scheduling.exe simple2.txt out_simple2_room.txt room
-scheduling.exe simple2.txt out_simple2_room.txt room ACADMY_AUD
-scheduling.exe simple2.txt out_simple2_dept_ECSE.txt dept ECSE
-scheduling.exe simple2.txt out_simple2_custom.txt custom
-*/
+ * .----------------.-------------.---------------------------.---------.-------------------.
+ * | argv[0]        | argv[1]     | argv[2]                   | argv[3] | argv[4](optional) |
+ * :----------------+-------------+---------------------------+---------+-------------------:
+ * | scheduling.exe | simple2.txt | out_simple2_room.txt      | room    |                   |
+ * :----------------+-------------+---------------------------+---------+-------------------:
+ * | scheduling.exe | simple2.txt | out_simple2_room.txt      | room    | ACADMY_AUD        |
+ * :----------------+-------------+---------------------------+---------+-------------------:
+ * | scheduling.exe | simple2.txt | out_simple2_dept_ECSE.txt | dept    | ECSE              |
+ * :----------------+-------------+---------------------------+---------+-------------------:
+ * | scheduling.exe | simple2.txt | out_simple2_custom.txt    | custom  |                   |
+ * '----------------'-------------'---------------------------'---------'-------------------'
+ */
 int main(int argc, char *argv[])
 {
-    // No matter what happened, 3 parameters are required.
-    if (argc < 3)
+    // No matter what happened, 4 parameters are required.
+    if (argc < 4)
     {
         std::cerr << "Program required at least 3 parameters to run." << std::endl;
         return 1;
@@ -60,19 +67,17 @@ int main(int argc, char *argv[])
     // Decide which operation to go
     if (operation == "room")
     {
+        // 4 parameters required.
         if (argc > 4)
         {
             std::string key(argv[4]);
 
             SearchCollection result = collection.getRoomCollection(key);
 
+            // Collection Size should not be zero, or maybe not data given
             if (result.getCollectionSize() > 0)
             {
-                if (!result.draw(out_str))
-                {
-                    std::cerr << "Unable to finished action." << std::endl;
-                    return 1;
-                }
+                result.draw(out_str);
             } else {
                 noData(out_str);
             }
@@ -82,6 +87,7 @@ int main(int argc, char *argv[])
             // All Room
             std::vector<SearchCollection> result = collection.getRoomCollection();
 
+            // Result Size should not be zero, or maybe not data given
             if (result.size() > 0)
             {
                 for (unsigned int i = 0; i < result.size(); i++)
@@ -95,18 +101,16 @@ int main(int argc, char *argv[])
     }
     else if (operation == "dept")
     {
+        // 4 parameters required
         if (argc > 4)
         {
             std::string key(argv[4]);
             SearchCollection result = collection.getDeptCollection(key);
 
+            // Collection Size should not be zero, or maybe not data given
             if (result.getCollectionSize() > 0)
             {
-                if (!result.draw(out_str))
-                {
-                    std::cerr << "Unable to finished action." << std::endl;
-                    return 1;
-                }
+                result.draw(out_str);
             } else {
                 noData(out_str);
             }
@@ -119,7 +123,7 @@ int main(int argc, char *argv[])
     }
     else if (operation == "custom")
     {
-        // Custom
+        // Custom Sort (Using Day)
         std::vector<SearchCollection> result = collection.getDayCollection();
 
         if (result.size() > 0)

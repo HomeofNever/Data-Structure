@@ -31,7 +31,7 @@ public:
     /**
      * Get Search Field ("dept", "room", "custom") provided
      */
-    std::string getSearchFirld() const;
+    std::string getSearchField() const;
 
     /**
      * Get Search Value ("room_name", "dept_code", "custom_value") provided
@@ -44,9 +44,24 @@ public:
     int getCollectionSize() const;
 
     /**
+     * Get the length of the longest CRN
+     */
+    int getLongestCRNLength() const;
+
+    /**
      * Get the length of the longest name size.
      */
     int getLongestCourseNameLength() const;
+
+    /**
+     * Get the length of the longest course code
+     */
+    int getLongestCourseCodeLength() const;
+
+    /**
+     * Get the length of the longest dept code
+     */
+    int getLongestDeptLength() const;
 
     /**
      * Get the length of the longest day words' length ("Monday" => 6, "Tuesday" => 7 ...).

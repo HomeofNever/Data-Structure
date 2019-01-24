@@ -18,15 +18,15 @@ string
 Day.h
 /mnt/c/Users/luox6/OneDrive - Rensselaer Polytechnic Institute/Documents/Project/DS/hw/3rd/code/Day.h
 
-/mnt/c/Users/luox6/OneDrive - Rensselaer Polytechnic Institute/Documents/Project/DS/hw/3rd/code/ScheduleCollection.h
-vector
--
-string
+/mnt/c/Users/luox6/OneDrive - Rensselaer Polytechnic Institute/Documents/Project/DS/hw/3rd/code/SearchCollection.cpp
+iomanip
 -
 fstream
 -
-Schedule.h
-/mnt/c/Users/luox6/OneDrive - Rensselaer Polytechnic Institute/Documents/Project/DS/hw/3rd/code/Schedule.h
+iostream
+-
+algorithm
+-
 SearchCollection.h
 /mnt/c/Users/luox6/OneDrive - Rensselaer Polytechnic Institute/Documents/Project/DS/hw/3rd/code/SearchCollection.h
 
@@ -39,14 +39,4 @@ fstream
 -
 Schedule.h
 /mnt/c/Users/luox6/OneDrive - Rensselaer Polytechnic Institute/Documents/Project/DS/hw/3rd/code/Schedule.h
-
-/mnt/c/Users/luox6/OneDrive - Rensselaer Polytechnic Institute/Documents/Project/DS/hw/3rd/code/main.cpp
-iostream
--
-fstream
--
-vector
--
-ScheduleCollection.h
-/mnt/c/Users/luox6/OneDrive - Rensselaer Polytechnic Institute/Documents/Project/DS/hw/3rd/code/ScheduleCollection.h
 
