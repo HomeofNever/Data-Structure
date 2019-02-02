@@ -4,6 +4,10 @@
 #include <string>
 #include "Day.h"
 
+/**
+ * Schedule is the basic element that represent
+ * an individual course arrangement
+ */
 class Schedule {
     public:
         // Constructors

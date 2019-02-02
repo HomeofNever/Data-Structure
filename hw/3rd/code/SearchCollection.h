@@ -7,6 +7,10 @@
 
 #include "Schedule.h"
 
+/**
+ * SearchCollection is created when Schedules in ScheduleCollection
+ * are filtered for a table and ready to to customized sort and draw
+ */
 class SearchCollection {
 public:
 

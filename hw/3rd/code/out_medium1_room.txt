@@ -1,0 +1,9 @@
+Room SAGE_3510
+Dept  Coursenum  Class Title                  Day      Start Time  End Time
+----  ---------  ---------------------------  -------  ----------  --------
+ECSE  2100-01    FIELDS_AND_WAVES_I           Monday   07:00PM     08:50PM 
+ECSE  2610-01    CPTR_COMPONENTS_&_OPER       Tuesday  10:30AM     11:50AM 
+ECSE  2050-01    INTRODUCTION_TO_ELECTRONICS  Tuesday  07:00PM     08:50PM 
+ECSE  2610-01    CPTR_COMPONENTS_&_OPER       Friday   10:30AM     11:50AM 
+4 entries
+

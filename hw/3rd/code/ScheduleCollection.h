@@ -8,6 +8,11 @@
 #include "Schedule.h"
 #include "SearchCollection.h"
 
+/**
+ * ScheduleCollection read in all Schedules and store them.
+ * It will also return SearchCollection for Schedules needed to be
+ * printed in the same table.
+ */
 class ScheduleCollection {
 public:
     // Constructors

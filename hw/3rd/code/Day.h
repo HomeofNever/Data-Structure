@@ -5,6 +5,10 @@
 #include <string>
 #include <vector>
 
+/**
+ * Day cover all legal situation for weekday
+ * and wrap up compare between them.
+ */
 class Day {
 public:
     // Constructors
