@@ -32,7 +32,7 @@ int main(int argc, char* argv[]) {
         //
         // uncomment if you have implemented the extra credit features
         //
-        // ExtraCreditTests();
+        ExtraCreditTests();
         //
 
     } else {
@@ -185,6 +185,67 @@ void StudentTests() {
     //
     // =======================================================
 
+    // int cases
+    Table<int> ints(10, 10, 10);
+    Table<int> int0(3,0,0);
+    ints.print();
+    int0.print();
+
+    assert(ints.get(9,9) == 10);
+    ints.set(9,9,9);
+    assert(ints.get(9,9) == 9);
+
+    // Int Pretty Print
+    ints.set(8, 7, 99999);
+    ints.set(6,5, 101010);
+    ints.print();
+
+    std::cout << "Int Type test completed" << std::endl;
+
+    // std::string cases
+    Table<std::string> str(10, 10, "STR");
+    str.print();
+
+    assert(str.get(9, 9) == "STR");
+
+    // Constructors exception
+    Table<std::string> str_1(3, 0, "STR");
+    str_1.print();
+    Table<std::string> str_3;
+    str_3.print();
+
+    // COPY AND ASSIGN
+    Table<std::string> str_2;
+    str_2 = str;
+    str_2.set(0, 0, "CHG");
+
+    assert(str_2.get(0,0) == "CHG");
+    assert(str.get(0,0) == "STR");
+
+    // Human Readable Print
+    str_2.set(1,1, "Hello!");
+    str_2.set(3,4, "I am Bad STR!");
+
+    str_2.print();
+
+    std::cout << "std::string case test completed" << std::endl;
+
+    // Invalid Access
+    // str.get(11, 0);
+    // str.get(0, 11);
+    // str.set(11, 11, "Invalid");
+    // str.set(-1, 1, "Another Invalid"); // Type mismatch though (unsigned int)
+
+    // Invalid Joint
+    std::vector<std::string> vec(5, "vec");
+    // str.push_back_row(vec);
+    // str.push_back_column(vec);
+
+    // Extra Credits
+    // str.push_back_columns(str_1);
+    // str.push_back_rows(str_1);
+
+    std::cout << "Invalid test completed" << std::endl;
 }
 
 
@@ -197,7 +258,7 @@ void ExtraCreditTests() {
     //
     // =======================================================
 
-    /*
+
     Table<char> x(2,5,'x');
     assert (x.numRows() == 2);
     assert (x.numColumns() == 5);
@@ -237,7 +298,6 @@ void ExtraCreditTests() {
     assert (x.get(5,6) == 'Z');
 
     std::cout << "extra credit tests completed" << std::endl;
-    */
 }
 
 
