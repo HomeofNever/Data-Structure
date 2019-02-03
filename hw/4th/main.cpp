@@ -186,27 +186,27 @@ void StudentTests() {
     // =======================================================
 
     // int cases
-    Table<int> ints(10, 10, 10);
+    Table<int> *ints = new Table<int>(10, 10, 10);
     Table<int> int0(3,0,0);
-    ints.print();
+    ints->print();
     int0.print();
 
-    assert(ints.get(9,9) == 10);
-    ints.set(9,9,9);
-    assert(ints.get(9,9) == 9);
+    assert(ints->get(9,9) == 10);
+    ints->set(9,9,9);
+    assert(ints->get(9,9) == 9);
 
     // Int Pretty Print
-    ints.set(8, 7, 99999);
-    ints.set(6,5, 101010);
-    ints.print();
+    ints->set(8, 7, 99999);
+    ints->set(6,5, 101010);
+    ints->print();
 
     std::cout << "Int Type test completed" << std::endl;
 
     // std::string cases
-    Table<std::string> str(10, 10, "STR");
-    str.print();
+    Table<std::string> *str = new Table<std::string>(10, 10, "STR");
+    str->print();
 
-    assert(str.get(9, 9) == "STR");
+    assert(str->get(9, 9) == "STR");
 
     // Constructors exception
     Table<std::string> str_1(3, 0, "STR");
@@ -220,11 +220,11 @@ void StudentTests() {
 
     // COPY AND ASSIGN
     Table<std::string> str_2;
-    str_2 = str;
+    str_2 = *str;
     str_2.set(0, 0, "CHG");
 
     assert(str_2.get(0,0) == "CHG");
-    assert(str.get(0,0) == "STR");
+    assert(str->get(0,0) == "STR");
 
     // Human Readable Print
     str_2.set(1,1, "Hello!");
@@ -250,6 +250,11 @@ void StudentTests() {
     // str.push_back_rows(str_1);
 
     std::cout << "Invalid test completed" << std::endl;
+
+    delete ints;
+    delete str;
+
+    std::cout << "Deconstructor test completed" << std::endl;
 }
 
 
