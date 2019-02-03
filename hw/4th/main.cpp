@@ -213,6 +213,10 @@ void StudentTests() {
     str_1.print();
     Table<std::string> str_3;
     str_3.print();
+    Table<std::string> str_4(0, 2, "");
+    str_4.print();
+    Table<std::string> str_5(10, 10, "");
+    str_5.print();
 
     // COPY AND ASSIGN
     Table<std::string> str_2;

@@ -325,7 +325,7 @@ template <class T> void Table<T>::push_back_columns(const Table<T> &t)
                 currentRow[j] = t_data[i][j];
             }
 
-            // Combine new Table
+            // Combine new Cols to Table
             for (size_type j = 0; j < t.numColumns(); j++)
             {
                 currentRow[col + j] = t[i][j];
@@ -334,7 +334,7 @@ template <class T> void Table<T>::push_back_columns(const Table<T> &t)
             // Delete old Row
             delete [] t_data[i];
 
-            // Add new Row
+            // Assign new Row
             t_data[i] = currentRow;
         }
 
