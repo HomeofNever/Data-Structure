@@ -10,7 +10,7 @@ public:
     Table(){ this->create(); }
     Table(size_type row, size_type col) { this->create(row, col); }
     Table(size_type row, size_type col, const T &t = T()) { this->create(row, col, t); }
-    Table(const Table& table) { copy(table); }
+    Table(const Table& table) { this->copy(table); }
 
     // Operators
     T* operator[](size_type i) { return t_data[i]; }

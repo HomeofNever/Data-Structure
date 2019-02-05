@@ -6,10 +6,6 @@
 
 #IncludeRegexTransform: 
 
-/mnt/c/Users/luox6/OneDrive - Rensselaer Polytechnic Institute/Documents/Project/DS/hw/4th/Table.h
-iomanip
--
-
 /mnt/c/Users/luox6/OneDrive - Rensselaer Polytechnic Institute/Documents/Project/DS/hw/4th/main.cpp
 iostream
 -
@@ -23,6 +19,10 @@ cassert
 -
 vector
 -
-Table.h
-/mnt/c/Users/luox6/OneDrive - Rensselaer Polytechnic Institute/Documents/Project/DS/hw/4th/Table.h
+table.h
+/mnt/c/Users/luox6/OneDrive - Rensselaer Polytechnic Institute/Documents/Project/DS/hw/4th/table.h
+
+/mnt/c/Users/luox6/OneDrive - Rensselaer Polytechnic Institute/Documents/Project/DS/hw/4th/table.h
+iomanip
+-
 

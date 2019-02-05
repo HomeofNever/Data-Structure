@@ -12,7 +12,7 @@
 #include <cstdlib>
 #include <cassert>
 #include <vector>
-#include "Table.h"
+#include "table.h"
 
 
 // helper testing functions
