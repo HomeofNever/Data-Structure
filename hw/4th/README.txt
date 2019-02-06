@@ -38,13 +38,13 @@ numColumns O(1)
 
 push_back_row O(n)
 
-push_back_column O(n^2)
+push_back_column O(n^m)
 
 pop_back_row O(n)
 
-pop_back_column O(n^2)
+pop_back_column O(n^m)
 
-print O(n^2)
+print O(n^m)
 
 
 TESTING & DEBUGGING STRATEGY:
@@ -64,7 +64,7 @@ your multi-row and multi-column push_back functions.
 
 push_back_rows O(n)
 
-push_back_columns O(n^2)
+push_back_columns O(n^m)
 
 
 MISC. COMMENTS TO GRADER:
