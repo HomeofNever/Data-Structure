@@ -1,6 +1,8 @@
 #ifndef INC_4TH_TABLE_H
 #define INC_4TH_TABLE_H
+
 #include <iomanip>
+#include <vector>
 
 template <class T> class Table {
 public:
@@ -13,8 +15,8 @@ public:
     Table(const Table& table) { this->copy(table); }
 
     // Operators
-    T* operator[](size_type i) { return t_data[i]; }
-    const T* operator[](size_type i) const { return t_data[i]; }
+    T* operator[](size_type i) { return *(t_data + i); }
+    const T* operator[](size_type i) const { return *(t_data + i); }
     Table& operator=(const Table& table);
     size_type getLongestElementLength() const;
 
@@ -81,7 +83,7 @@ template <class T> void Table<T>::create(size_type row, size_type col)
 
     for (size_type i = 0; i < row; i++)
     {
-        t_data[i] = new T[col];
+        *(t_data + i) = new T[col];
     }
 }
 
@@ -100,7 +102,7 @@ template <class T> void Table<T>::create(size_type row, size_type col, const T &
     {
         for (size_type j = 0; j < col; j++)
         {
-            t_data[i][j] = t;
+            *(*(t_data + i) + j) = t;
         }
     }
 }
@@ -198,7 +200,7 @@ template <class T> void Table<T>::copy(const Table<T> &t)
     {
         for (size_type j = 0; j < col; j++)
         {
-            t_data[i][j] = t[i][j];
+            *(*(t_data + i) + j) = t[i][j];
         }
     }
 }
@@ -225,7 +227,7 @@ template <class T> void Table<T>::destroy()
 {
     for (size_type i = 0; i < row; i++)
     {
-        delete [] t_data[i];
+        delete [] *(t_data + i);
     }
 
     delete [] t_data;
@@ -242,7 +244,7 @@ template <class T> const T& Table<T>::get(size_type row, size_type col) const
 {
     if (isLegalIndex(row, col))
     {
-        return t_data[row][col];
+        return *(*(t_data + row) + col);
     }
     
     std::cerr << "Index out of bound!" << std::endl;
@@ -285,16 +287,16 @@ template <class T> void Table<T>::push_back_column(const std::vector<T> &v)
             T* currentRow = new T[newColNum];
             for (size_type j = 0; j < col; j++)
             {
-                currentRow[j] = t_data[i][j];
+                *(currentRow + j) = *(*(t_data + i) + j);
             }
 
-            currentRow[col] = v[i];
+            *(currentRow + col) = v[i];
 
             // Delete old Row
-            delete [] t_data[i];
+            delete [] *(t_data + i);
 
             // Add new Row
-            t_data[i] = currentRow;
+            *(t_data + i) = currentRow;
         }
 
         col = newColNum;
@@ -322,20 +324,20 @@ template <class T> void Table<T>::push_back_columns(const Table<T> &t)
             T* currentRow = new T[newColNum];
             for (size_type j = 0; j < col; j++)
             {
-                currentRow[j] = t_data[i][j];
+                *(currentRow + j) = *(*(t_data +i) + j);
             }
 
             // Combine new Cols to Table
             for (size_type j = 0; j < t.numColumns(); j++)
             {
-                currentRow[col + j] = t[i][j];
+                *(currentRow +col + j) = t[i][j];
             }
 
             // Delete old Row
-            delete [] t_data[i];
+            delete [] *(t_data + i);
 
             // Assign new Row
-            t_data[i] = currentRow;
+            *(t_data + i) = currentRow;
         }
 
         col = newColNum;
@@ -361,18 +363,18 @@ template <class T> void Table<T>::push_back_row(const std::vector<T> &v)
         // Copy old Pointers to new main Array
         for (size_type i = 0; i < row; i++)
         {
-            new_data[i] = t_data[i];
+            *(new_data + i) = *(t_data + i);
         }
 
         // Create new Array and copy elements from given vector
         T* currentRow = new T[col];
         for (size_type i = 0; i < col; i++)
         {
-            currentRow[i] = v[i];
+            *(currentRow + i) = v[i];
         }
 
         // Assign new Row to main Array
-        new_data[newRowNum - 1] = currentRow;
+        *(new_data + newRowNum - 1) = currentRow;
 
         // Delete old Array
         delete [] t_data;
@@ -405,7 +407,7 @@ template <class T> void Table<T>::push_back_rows(const Table<T> &t)
         // Copy old main Array
         for (size_type i = 0; i < row; i++)
         {
-            new_data[i] = t_data[i];
+            *(new_data + i) = *(t_data + i);
         }
 
         // Loop through given Table
@@ -416,11 +418,11 @@ template <class T> void Table<T>::push_back_rows(const Table<T> &t)
             // Copy new Table row's elements
             for (size_type j = 0; j < col; j++)
             {
-                currentRow[j] = t[i][j];
+                *(currentRow + j) = t[i][j];
             }
 
             // Add row to the back of current Table
-            new_data[row + i] = currentRow;
+            *(new_data + row + i)= currentRow;
         }
 
         // Delete old main array
@@ -451,11 +453,11 @@ template <class T> void Table<T>::pop_back_row()
         // Copy old pointers, except the last one
         for (size_type i = 0; i < newRowNum; i++)
         {
-            new_data[i] = t_data[i];
+            *(new_data + i) = *(t_data + i);
         }
 
         // Release the last row and the origin Array
-        delete [] t_data[row - 1];
+        delete [] *(t_data + row - 1);
         delete [] t_data;
 
         // Assign the new main Array
@@ -487,14 +489,14 @@ template <class T> void Table<T>::pop_back_column()
             // Copy old element, except the last one
             for (size_type j = 0; j < newCol; j++)
             {
-                currentRow[j] = t_data[i][j];
+                *(currentRow + j) = *(*(t_data + i) + j);
             }
 
             // Delete old Row
-            delete [] t_data[i];
+            delete [] *(t_data + i);
 
             // Assign new Row
-            t_data[i] = currentRow;
+            *(t_data + i) = currentRow;
         }
 
         col = newCol;
@@ -518,7 +520,7 @@ template <class T> void Table<T>::print()
     {
         for (size_type j = 0; j < col; j++)
         {
-            std::cout << std::setw(l) << t_data[i][j] << ' ';
+            std::cout << std::setw(l) << *(*(t_data + i) + j) << ' ';
         }
         std::cout << std::endl;
     }
