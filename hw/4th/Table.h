@@ -15,8 +15,6 @@ public:
     Table(const Table& table) { this->copy(table); }
 
     // Operators
-    T* operator[](size_type i) { return *(t_data + i); }
-    const T* operator[](size_type i) const { return *(t_data + i); }
     Table& operator=(const Table& table);
     size_type getLongestElementLength() const;
 
@@ -200,7 +198,7 @@ template <class T> void Table<T>::copy(const Table<T> &t)
     {
         for (size_type j = 0; j < col; j++)
         {
-            *(*(t_data + i) + j) = t[i][j];
+            *(*(t_data + i) + j) = *(*(t.t_data + i) + j);
         }
     }
 }
@@ -330,7 +328,7 @@ template <class T> void Table<T>::push_back_columns(const Table<T> &t)
             // Combine new Cols to Table
             for (size_type j = 0; j < t.numColumns(); j++)
             {
-                *(currentRow +col + j) = t[i][j];
+                *(currentRow +col + j) = *(*(t.t_data + i) + j);
             }
 
             // Delete old Row
@@ -418,7 +416,7 @@ template <class T> void Table<T>::push_back_rows(const Table<T> &t)
             // Copy new Table row's elements
             for (size_type j = 0; j < col; j++)
             {
-                *(currentRow + j) = t[i][j];
+                *(currentRow + j) = *(*(t.t_data + i) + j);
             }
 
             // Add row to the back of current Table

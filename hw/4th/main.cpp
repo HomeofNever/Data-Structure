@@ -206,7 +206,15 @@ void StudentTests() {
     Table<std::string> *str = new Table<std::string>(10, 10, "STR");
     str->print();
 
+    // Copy Constructor
+    Table<std::string> cp(*str);
+
+    cp.set(9,9, "STH");
     assert(str->get(9, 9) == "STR");
+    assert(cp.get(9, 9) == "STH");
+    cp.print();
+
+    std::cout << "Copy constructor test completed" << std::endl;
 
     // Constructors exception
     Table<std::string> str_1(3, 0, "STR");

@@ -12,13 +12,12 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="30ec82b5-faac-49a2-a0a5-e4531f5612ad" name="Default Changelist" comment="">
-      <change afterPath="$PROJECT_DIR$/../lab/4th/.idea/deployment.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../lab/4th/.idea/vcs.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/README.txt" beforeDir="false" afterPath="$PROJECT_DIR$/README.txt" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Table.h" beforeDir="false" afterPath="$PROJECT_DIR$/Table.h" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/cmake-build-debug/4th" beforeDir="false" afterPath="$PROJECT_DIR$/cmake-build-debug/4th" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/cmake-build-debug/CMakeFiles/4th.dir/CXX.includecache" beforeDir="false" afterPath="$PROJECT_DIR$/cmake-build-debug/CMakeFiles/4th.dir/CXX.includecache" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/cmake-build-debug/CMakeFiles/4th.dir/main.cpp.o" beforeDir="false" afterPath="$PROJECT_DIR$/cmake-build-debug/CMakeFiles/4th.dir/main.cpp.o" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/cmake-build-debug/CMakeFiles/4th.dir/main.cpp.o" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/main.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/main.cpp" afterDir="false" />
     </list>
     <ignored path="$PROJECT_DIR$/cmake-build-debug/" />
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
@@ -35,20 +34,20 @@
           <provider selected="true" editor-type-id="text-editor" />
         </entry>
       </file>
-      <file pinned="false" current-in-tab="false">
+      <file pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/main.cpp">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="-6422">
-              <caret line="14" column="15" selection-start-line="14" selection-start-column="15" selection-end-line="14" selection-end-column="15" />
+            <state relative-caret-position="-2198">
+              <caret line="212" column="36" lean-forward="true" selection-start-line="212" selection-start-column="36" selection-end-line="212" selection-end-column="36" />
             </state>
           </provider>
         </entry>
       </file>
-      <file pinned="false" current-in-tab="true">
+      <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/README.txt">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="-475">
-              <caret line="11" selection-start-line="11" selection-end-line="11" />
+            <state relative-caret-position="893">
+              <caret line="47" selection-start-line="47" selection-end-line="47" />
             </state>
           </provider>
         </entry>
@@ -65,12 +64,13 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/table.h">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="285">
-              <caret line="33" column="15" lean-forward="true" selection-start-line="33" selection-start-column="15" selection-end-line="33" selection-end-column="15" />
+            <state relative-caret-position="-2489">
+              <caret line="16" column="16" selection-start-line="16" selection-start-column="16" selection-end-line="16" selection-end-column="16" />
               <folding>
-                <element signature="e#77#86#0" expanded="true" />
-                <element signature="e#2589#2598#0" expanded="true" />
-                <element signature="e#3616#3618#0" expanded="true" />
+                <element signature="e#2628#2637#0" expanded="true" />
+                <element signature="e#2893#2902#0" expanded="true" />
+                <element signature="e#5112#5121#0" expanded="true" />
+                <element signature="e#10109#10118#0" expanded="true" />
               </folding>
             </state>
           </provider>
@@ -95,6 +95,7 @@
       <find>pop_back_col</find>
       <find>pop</find>
       <find>delete</find>
+      <find>t[</find>
     </findStrings>
     <replaceStrings>
       <replace>reset</replace>
@@ -103,6 +104,7 @@
     </replaceStrings>
   </component>
   <component name="Git.Settings">
+    <option name="UPDATE_TYPE" value="MERGE" />
     <option name="ROOT_SYNC" value="DONT_SYNC" />
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$/../.." />
   </component>
@@ -110,11 +112,11 @@
     <option name="CHANGED_PATHS">
       <list>
         <option value="$PROJECT_DIR$/large.txt" />
-        <option value="$PROJECT_DIR$/README.txt" />
         <option value="$PROJECT_DIR$/Table.h" />
         <option value="$PROJECT_DIR$/table_a.h" />
-        <option value="$PROJECT_DIR$/main.cpp" />
+        <option value="$PROJECT_DIR$/README.txt" />
         <option value="$PROJECT_DIR$/table.h" />
+        <option value="$PROJECT_DIR$/main.cpp" />
       </list>
     </option>
   </component>
@@ -194,7 +196,11 @@
       <workItem from="1549182564974" duration="444000" />
       <workItem from="1549332853690" duration="366000" />
       <workItem from="1549472435264" duration="26000" />
-      <workItem from="1549477177295" duration="4294000" />
+      <workItem from="1549477177295" duration="6075000" />
+      <workItem from="1549488808823" duration="7000" />
+      <workItem from="1549488826776" duration="633000" />
+      <workItem from="1549573339041" duration="904000" />
+      <workItem from="1549595369920" duration="341000" />
     </task>
     <task id="LOCAL-00001" summary="hw4">
       <created>1549171946659</created>
@@ -210,22 +216,29 @@
       <option name="project" value="LOCAL" />
       <updated>1549174022491</updated>
     </task>
-    <option name="localTasksCounter" value="3" />
+    <task id="LOCAL-00003" summary="hw4 pointer arithmetic">
+      <created>1549481709740</created>
+      <option name="number" value="00003" />
+      <option name="presentableId" value="LOCAL-00003" />
+      <option name="project" value="LOCAL" />
+      <updated>1549481709740</updated>
+    </task>
+    <option name="localTasksCounter" value="4" />
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="35672000" />
+    <option name="totallyTimeSpent" value="39338000" />
   </component>
   <component name="ToolWindowManager">
     <frame x="-7" y="-7" width="1550" height="838" extended-state="6" />
     <editor active="true" />
     <layout>
-      <window_info active="true" content_ui="combo" id="Project" order="0" visible="true" weight="0.26675603" />
+      <window_info content_ui="combo" id="Project" order="0" visible="true" weight="0.28150135" />
       <window_info id="Structure" order="1" side_tool="true" weight="0.25" />
       <window_info id="Favorites" order="2" side_tool="true" />
       <window_info anchor="bottom" id="Message" order="0" />
       <window_info anchor="bottom" id="Find" order="1" />
-      <window_info anchor="bottom" id="Run" order="2" sideWeight="0.49932975" visible="true" weight="0.3286119" />
+      <window_info active="true" anchor="bottom" id="Run" order="2" sideWeight="0.49932975" visible="true" weight="0.3286119" />
       <window_info anchor="bottom" id="Debug" order="3" weight="0.39943343" />
       <window_info anchor="bottom" id="Cvs" order="4" weight="0.25" />
       <window_info anchor="bottom" id="Inspection" order="5" weight="0.4" />
@@ -249,7 +262,8 @@
   <component name="VcsManagerConfiguration">
     <MESSAGE value="hw4" />
     <MESSAGE value="hw4 README" />
-    <option name="LAST_COMMIT_MESSAGE" value="hw4 README" />
+    <MESSAGE value="hw4 pointer arithmetic" />
+    <option name="LAST_COMMIT_MESSAGE" value="hw4 pointer arithmetic" />
   </component>
   <component name="editorHistoryManager">
     <entry file="file://$PROJECT_DIR$/Table.cpp" />
@@ -270,8 +284,16 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/table_a.h" />
     <entry file="file://$PROJECT_DIR$/CMakeLists.txt">
       <provider selected="true" editor-type-id="text-editor" />
+    </entry>
+    <entry file="file://$PROJECT_DIR$/README.txt">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="893">
+          <caret line="47" selection-start-line="47" selection-end-line="47" />
+        </state>
+      </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/large.txt">
       <provider selected="true" editor-type-id="text-editor">
@@ -280,49 +302,23 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/table_a.h">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="3969">
-          <caret line="254" column="18" lean-forward="true" selection-start-line="254" selection-start-column="4" selection-end-line="254" selection-end-column="18" />
-          <folding>
-            <element signature="e#522#531#0" expanded="true" />
-            <element signature="e#3307#3316#0" expanded="true" />
-            <element signature="e#3570#3579#0" expanded="true" />
-            <element signature="e#4002#4011#0" expanded="true" />
-            <element signature="e#4272#4281#0" expanded="true" />
-            <element signature="e#4477#4486#0" expanded="true" />
-            <element signature="e#4996#5005#0" expanded="true" />
-            <element signature="e#5406#5415#0" expanded="true" />
-            <element signature="e#6691#6700#0" expanded="true" />
-            <element signature="e#7446#7455#0" expanded="true" />
-            <element signature="e#8821#8830#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/table.h">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="285">
-          <caret line="33" column="15" lean-forward="true" selection-start-line="33" selection-start-column="15" selection-end-line="33" selection-end-column="15" />
+        <state relative-caret-position="-2489">
+          <caret line="16" column="16" selection-start-line="16" selection-start-column="16" selection-end-line="16" selection-end-column="16" />
           <folding>
-            <element signature="e#77#86#0" expanded="true" />
-            <element signature="e#2589#2598#0" expanded="true" />
-            <element signature="e#3616#3618#0" expanded="true" />
+            <element signature="e#2628#2637#0" expanded="true" />
+            <element signature="e#2893#2902#0" expanded="true" />
+            <element signature="e#5112#5121#0" expanded="true" />
+            <element signature="e#10109#10118#0" expanded="true" />
           </folding>
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/main.cpp">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-6422">
-          <caret line="14" column="15" selection-start-line="14" selection-start-column="15" selection-end-line="14" selection-end-column="15" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/README.txt">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-475">
-          <caret line="11" selection-start-line="11" selection-end-line="11" />
+        <state relative-caret-position="-2198">
+          <caret line="212" column="36" lean-forward="true" selection-start-line="212" selection-start-column="36" selection-end-line="212" selection-end-column="36" />
         </state>
       </provider>
     </entry>
