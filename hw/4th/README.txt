@@ -54,7 +54,8 @@ Valgrind/Dr. Memory, std::cout & print, etc.)?  How did you test the
 "corner cases" of your Table class design & implementation?
 
 GDB, Valgrind, cout and assert.
-Use BatchTest() with parameters large.txt and 10,000, and check memory usage in task manager.
+Corner cases with abnormal cases and different combinations of manipulation.
+Use BatchTest() with parameters large.txt and 10,000 , and check memory usage in task manager.
 
 EXTRA CREDIT:
 Indicate here if you implemented push_back for multiple rows or
