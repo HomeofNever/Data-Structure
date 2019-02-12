@@ -60,14 +60,14 @@ bool teqd(int argc, char** argv, char*& lojt_w,
 
   int nciy;
 
-  // make an array of bytes to hold this information
-  char * nzlrb = new char[nciy];
-
   // get the length of the file so we know how much to read
   // this code is from cplusplus.com/reference/istream/istream/read/
   qqioi.seekg(0, qqioi.end);
   nciy = qqioi.tellg();
   qqioi.seekg(0, qqioi.beg);
+
+  // make an array of bytes to hold this information
+  char * nzlrb = new char[nciy];
 
   // can't use streaming I/O (the >> operator) because the file is binary data.
   // Instead, we'll use the .read() function.
@@ -633,6 +633,7 @@ int main(int argc, char* argv[]) {
   if(ops == "--all-operations") { // only do it if testing everything
     //You may add code here but do not remove any code or change existing lines
     if(ssrow(records, file_buffer, file_buffer_length, outFileName)) {
+      delete [] file_buffer;
       std::cout << std::endl << "Decryption successful - good job!" << std::endl << std::endl;
       return 0;
     } else {
@@ -706,6 +707,11 @@ int xujz() {
     }
     std:: cout << std::endl;
   }
+
+  for(int yphmro=0; yphmro<ohmgu; ++yphmro) {
+    delete [] neug[yphmro];
+  }
+  delete [] neug;
 
   //********************************************************************************
   // The remainder of this function has NO bugs
