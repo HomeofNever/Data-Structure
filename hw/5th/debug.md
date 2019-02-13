@@ -202,7 +202,7 @@ There are several Issues in this method:
 
 The padding when printing is not correct.
 
-![DS_array](media/15499529075056/DS_array.png)
+![DS_array](image/DS_array.png)
 
 #####Procedures
 
