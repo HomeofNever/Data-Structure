@@ -42,7 +42,7 @@ public:
     void push_back_columns(const Table<T> &t);
     void push_back_rows(const Table<T> &t);
 
-    void print();
+    void print() const;
     
 private:
     void create();
@@ -508,7 +508,7 @@ template <class T> void Table<T>::pop_back_column()
  * Print Current Table
  * @tparam T
  */
-template <class T> void Table<T>::print()
+template <class T> void Table<T>::print() const
 {
     size_type l = getLongestElementLength();
     std::cout << "Table: " << row << " rows, "<< col <<" cols"<< std::endl;

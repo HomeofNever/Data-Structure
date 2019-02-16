@@ -19,6 +19,8 @@
         "iosfwd": "cpp",
         "iterator": "cpp",
         "ios": "cpp",
-        "__locale": "cpp"
+        "__locale": "cpp",
+        "cassert": "cpp",
+        "iostream": "cpp"
     }
 }
