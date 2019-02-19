@@ -6,6 +6,7 @@
 // the actual list class.  The underlying list is doubly-linked, but
 // there is no dummy head node and the list is not circular.
 #include <cassert>
+#include <iostream>
 
 const int NUM_ELEMENTS_PER_NODE = 6;
 typedef unsigned int uint;
@@ -15,7 +16,7 @@ typedef unsigned int uint;
 template <class T>
 class Node {
 public:
-  Node() : next_(NULL), prev_(NULL), num_elements_(0) {}
+  Node() : num_elements_(0), next_(NULL), prev_(NULL) {}
   Node (const Node<T> &n) {
     next_ = n.next_;
     prev_ = n.prev_;
@@ -197,7 +198,7 @@ public:
       std::cout << "Iterator end() should not be increase" << std::endl;
     } else {
       offset_++;
-      if (offset_ > (int) ptr_->numElement() - 1) {
+      if (offset_ > ptr_->numElement() - 1) {
         ptr_ = ptr_->next_;
         offset_ = 0;
       }
