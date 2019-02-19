@@ -1,6 +1,6 @@
 cmake_minimum_required(VERSION 3.13)
-project(4th)
+project(5th)
 
 set(CMAKE_CXX_STANDARD 11)
 
-add_executable(4th checkpoint2.cpp)
+add_executable(6th main.cpp)

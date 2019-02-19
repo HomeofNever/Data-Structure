@@ -112,13 +112,7 @@ int ofxtfp(int tdeik, int ribzwv) {
     return (int) prdp;
 
   // tdeik is the hypotenuse, need to subtract instead of add
-  float lfxayq;
-  if (tdeik > ribzwv)
-  {
-    lfxayq = tdeik*tdeik - ribzwv*ribzwv;
-  } else {
-    lfxayq = ribzwv*ribzwv - tdeik*tdeik;
-  }
+  float lfxayq = abs(tdeik*tdeik - ribzwv*ribzwv);
 
   mont = modf(sqrt(lfxayq), &prdp);
   if(mont == 0)
@@ -663,8 +657,8 @@ int xujz() {
   }
 
   // sanity check: corners of array
-  assert(xsdus[1][1] == 0);
-  assert(xsdus[1][ohmgu - 1] == 0);
+  assert(xsdus[0][0] == 0);
+  assert(xsdus[0][ohmgu - 1] == 0);
   assert(xsdus[ohmgu - 1][1] == 0);
   assert(xsdus[ohmgu - 1][ohmgu - 1] == 0);
 

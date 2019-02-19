@@ -218,4 +218,23 @@ void MoreTests() {
   //
   //
 
+  // Deconstructor/Print: Zero, one, or more node appears.
+  UnrolledLL<int> * a = new UnrolledLL<int>;
+  a->print(std::cout);
+  delete a;
+
+  UnrolledLL<int> * b = new UnrolledLL<int>;
+  b->push_back(1);
+  b->print(std::cout);
+  delete b;
+
+  UnrolledLL<int> * c = new UnrolledLL<int>;
+  for (int i = 0; i < 10; i++)
+  {
+    c->push_back(1);
+  }
+  c->print(std::cout);
+  delete c;
+
+  std::cout << "End Print/Deconstructor test" << std::endl;
 }
