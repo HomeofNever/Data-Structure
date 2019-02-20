@@ -57,9 +57,9 @@ public:
 
   // REPRESENTATION
   T elements_[NUM_ELEMENTS_PER_NODE];
-  uint num_elements_;
-  Node<T>* next_;
-  Node<T>* prev_;
+  uint num_elements_ = 0;
+  Node<T>* next_ = NULL;
+  Node<T>* prev_ = NULL;
 };
 
 template <class T> const T& Node<T>::getElement(uint offset) const 
@@ -250,7 +250,7 @@ public:
 
 private:
   // REPRESENTATION
-  Node<T>* ptr_;    // ptr to node in the list
+  Node<T>* ptr_ = NULL;    // ptr to node in the list
   uint offset_ = 0;
 };
 
@@ -306,9 +306,9 @@ private:
   void mergeNode(Node<T> *one, Node<T> *other);
 
   //REPRESENTATION
-  Node<T>* head_;
-  Node<T>* tail_;
-  unsigned int size_;
+  Node<T>* head_ = NULL;
+  Node<T>* tail_ = NULL;
+  unsigned int size_ = 0;
 };
 
 // -----------------------------------------------------------------
@@ -363,23 +363,6 @@ void UnrolledLL<T>::pop_back() {
     erase(iterator(tail_, tail_->numElement() - 1));
   }
 }
-
-// do these lists look the same (length & contents)?
-template <class T>
-bool operator== (UnrolledLL<T>& left, UnrolledLL<T>& right) {
-  if (left.size() != right.size()) return false;
-  typename UnrolledLL<T>::iterator left_itr = left.begin();
-  typename UnrolledLL<T>::iterator right_itr = right.begin();
-  // walk over both lists, looking for a mismatched value
-  while (left_itr != left.end()) {
-    if (*left_itr != *right_itr) return false;
-    left_itr++; right_itr++;
-  }
-  return true;
-}
-
-template <class T>
-bool operator!= (UnrolledLL<T>& left, UnrolledLL<T>& right){ return !(left==right); }
 
 template <class T>
 typename UnrolledLL<T>::iterator UnrolledLL<T>::erase(iterator itr) {
@@ -524,7 +507,7 @@ void UnrolledLL<T>::push_back_node(const Node<T> &n)
   // Create a new Node
   Node<T> * new_node = new Node<T>(n);
   new_node->next_ = NULL;
-  if (tail_ == NULL && head_ == NULL)
+  if (empty())
   {
     // then this is the first new Node.
     head_ = new_node;
@@ -583,7 +566,7 @@ typename UnrolledLL<T>::iterator UnrolledLL<T>::checkMerge(iterator itr)
 
       mergeNode(prev, current);
 
-      return iterator(prev, prev_num + current_num - 1);
+      return iterator(prev, (uint)(prev_num + current_num - 1));
     } else if (next_num != -1 &&
                current_num != -1 &&
                next_num + current_num <= NUM_ELEMENTS_PER_NODE) {

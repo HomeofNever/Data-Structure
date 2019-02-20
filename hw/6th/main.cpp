@@ -219,6 +219,7 @@ void MoreTests() {
   //
 
   // Deconstructor/Print: Zero, one, or more node appears.
+  std::cout << "**************Begin MoreTest()**************" << std::endl;
   UnrolledLL<int> * a = new UnrolledLL<int>;
   a->print(std::cout);
   delete a;
@@ -237,4 +238,42 @@ void MoreTests() {
   delete c;
 
   std::cout << "End Print/Deconstructor test" << std::endl;
+
+  // Assignment operator, types other than int
+  UnrolledLL<char> d;
+  for (char i = 'a'; i <= 'z'; i++)
+  {
+    d.push_back(i);
+  }
+  d.print(std::cout);
+
+  for (char i = 'A'; i <= 'Z'; i++)
+  {
+    d.push_front(i);
+  }
+  d.print(std::cout);
+
+  UnrolledLL<char> e = d;
+  UnrolledLL<char> f(d);
+  e.push_back('~');
+  f.push_front('@');
+
+  e.print(std::cout);
+  f.print(std::cout);
+
+  std::cout << "End copy and char type test" << std::endl;
+
+  // Erase/Insert, merge node
+  UnrolledLL<std::string> g;
+  UnrolledLL<std::string>::iterator gi = g.begin();
+  g.push_front("abc");
+  g.push_front("abc");
+  g.push_front("abc");
+  g.push_front("abc");
+  g.push_front("abc");
+  g.push_front("abc");
+  g.print(std::cout);
+  g.push_front("abc");
+  g.print(std::cout);
+
 }
