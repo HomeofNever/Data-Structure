@@ -1,0 +1,1 @@
+/usr/bin/c++  -g   CMakeFiles/6th.dir/checkpoint2.cpp.o  -o 6th 

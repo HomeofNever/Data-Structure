@@ -1,0 +1,22 @@
+#IncludeRegexLine: ^[ 	]*[#%][ 	]*(include|import)[ 	]*[<"]([^">]+)([">])
+
+#IncludeRegexScan: ^.*$
+
+#IncludeRegexComplain: ^$
+
+#IncludeRegexTransform: 
+
+/mnt/c/Users/luox6/OneDrive - Rensselaer Polytechnic Institute/Documents/Project/DS/lab/6th/checkpoint2.cpp
+iostream
+-
+cmath
+-
+list
+-
+dslist.h
+/mnt/c/Users/luox6/OneDrive - Rensselaer Polytechnic Institute/Documents/Project/DS/lab/6th/dslist.h
+
+/mnt/c/Users/luox6/OneDrive - Rensselaer Polytechnic Institute/Documents/Project/DS/lab/6th/dslist.h
+cassert
+-
+
