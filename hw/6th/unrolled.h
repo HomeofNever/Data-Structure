@@ -23,7 +23,7 @@ public:
     num_elements_ = n.numElement();
     for (uint i = 0; i < num_elements_; i++)
     {
-      elements_[i] = n.elements_[i];
+      elements_[i] = n.getElement(i);
     }
   }
   ~Node() { destroy(); };
@@ -130,7 +130,6 @@ template <class T> T Node<T>::erase(uint offset)
     std::cerr << "Value cannot be erased since Index out of bound" << std::endl;
   } else {
     T erased = elements_[offset];
-    // delete elements_[offset];
     step_front(offset);
     num_elements_--;
 
@@ -140,7 +139,7 @@ template <class T> T Node<T>::erase(uint offset)
 
 template <class T> void Node<T>::destroy()
 {
-  // delete [] elements_;
+  num_elements_ = 0;
 }
 
 template <class T>
@@ -419,7 +418,14 @@ typename UnrolledLL<T>::iterator UnrolledLL<T>::erase_node(const iterator itr)
   Node<T> * prev = itr.ptr_->prev_;
   Node<T> * next = itr.ptr_->next_;
 
-  if (itr.ptr_ == head_)
+  // When ptr is head_ and tail_, treat it as head_
+  if (itr.ptr_ == head_ && itr.ptr_ == tail_)
+  {
+    // then this is the only element
+    head_ = next;
+    tail_ = next;
+
+  } else if (itr.ptr_ == head_)
   {
     head_ = next;
     next->prev_ = NULL;
@@ -503,13 +509,12 @@ template <class T>
 void UnrolledLL<T>::copy_list(const UnrolledLL<T>& old)
 {
   size_ = old.size_;
-  iterator o = old.begin();
-  o++; // Increase one since head is added.
-  while (o != old.end())
+  Node<T> * n = old.head_;
+  while (n != NULL)
   {
     // Copy node and link together
-    push_back(*o);
-    o++;
+    push_back_node(*n);
+    n = n->next_;
   }
 }
 
@@ -542,6 +547,9 @@ void UnrolledLL<T>::destroy_list()
     delete n;
     n = next;
   }
+
+  size_ = 0;
+  head_ = tail_ = NULL;
 }
 
 template <class T>
@@ -597,6 +605,11 @@ void UnrolledLL<T>::mergeNode(Node<T> *one, Node<T> *other)
     one->push_back(other->pop_front());
   }
 
+  // If we are removing tail: relink relationship
+  if (other == tail_)
+  {
+    tail_ = one;
+  }
 
   // Remove "other" and relink Nodes
   one->next_ = other->next_;
@@ -628,6 +641,18 @@ void UnrolledLL<T>::print(std::ostream &output) const
   Node<T> * n = head_;
   while (n != NULL)
   {
+    if (n == head_ && n == tail_)
+    {
+      output << "H&T";
+    } else if (n == head_)
+    {
+      output << "H  ";
+    } else if (n == tail_)
+    {
+      output << "T  ";
+    } else {
+      output << "   ";
+    }
     n->print(output);
     output << std::endl;
     n = n->next_;
