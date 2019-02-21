@@ -16,7 +16,9 @@ typedef unsigned int uint;
 template <class T>
 class Node {
 public:
+  // Constructors
   Node() : num_elements_(0), next_(NULL), prev_(NULL) {}
+  // Copy Constructor
   Node (const Node<T> &n) {
     next_ = n.next_;
     prev_ = n.prev_;
@@ -32,6 +34,7 @@ public:
   uint numElement() const { return num_elements_; };
   const T& getElement(uint offset) const;
   T& getElement(uint offset);
+
   // Mutator
   void insert(const T& value, uint offset);
   T erase(uint offset);
@@ -39,18 +42,22 @@ public:
   void push_back(const T& v) { insert(v, numElement()); };
   T pop_front() { return erase(0); }
   T pop_back() { return erase(numElement() - 1); }
-  // Helper
+
+  // Helpers
   void move(uint offset);
   void step_front(uint offset);
+
   const T& front() const { return getElement(0);  };
   T& front() { return getElement(0); };
   const T& back() const { return getElement(numElement() - 1); };
   T& back() { return getElement(numElement() - 1); };
+
   // Methods
   bool isLegalIndex(uint offset) const { return offset < numElement(); };
   bool isAllowedIndex(uint offset) const { return offset < NUM_ELEMENTS_PER_NODE; };
   bool isFull() const { return numElement() >= NUM_ELEMENTS_PER_NODE; };
   bool isEmpty() const { return numElement() <= 0; };
+
   void destroy();
 
   void print(std::ostream &output) const;
@@ -62,7 +69,9 @@ public:
   Node<T>* prev_ = NULL;
 };
 
-template <class T> const T& Node<T>::getElement(uint offset) const 
+// Get Const reference of an element in the node of specific offset
+template <class T>
+const T& Node<T>::getElement(uint offset) const
 {
   if (!isLegalIndex(offset))
   {
@@ -72,7 +81,9 @@ template <class T> const T& Node<T>::getElement(uint offset) const
   }
 }
 
-template <class T> T& Node<T>::getElement(uint offset)
+// Get mutable reference of an element in the node of specific offset
+template <class T>
+T& Node<T>::getElement(uint offset)
 {
   if (!isLegalIndex(offset))
   {
@@ -82,7 +93,9 @@ template <class T> T& Node<T>::getElement(uint offset)
   }
 }
 
-template <class T> void Node<T>::move(uint offset)
+// Make a space if requested offset has already occupied by an element
+template <class T>
+void Node<T>::move(uint offset)
 {
   // If the set is occupied by other element, move things away.
   // There won't be any empty block between two elements
@@ -96,7 +109,9 @@ template <class T> void Node<T>::move(uint offset)
   }
 }
 
-template <class T> void Node<T>::step_front(uint offset)
+// Move the elements in the array to eliminate the empty space among elements
+template <class T>
+void Node<T>::step_front(uint offset)
 {
   // If there is element behind, move one step front
   uint behind = numElement() - 1 - offset;
@@ -109,7 +124,9 @@ template <class T> void Node<T>::step_front(uint offset)
   }
 }
 
-template <class T> void Node<T>::insert(const T& value, uint offset)
+// Insert given value into given offset
+template <class T>
+void Node<T>::insert(const T& value, uint offset)
 {
   if (isFull())
   {
@@ -123,7 +140,10 @@ template <class T> void Node<T>::insert(const T& value, uint offset)
   }
 }
 
-template <class T> T Node<T>::erase(uint offset)
+// Remove element at the given location
+// Return erased element
+template <class T>
+T Node<T>::erase(uint offset)
 {
   if (!isLegalIndex(offset))
   {
@@ -137,11 +157,14 @@ template <class T> T Node<T>::erase(uint offset)
   }
 }
 
-template <class T> void Node<T>::destroy()
+// Deconstructor/Reset to default
+template <class T>
+void Node<T>::destroy()
 {
   num_elements_ = 0;
 }
 
+// Print current node and its element(s)
 template <class T>
 void Node<T>::print(std::ostream &output) const
 {
@@ -177,7 +200,7 @@ public:
     if (ptr_ == NULL)
     {
       offset_ = 0;
-      std::cout << "Iterator end() should not be increase" << std::endl;
+      std::cout << "Iterator end() should not be increased" << std::endl;
     } else {
       offset_++;
       if (offset_ > ptr_->numElement() - 1){
@@ -188,13 +211,12 @@ public:
 
     return *this;
   }
-
   list_iterator<T> operator++(int) { // post-increment, e.g., iter++
     list_iterator<T> temp(*this);
     if (ptr_ == NULL)
     {
       offset_ = 0;
-      std::cout << "Iterator end() should not be increase" << std::endl;
+      std::cout << "Iterator end() should not be increased" << std::endl;
     } else {
       offset_++;
       if (offset_ > ptr_->numElement() - 1) {
@@ -221,7 +243,6 @@ public:
     }
     return *this;
   }
-
   list_iterator<T> operator--(int) { // post-decrement, e.g., iter--
     list_iterator<T> temp(*this);
     if (offset_ == 0)
@@ -239,6 +260,7 @@ public:
     }
     return temp;
   }
+
   // the UnrolledLL class needs access to the private ptr_ member variable
   friend class UnrolledLL<T>;
 
@@ -283,6 +305,7 @@ public:
   void push_back(const T& v);
   void pop_back();
 
+  // methods
   typedef list_iterator<T> iterator;
   iterator erase(iterator itr);
   iterator insert(iterator itr, const T& v);
@@ -296,12 +319,14 @@ private:
   void copy_list(const UnrolledLL<T>& old);
   void destroy_list();
 
+  // Helpers
   void push_back_node(const Node<T> &n);
   iterator erase_node(iterator itr);
   iterator split_node(iterator itr);
 
   // Methods
   void init(const T &t);
+
   iterator checkMerge(iterator itr);
   void mergeNode(Node<T> *one, Node<T> *other);
 
@@ -327,17 +352,21 @@ template <class T>
 void UnrolledLL<T>::push_front(const T& v) {
   if (empty())
   {
+    // Initialize a new node
     init(v);
     size_++;
   } else {
+    // Insert to the beginning
     insert(begin(), v);
   }
 }
 
 template <class T>
 void UnrolledLL<T>::pop_front() {
+  // Do nothing when empty
   if (!empty())
   {
+    // Erase the first element
     erase(begin());
   }
 }
@@ -349,6 +378,7 @@ void UnrolledLL<T>::push_back(const T& v) {
     // The last node is full or does not exist, generate a new Node and add.
     init(v);
   } else {
+    // Add to the tail and check merge status
     tail_->push_back(v);
     checkMerge(iterator(tail_, tail_->numElement() - 1));
   }
@@ -358,8 +388,11 @@ void UnrolledLL<T>::push_back(const T& v) {
 
 template <class T>
 void UnrolledLL<T>::pop_back() {
+  // Do nothing when empty
   if (!empty())
   {
+    // If it is not empty, tail_ must exist,
+    // and tail_ should not be empty
     erase(iterator(tail_, tail_->numElement() - 1));
   }
 }
@@ -371,6 +404,7 @@ typename UnrolledLL<T>::iterator UnrolledLL<T>::erase(iterator itr) {
     iterator next(itr);
     next++;
 
+    // Remove from the node and decrease size
     itr.ptr_->erase(itr.offset_);
     size_--;
 
@@ -380,7 +414,7 @@ typename UnrolledLL<T>::iterator UnrolledLL<T>::erase(iterator itr) {
       return checkMerge(erase_node(itr));
     } else {
       if (next == end()){
-        // We just delete the last element, return end
+        // We just delete the last element of the list, return end()
         return end();
       } else if (itr.offset_ > itr.ptr_->numElement() - 1){
         // We have removed the last element in this node, move to the next node.
@@ -395,31 +429,34 @@ typename UnrolledLL<T>::iterator UnrolledLL<T>::erase(iterator itr) {
   }
 }
 
+// Remove a node when it is empty
 template <class T>
 typename UnrolledLL<T>::iterator UnrolledLL<T>::erase_node(const iterator itr)
 {
   Node<T> * prev = itr.ptr_->prev_;
   Node<T> * next = itr.ptr_->next_;
 
-  // When ptr is head_ and tail_, treat it as head_
+  // If head != tail, there must be >= 2 nodes in the list
   if (itr.ptr_ == head_ && itr.ptr_ == tail_)
   {
-    // then this is the only element
+    // then this is the only node in the list
     head_ = next;
     tail_ = next;
-
   } else if (itr.ptr_ == head_)
   {
+    // This is the head node?
     head_ = next;
     next->prev_ = NULL;
   } else if (itr.ptr_ == tail_) {
+    // Or this is the tail node?
+    // Here, we are removing the last node, so we should return end()
     tail_ = prev;
     prev->next_ = NULL;
-
-    delete itr.ptr_;
-
-    return iterator(tail_, tail_->numElement() - 1);
+//    delete itr.ptr_;
+//
+//    return iterator(tail_, tail_->numElement() - 1);
   } else {
+    // Normal node
     prev->next_ = next;
     next->prev_ = prev;
   }
@@ -429,11 +466,13 @@ typename UnrolledLL<T>::iterator UnrolledLL<T>::erase_node(const iterator itr)
   return iterator(next, 0);
 }
 
+// Split a full node into two half-full node so it can hold more elements
 template <class T>
 typename UnrolledLL<T>::iterator UnrolledLL<T>::split_node(UnrolledLL<T>::iterator itr) {
   if (itr.ptr_->isFull()) {
-    // Create a new Node and make them 50% full
+    // Create a new Node
     Node<T> *new_node = new Node<T>();
+    // Insert the node at full-node's back
     new_node->prev_ = itr.ptr_;
     if (itr.ptr_ != tail_) {
       new_node->next_ = itr.ptr_->next_;
@@ -444,8 +483,10 @@ typename UnrolledLL<T>::iterator UnrolledLL<T>::split_node(UnrolledLL<T>::iterat
 
     itr.ptr_->next_ = new_node;
 
+    // Separation
     uint num = itr.ptr_->numElement();
     uint limit = (num - 1) / 2;
+    // and make it 50% full
     for (uint i = num - 1; i > limit; i--) {
       new_node->push_front(itr.ptr_->pop_back());
     }
@@ -461,6 +502,7 @@ typename UnrolledLL<T>::iterator UnrolledLL<T>::split_node(UnrolledLL<T>::iterat
   return itr;
 }
 
+// Insert element at given location
 template <class T>
 typename UnrolledLL<T>::iterator UnrolledLL<T>::insert(iterator itr, const T& v)
 {
@@ -501,10 +543,11 @@ void UnrolledLL<T>::copy_list(const UnrolledLL<T>& old)
   }
 }
 
+// Push given node to the back of the list
 template <class T>
 void UnrolledLL<T>::push_back_node(const Node<T> &n)
 {
-  // Create a new Node
+  // Copy a new Node
   Node<T> * new_node = new Node<T>(n);
   new_node->next_ = NULL;
   if (empty())
@@ -514,12 +557,14 @@ void UnrolledLL<T>::push_back_node(const Node<T> &n)
     tail_ = new_node;
     new_node->prev_ = NULL;
   } else {
+    // Attached to the back
     tail_->next_ = new_node;
     new_node->prev_ = tail_;
     tail_ = new_node;
   }
 }
 
+// Deconstructor/Reset the list
 template <class T>
 void UnrolledLL<T>::destroy_list()
 {
@@ -535,51 +580,56 @@ void UnrolledLL<T>::destroy_list()
   head_ = tail_ = NULL;
 }
 
+// Check if given node can be merged into nearest location
+// Return the correct iterator if merge happened.
 template <class T>
 typename UnrolledLL<T>::iterator UnrolledLL<T>::checkMerge(iterator itr)
 {
   if (!empty()){
-    if (itr.ptr_ == NULL)
-    {
-      // Erase kick out the last element of the list
-      itr = iterator(tail_, tail_->numElement() - 1);
+    // If erase kick out the last element of the list
+    // Don't check anything, this is the end()
+    if (itr.ptr_ != NULL) {
+      // Acquire prev node info
+      Node<T> *prev = itr.ptr_->prev_;
+      int prev_num = -1;
+      if (prev != NULL) {
+        prev_num = prev->numElement();
+      }
+
+      // Acquire next node info
+      Node<T> *next = itr.ptr_->next_;
+      int next_num = -1;
+      if (next != NULL) {
+        next_num = next->numElement();
+      }
+
+      // Acquire current node info
+      Node<T> *current = itr.ptr_;
+      int current_num = current->numElement();
+
+      if (prev_num != -1 &&
+          current_num != -1 &&
+          prev_num + current_num <= NUM_ELEMENTS_PER_NODE) {
+        // If prev can be merged with current, remove current and keep prev
+        mergeNode(prev, current);
+
+        return iterator(prev, (uint) (prev_num + current_num - 1));
+      } else if (next_num != -1 &&
+                 current_num != -1 &&
+                 next_num + current_num <= NUM_ELEMENTS_PER_NODE) {
+        // If next can be merged with current, remove next and keep current.
+        mergeNode(current, next);
+      }
+
+      return itr;
     }
-
-    Node<T> *prev = itr.ptr_->prev_;
-    int prev_num = -1;
-    if (prev != NULL) {
-      prev_num = prev->numElement();
-    }
-
-    Node<T> *next = itr.ptr_->next_;
-    int next_num = -1;
-    if (next != NULL) {
-      next_num = next->numElement();
-    }
-
-    Node<T> *current = itr.ptr_;
-    int current_num = current->numElement();
-
-    if (prev_num != -1 &&
-        current_num != -1 &&
-        prev_num + current_num <= NUM_ELEMENTS_PER_NODE) {
-
-      mergeNode(prev, current);
-
-      return iterator(prev, (uint)(prev_num + current_num - 1));
-    } else if (next_num != -1 &&
-               current_num != -1 &&
-               next_num + current_num <= NUM_ELEMENTS_PER_NODE) {
-
-      mergeNode(current, next);
-    }
-
-    return itr;
   } else {
+    // Empty list should always get the begin()
     return begin();
   }
 }
 
+// Merge two nodes with given order and fix relationship
 template <class T>
 void UnrolledLL<T>::mergeNode(Node<T> *one, Node<T> *other)
 {
@@ -588,13 +638,13 @@ void UnrolledLL<T>::mergeNode(Node<T> *one, Node<T> *other)
     one->push_back(other->pop_front());
   }
 
-  // If we are removing tail: relink relationship
+  // If we are removing tail, update pointer
   if (other == tail_)
   {
     tail_ = one;
   }
 
-  // Remove "other" and relink Nodes
+  // Remove "other" and relink nodes
   one->next_ = other->next_;
   if (one->next_ != NULL){
     one->next_->prev_ = one;
@@ -602,6 +652,8 @@ void UnrolledLL<T>::mergeNode(Node<T> *one, Node<T> *other)
   delete other;
 }
 
+// Initialize when list is empty
+// Given the first element so we can build a node
 template <class T>
 void UnrolledLL<T>::init(const T &t)
 {
@@ -612,11 +664,11 @@ void UnrolledLL<T>::init(const T &t)
   delete new_node;
 }
 
-//UnrolledLL, size: 18
-// node:[5] 11 12 13 14 15
-// node:[6] 16 17 18 19 20 21
-// node:[6] 22 23 24 25 26 27
-// node:[1] 28
+//Example:
+//UnrolledLL, size: 14
+//H   node:[6] 77 92 91 77 16 17
+//    node:[3] 77 19 20
+//T   node:[5] 22 23 25 77 26
 template <class T>
 void UnrolledLL<T>::print(std::ostream &output) const
 {
