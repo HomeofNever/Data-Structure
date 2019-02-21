@@ -9,6 +9,7 @@
 #include <iostream>
 
 const int NUM_ELEMENTS_PER_NODE = 6;
+const int HALF_ELEMENTS_PER_NODE = (int)ceil((float)NUM_ELEMENTS_PER_NODE / (float)2);
 typedef unsigned int uint;
 
 // -----------------------------------------------------------------
@@ -368,6 +369,8 @@ void UnrolledLL<T>::pop_front() {
   {
     // Erase the first element
     erase(begin());
+  } else {
+    std::cerr << "Empty list cannot pop_front!" << std::endl;
   }
 }
 
@@ -394,6 +397,8 @@ void UnrolledLL<T>::pop_back() {
     // If it is not empty, tail_ must exist,
     // and tail_ should not be empty
     erase(iterator(tail_, tail_->numElement() - 1));
+  } else {
+    std::cerr << "Empty list should not be pop_back!" << std::endl;
   }
 }
 
@@ -418,7 +423,8 @@ typename UnrolledLL<T>::iterator UnrolledLL<T>::erase(iterator itr) {
         return end();
       } else if (itr.offset_ > itr.ptr_->numElement() - 1){
         // We have removed the last element in this node, move to the next node.
-        return checkMerge(iterator(itr.ptr_->next_, 0));
+        // However, we need to check current node, increase itr after adjustment.
+        return ++checkMerge(iterator(itr.ptr_, itr.ptr_->numElement() - 1));
       } else {
         // The next element should be @ the same spot
         return checkMerge(itr);
@@ -452,9 +458,6 @@ typename UnrolledLL<T>::iterator UnrolledLL<T>::erase_node(const iterator itr)
     // Here, we are removing the last node, so we should return end()
     tail_ = prev;
     prev->next_ = NULL;
-//    delete itr.ptr_;
-//
-//    return iterator(tail_, tail_->numElement() - 1);
   } else {
     // Normal node
     prev->next_ = next;
@@ -613,12 +616,27 @@ typename UnrolledLL<T>::iterator UnrolledLL<T>::checkMerge(iterator itr)
         // If prev can be merged with current, remove current and keep prev
         mergeNode(prev, current);
 
-        return iterator(prev, (uint) (prev_num + current_num - 1));
+        return iterator(prev, (uint) (prev_num + itr.offset_));
       } else if (next_num != -1 &&
                  current_num != -1 &&
                  next_num + current_num <= NUM_ELEMENTS_PER_NODE) {
         // If next can be merged with current, remove next and keep current.
         mergeNode(current, next);
+      } else {
+        // if current node if lower than half
+        // Split up a full node nearby and
+        if (current_num != -1 && current_num < HALF_ELEMENTS_PER_NODE)
+        {
+          if (prev_num > HALF_ELEMENTS_PER_NODE)
+          {
+            // Get one element from the prev
+            current->push_front(prev->pop_back());
+            itr++;
+          } else if (next_num > HALF_ELEMENTS_PER_NODE)
+          {
+            current->push_back(next->pop_front());
+          }
+        }
       }
 
       return itr;

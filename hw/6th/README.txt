@@ -22,8 +22,9 @@ ESTIMATE OF # OF HOURS SPENT ON THIS ASSIGNMENT:  12
 
 
 TESTING & DEBUGGING STRATEGY:
-I use GDB to go through
-
+1) I use GDB to go through each seg fault I have met.
+2) I also add "H/T" in list's print function when printing Node so that I know that list (head_ and tail_) is properly tagged.
+3) I use valgrind to check memory leak and evaluate which function causes the leak.
 
 
 ORDER NOTATION & EVALUATION:
@@ -37,7 +38,7 @@ elements per node in this case?
 
 
 EXTRA CREDIT:
-Improved memory usage implementation.  Discussion as outlined in .pdf.
+If the # of elements in the list changes with function pop/push/insert/erase, I will do a check over the node that being mod
 
 
 

@@ -278,7 +278,7 @@ void MoreTests() {
     g.push_front("abc");
   }
 
-  UnrolledLL<std::string>::iterator gi = g.begin();
+  list_iterator<std::string> gi = g.begin();
   for (int i = 1; i < g.size(); i++)
   {
     if (i > NUM_ELEMENTS_PER_NODE && i <= NUM_ELEMENTS_PER_NODE * 1.5)
