@@ -3,4 +3,4 @@ project(5th)
 
 set(CMAKE_CXX_STANDARD 11)
 
-add_executable(6th othermain.cpp)
+add_executable(6th main.cpp)

@@ -22,7 +22,7 @@ ESTIMATE OF # OF HOURS SPENT ON THIS ASSIGNMENT:  12
 
 
 TESTING & DEBUGGING STRATEGY:
-Please be concise!
+I use GDB to go through
 
 
 

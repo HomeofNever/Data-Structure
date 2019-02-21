@@ -237,7 +237,7 @@ void MoreTests() {
   c->print(std::cout);
   delete c;
 
-  std::cout << "End Print/Deconstructor test" << std::endl;
+  std::cout << "End Print/Deconstructor/Special case test" << std::endl;
 
   // Assignment operator, types other than int
   UnrolledLL<char> d;
@@ -261,19 +261,71 @@ void MoreTests() {
   e.print(std::cout);
   f.print(std::cout);
 
-  std::cout << "End copy and char type test" << std::endl;
+  std::cout << "Finish copy and char type test" << std::endl;
 
   // Erase/Insert, merge node
   UnrolledLL<std::string> g;
-  UnrolledLL<std::string>::iterator gi = g.begin();
-  g.push_front("abc");
-  g.push_front("abc");
-  g.push_front("abc");
-  g.push_front("abc");
-  g.push_front("abc");
-  g.push_front("abc");
-  g.print(std::cout);
-  g.push_front("abc");
+
+  for (int i = 0; i < NUM_ELEMENTS_PER_NODE; i++)
+  {
+    g.push_front("abc");
+  }
+
   g.print(std::cout);
 
+  for (int i = 0; i < NUM_ELEMENTS_PER_NODE; i++)
+  {
+    g.push_front("abc");
+  }
+
+  UnrolledLL<std::string>::iterator gi = g.begin();
+  for (int i = 1; i < g.size(); i++)
+  {
+    if (i > NUM_ELEMENTS_PER_NODE && i <= NUM_ELEMENTS_PER_NODE * 1.5)
+    {
+      gi = g.insert(gi, "cde");
+    } else {
+      gi++;
+    }
+  }
+
+  gi++;
+
+  assert(gi == g.end());
+
+  std::cout << "--Before merge" << std::endl;
+  g.print(std::cout);
+
+  gi = g.begin();
+  for (int i = 0; i < NUM_ELEMENTS_PER_NODE; i++)
+  {
+    gi++;
+  }
+
+  // Erase Merge
+  for (int i = 0; i < NUM_ELEMENTS_PER_NODE / 2; i++)
+  {
+    gi = g.erase(gi);
+  }
+
+  std::cout << "--After merge" << std::endl;
+  g.print(std::cout);
+
+  std::cout << "Finish std::string, erase merge" << std::endl;
+
+  // Push, Pop one/Zero node
+  UnrolledLL<int> l;
+  l.push_back(1);
+  l.pop_front();
+  l.push_front(1);
+  l.pop_back();
+  l.insert(l.begin(), 1);
+
+  assert(l.front() == 1);
+  l.print(std::cout);
+
+  l.pop_back();
+  l.pop_front();
+
+  std::cout << "Finished One/Zero Node with pop/push test" << std::endl;
 }
