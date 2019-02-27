@@ -1,0 +1,3 @@
+/mnt/c/Users/luox6/OneDrive - Rensselaer Polytechnic Institute/Documents/Project/DS/hw/6th/cmake-build-debug/CMakeFiles/rebuild_cache.dir
+/mnt/c/Users/luox6/OneDrive - Rensselaer Polytechnic Institute/Documents/Project/DS/hw/6th/cmake-build-debug/CMakeFiles/6th.dir
+/mnt/c/Users/luox6/OneDrive - Rensselaer Polytechnic Institute/Documents/Project/DS/hw/6th/cmake-build-debug/CMakeFiles/edit_cache.dir

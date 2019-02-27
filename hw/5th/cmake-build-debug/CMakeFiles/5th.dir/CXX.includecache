@@ -1,0 +1,28 @@
+#IncludeRegexLine: ^[ 	]*[#%][ 	]*(include|import)[ 	]*[<"]([^">]+)([">])
+
+#IncludeRegexScan: ^.*$
+
+#IncludeRegexComplain: ^$
+
+#IncludeRegexTransform: 
+
+/mnt/c/Users/luox6/OneDrive - Rensselaer Polytechnic Institute/Documents/Project/DS/hw/5th/main.cpp
+iostream
+-
+cstdlib
+-
+cassert
+-
+vector
+-
+list
+-
+fstream
+-
+cstdio
+-
+cmath
+-
+algorithm
+-
+

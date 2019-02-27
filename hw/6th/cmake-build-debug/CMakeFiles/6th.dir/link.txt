@@ -1,0 +1,1 @@
+/usr/bin/c++  -g   CMakeFiles/6th.dir/main.cpp.o  -o 6th 
