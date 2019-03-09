@@ -1,0 +1,18 @@
+#IncludeRegexLine: ^[ 	]*[#%][ 	]*(include|import)[ 	]*[<"]([^">]+)([">])
+
+#IncludeRegexScan: ^.*$
+
+#IncludeRegexComplain: ^$
+
+#IncludeRegexTransform: 
+
+/mnt/c/Users/luox6/OneDrive - Rensselaer Polytechnic Institute/Documents/Project/DS/lab/7th/start.cpp
+fstream
+-
+iostream
+-
+list
+-
+vector
+-
+

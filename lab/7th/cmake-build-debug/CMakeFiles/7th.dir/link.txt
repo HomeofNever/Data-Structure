@@ -1,0 +1,1 @@
+/usr/bin/c++  -g   CMakeFiles/7th.dir/start.cpp.o  -o 7th 
