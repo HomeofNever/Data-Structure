@@ -92,63 +92,17 @@ std::string grid::getString(unsigned int x, unsigned int y, int type, unsigned i
   return str;
 }
 
-bool grid::targetReached(std::list<std::string> words) const {
-  if (words.size() == constraints.size()) {
-    //@TODO
-    std::list<std::string>::iterator wb = words.begin();
-    while (wb != words.end()) {
-      std::cout << *wb << " ";
-      wb++;
-    }
-    std::cout << std::endl;
-
-    std::list<unsigned int> c(constraints);
-    std::list<unsigned int>::iterator cb = c.begin();
-    while (cb != c.end()) {
-      std::list<std::string>::iterator wb = words.begin();
-      while (wb != words.end()) {
-        if (*cb == (*wb).length()) {
-          cb = c.erase(cb);
-          wb = words.erase(wb);
-          break;
-        } else {
-          wb++;
-        }
-      }
-      cb++;
-    }
-    return c.size() == 0 && words.size() == 0;
-  } else {
-    return false;
-  }
-}
-
-unsigned int grid::count_only(Dictionary &dict) {
+void grid::run(Dictionary &dict, bool one_solution, bool count_only) {
   std::list<std::string> init(0);
   // State:
   // 0 cross, 1 down
   std::list<std::vector<unsigned int>> path;
-  COUNT_ONLY = true;
-  ONE_SOLUTION = false;
+  COUNT_ONLY = count_only;
+  ONE_SOLUTION = one_solution;
   STOP_FLAG = false;
   result = std::list<solution>();
+
   recursive(0, 0, 0, init, path, constraints, dict);
-
-  return result.size();
-}
-
-unsigned int grid::all_solution(Dictionary &dict) {
-  std::list<std::string> init(0);
-  // State:
-  // 0 cross, 1 down
-  std::list<std::vector<unsigned int>> path;
-  COUNT_ONLY = true;
-  ONE_SOLUTION = false;
-  STOP_FLAG = false;
-  result = std::list<solution>();
-  recursive(0, 0, 0, init, path, constraints, dict);
-
-  return
 }
 
 void grid::recursive(unsigned int x,
@@ -200,17 +154,17 @@ void grid::recursive(unsigned int x,
                 p[2] = x;
                 p[3] = y;
                 if (state == 0) {
-                  p[2] += d[i];
+                  p[2] += d[i] - 1;
                 } else {
-                  p[3] += d[i];
+                  p[3] += d[i] - 1;
                 }
 
                 next_path.push_back(p);
 
                 // After a new word:
                 // If Target?
-                if (targetReached(next_word)) {
-                  result.push_back(solution(next_path, next_word));
+                if (con.size() == 0) {
+                  result.push_back(solution(next_path, next_word, row(), col()));
                   if (ONE_SOLUTION)
                   {
                     STOP_FLAG = true;

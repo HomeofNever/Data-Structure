@@ -1,0 +1,30 @@
+bool grid::targetReached(std::list<std::string> words) const {
+  if (words.size() == constraints.size()) {
+    //@TODO
+    std::list<std::string>::iterator wb = words.begin();
+    while (wb != words.end()) {
+      std::cout << *wb << " ";
+      wb++;
+    }
+    std::cout << std::endl;
+
+    std::list<unsigned int> c(constraints);
+    std::list<unsigned int>::iterator cb = c.begin();
+    while (cb != c.end()) {
+      std::list<std::string>::iterator wb = words.begin();
+      while (wb != words.end()) {
+        if (*cb == (*wb).length()) {
+          cb = c.erase(cb);
+          wb = words.erase(wb);
+          break;
+        } else {
+          wb++;
+        }
+      }
+      cb++;
+    }
+    return c.size() == 0 && words.size() == 0;
+  } else {
+    return false;
+  }
+}

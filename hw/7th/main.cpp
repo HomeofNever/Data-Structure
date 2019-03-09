@@ -36,19 +36,34 @@ int main(int argc, char *argv[]) {
 
   // Get Solution mode
   // one_solution / all_solution
-  std::string solution = argv[3];
+  std::string mode = argv[3];
+
+  bool one_solution = mode == "one_solution";
 
   // Get Output mode
   // count_only / print_boards
   std::string output = argv[4];
 
+  bool count_only = output == "count_only";
   // Maybe we have 5th？
   if (argc > 5)
   {
     std::string gc = argv[5];
   }
 
-  g.count_only(dict);
+  g.run(dict, one_solution, count_only);
+  std::cout << "Number of solution(s): " << g.getSolution().size() << std::endl;
+
+  std::list<solution>::const_iterator cb = g.getSolution().begin();
+
+  if (!count_only){
+    while (cb != g.getSolution().end())
+    {
+      std::cout << "Board:" << std::endl;
+      (*cb).print_map(g.getMap());
+      cb++;
+    }
+  }
 
   return 0;
 }
