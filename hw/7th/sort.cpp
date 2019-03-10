@@ -5,7 +5,6 @@
 #include <iostream>
 #include <algorithm>
 #include "sort.h"
-#include "word.h"
 
 sort::sort(const std::list<word> &w) {
   std::list<word>::const_iterator wb = w.begin();

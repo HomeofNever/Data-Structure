@@ -7,13 +7,15 @@
 
 #include <list>
 #include <string>
-#include "word.h"
 #include "solution.h"
+
+class solution;
 
 class sort {
 public:
     sort(const std::list<word> &w);
-    
+    sort(const sort &sort1): length(sort1.length), words(sort1.words) {};
+
     std::list<solution> combination(const std::list<unsigned int> &constraints) const;
     void print() const;
 

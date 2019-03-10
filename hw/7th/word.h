@@ -5,7 +5,6 @@
 #ifndef INC_7TH_WORD_H
 #define INC_7TH_WORD_H
 
-
 #include <string>
 #include <vector>
 
@@ -35,6 +34,9 @@ public:
 
     void print() const;
 
+    static bool same_word(const word &word1, const word &word2);
+    static bool collapse(const word &word1, const word &word2);
+
 private:
     std::string theword;
     unsigned int _start_x = 0;
@@ -46,6 +48,5 @@ private:
     // Across: 0, down: 1
     int _position = 0;
 };
-
 
 #endif //INC_7TH_WORD_H

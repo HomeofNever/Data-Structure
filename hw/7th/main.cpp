@@ -2,6 +2,7 @@
 #include <fstream>
 #include "dictionary.h"
 #include "grid.h"
+#include "sort.h"
 
 // ./a.out [dictionary file] [initial grid file] [solution mode] [output mode] [gc]
 int main(int argc, char *argv[]) {
@@ -55,8 +56,27 @@ int main(int argc, char *argv[]) {
 
   sort s(w);
   std::list<solution> so = s.combination(g.getConstraints());
-  std::cout << so.size() << std::endl;
-  
+  std::list<solution> valid;
+
+  std::list<solution>::iterator itr = so.begin();
+  while (itr != so.end()) {
+    if ((*itr).is_valid(g, dict)) {
+      valid.push_back(*itr);
+      if (valid.size() >= 1 && one_solution) {
+        break;
+      }
+    }
+    itr++;
+  }
+
+  std::cout << "Number of solution(s): " << valid.size() << std::endl;
+  if (!count_only){
+    std::list<solution>::iterator iter = valid.begin();
+    while (iter != valid.end()) {
+      (*iter).print_map(std::cout);
+      iter++;
+    }
+  }
 
   return 0;
 }

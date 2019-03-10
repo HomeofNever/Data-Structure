@@ -5,7 +5,6 @@
 #include <iostream>
 #include <list>
 #include "grid.h"
-#include "sort.h"
 
 const char NOTE_SYMBOL = '!';
 const char CONSTRAINT_SYMBOL = '+';
@@ -90,8 +89,7 @@ std::string grid::getString(unsigned int x, unsigned int y, int type, unsigned i
   return str;
 }
 
-std::list<word> grid::search_word(Dictionary &dict) const
-{
+std::list<word> grid::search_word(const Dictionary &dict) const {
   std::list<word> result;
   search_recursive(0, 0, dict, result);
 
@@ -100,9 +98,8 @@ std::list<word> grid::search_word(Dictionary &dict) const
 
 void grid::search_recursive(unsigned int x,
                             unsigned int y,
-                            Dictionary &dict,
-                            std::list<word> &result) const
-{
+                            const Dictionary &dict,
+                            std::list<word> &result) const {
   // Current Letter
   if (isLegalIndex(x, y)) {
     // start char should be legal
@@ -120,8 +117,7 @@ void grid::search_recursive(unsigned int x,
           result.push_back(word(x, x + d[i] - 1, y, y, c));
         }
 
-        if (dict.search(down))
-        {
+        if (dict.search(down)) {
           result.push_back(word(x, x, y, y + d[i] - 1, down));
         }
       }
@@ -138,4 +134,18 @@ void grid::search_recursive(unsigned int x,
       // std::cout << "Search Word Complete" << std::endl;
     }
   }
+}
+
+char grid::getChar(unsigned int x, unsigned int y) const {
+  if (isLegalIndex(x, y)) { return map[y][x]; }
+  return '\0';
+}
+
+grid &grid::operator=(const grid &grid1) {
+  if (this != &grid1) {
+    clear();
+    copy(grid1.map, grid1.constraints);
+  }
+
+  return *this;
 }
