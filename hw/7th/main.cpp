@@ -51,19 +51,11 @@ int main(int argc, char *argv[]) {
     std::string gc = argv[5];
   }
 
-  g.run(dict, one_solution, count_only);
-  std::cout << "Number of solution(s): " << g.getSolution().size() << std::endl;
+  std::list<word> w = g.search_word(dict);
 
-  std::list<solution>::const_iterator cb = g.getSolution().begin();
+  sort s(w);
 
-  if (!count_only){
-    while (cb != g.getSolution().end())
-    {
-      std::cout << "Board:" << std::endl;
-      (*cb).print_map(g.getMap());
-      cb++;
-    }
-  }
+  
 
   return 0;
 }

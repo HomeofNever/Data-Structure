@@ -59,12 +59,9 @@ const std::vector<unsigned int> & Dictionary::getLength(char x) const
 
 bool Dictionary::search(std::string &str) const
 {
-  for (unsigned int i = 0; i < list.size(); i++)
+  if (!str.empty())
   {
-    if (list[i] == str)
-    {
-      return true;
-    }
+    return std::find(std::begin(list), std::end(list), str) != std::end(list);
   }
 
   return false;

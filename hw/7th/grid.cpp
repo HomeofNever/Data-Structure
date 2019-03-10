@@ -5,7 +5,7 @@
 #include <iostream>
 #include <list>
 #include "grid.h"
-#include "solution.h"
+#include "sort.h"
 
 const char NOTE_SYMBOL = '!';
 const char CONSTRAINT_SYMBOL = '+';
@@ -14,8 +14,6 @@ const char PLACEHOLDER_SYMBOL = '#';
 bool ONE_SOLUTION = false;
 bool STOP_FLAG = false;
 bool COUNT_ONLY = false;
-std::list<solution> result;
-
 
 grid::grid(std::ifstream &file) {
   std::string str;
@@ -92,133 +90,52 @@ std::string grid::getString(unsigned int x, unsigned int y, int type, unsigned i
   return str;
 }
 
-void grid::run(Dictionary &dict, bool one_solution, bool count_only) {
-  std::list<std::string> init(0);
-  // State:
-  // 0 cross, 1 down
-  std::list<std::vector<unsigned int>> path;
-  COUNT_ONLY = count_only;
-  ONE_SOLUTION = one_solution;
-  STOP_FLAG = false;
-  result = std::list<solution>();
+std::list<word> grid::search_word(Dictionary &dict) const
+{
+  std::list<word> result;
+  search_recursive(0, 0, dict, result);
 
-  recursive(0, 0, 0, init, path, constraints, dict);
+  return result;
 }
 
-void grid::recursive(unsigned int x,
-                     unsigned int y,
-                     int state,
-                     std::list<std::string> &words,
-                     std::list<std::vector<unsigned int>> &path,
-                     std::list<unsigned int> &con,
-                     Dictionary &dict) {
-  if (STOP_FLAG)
-  {
-    return;
-  }
-
+void grid::search_recursive(unsigned int x,
+                            unsigned int y,
+                            Dictionary &dict,
+                            std::list<word> &result) const
+{
   // Current Letter
   if (isLegalIndex(x, y)) {
-    // The length of possible words
-    std::list<unsigned int> origin_con(con);
-
     // start char should be legal
-    if (getChar(x, y) != PLACEHOLDER_SYMBOL){
+    if (map[y][x] != PLACEHOLDER_SYMBOL) {
       std::vector<unsigned int> d = dict.getLength(getChar(x, y));
-
       // Check each of them
       for (unsigned int i = 0; i < d.size(); i++) {
         // Get Word in grid
-        std::string w = getString(x, y, state, d[i]);
+        // Across?
+        std::string c = getString(x, y, 0, d[i]);
+        // Down?
+        std::string down = getString(x, y, 1, d[i]);
 
-        if (!w.empty()) {
-          if (dict.search(w)) {
-            // Word found, is constraint?
-            std::list<unsigned int>::iterator cb = con.begin();
-            while (cb != con.end())
-            {
-              if (*cb == d[i])
-              {
-                // It is, continue
-                con.erase(cb);
-                std::list<std::string> next_word(words);
-                std::list<std::vector<unsigned int>> next_path(path);
+        if (dict.search(c)) {
+          result.push_back(word(x, x + d[i] - 1, y, y, c));
+        }
 
-                next_word.push_back(w);
-
-                // Path:
-                // [ [x, y, end_x, end_y] ]
-                std::vector<unsigned int> p(4, 0);
-                p[0] = x;
-                p[1] = y;
-                p[2] = x;
-                p[3] = y;
-                if (state == 0) {
-                  p[2] += d[i] - 1;
-                } else {
-                  p[3] += d[i] - 1;
-                }
-
-                next_path.push_back(p);
-
-                // After a new word:
-                // If Target?
-                if (con.size() == 0) {
-                  result.push_back(solution(next_path, next_word, row(), col()));
-                  if (ONE_SOLUTION)
-                  {
-                    STOP_FLAG = true;
-                  }
-
-                  return;
-                } else {
-                  // Proceed with the word
-                  if (state == 0) {
-                    recursive(x + d[i], y, state, next_word, next_path, con, dict);
-                  } else {
-                    recursive(x, y + d[i], state, next_word, next_path, con, dict);
-                  }
-                }
-
-                break;
-              } else {
-                cb++;
-              }
-            }
-          }
+        if (dict.search(down))
+        {
+          result.push_back(word(x, x, y, y + d[i] - 1, down));
         }
       }
-    }
+    } // Not a legal character
 
     // Proceed with one letter
-    if (state == 0) {
-      recursive(x + 1, y, state, words, path, origin_con, dict);
-    } else {
-      recursive(x, y + 1, state, words, path, origin_con, dict);
-    }
+    search_recursive(x + 1, y, dict, result);
   } else {
-
-    if (state == 0) {
-      // cross out of bound
-      if (x >= col() && y < row()) {
-        x = 0;
-        y += 1;
-        recursive(x, y, state, words, path, con, dict);
-      } else if (y >= row()) {
-        // The end of the cross, switch to down
-        recursive(0, 0, 1, words, path, con, dict);
-      }
-
-    } else {
-      if (y >= col() && x < row()) {
-        // The end of the col, move next
-        x += 1;
-        y = 0;
-        recursive(x, y, state, words, path, con, dict);
-      } else if (x >= row()) {
-        // That's the end of the story
-        // std::cout << "Reach End" << std::endl;
-      }
+    // cross out of bound
+    if (x >= col() && y < row()) {
+      search_recursive(0, y + 1, dict, result);
+    } else if (y >= row()) {
+      // The end of the grid
+      // std::cout << "Search Word Complete" << std::endl;
     }
   }
 }
