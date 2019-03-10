@@ -109,7 +109,7 @@ unsigned int sort::mixed_solutions(const std::vector<std::vector<std::vector<wor
      for (int j = 0; j < all_chosen[i][index[i]].size(); j++)
        tmp.push_back(all_chosen[i][index[i]][j]);
 
-    // Due to increase memory usage, check one when create one.
+    // Limit memory usage, check one when create one.
     solution * so = new solution(tmp, constraint_index);
     if (so->is_valid(g, d)) {
       count++;
