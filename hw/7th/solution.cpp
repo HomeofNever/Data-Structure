@@ -15,7 +15,9 @@ bool solution::is_valid(const grid &g, const Dictionary &d)
     map.search_word(d);
     if (map.getSearched().size() == word_list.size()) {
       // It should be the solution
-      return true;
+      if (no_invalid_words()) {
+        return true;
+      }
     }
   }
 
@@ -107,4 +109,56 @@ bool solution::no_same_word() const
   }
 
   return true;
+}
+
+bool solution::no_invalid_words() const
+{
+  std::list<word*>::const_iterator cit = word_list.begin();
+  while(cit != word_list.end()) {
+    // Iterate over the path of words
+    if ((*cit)->position() == 0) {
+      for (int i = (*cit)->start_x(); i <= (*cit)->end_x(); i++) {
+        unsigned int length = word_recursive(i, (*cit)->start_y(), 1, 1) +
+                          word_recursive(i, (*cit)->start_y(), 1, -1);
+        if (length < 3) {
+          return false;
+        } else if (!is_constraints(length)) {
+          return false;
+        }
+      }
+    }
+    cit++;
+  }
+
+  return true;
+}
+
+// Offset: different direction (1, -1)
+unsigned int solution::word_recursive(unsigned int x,
+                                      unsigned int y,
+                                      int position,
+                                      int offset) const
+{
+  char current = map.getChar(x, y);
+  if (current && current != '#') {
+    if (position == 0)
+      return word_recursive(x + offset, y, position, offset) + 1;
+    else
+      return word_recursive(x, y + offset, position, offset) + 1;
+  } else {
+    return 0;
+  }
+}
+
+bool solution::is_constraints(unsigned int c) const
+{
+  for (int i = 0; i < constraints->size(); i++)
+  {
+    if ((*constraints)[i] == c)
+    {
+      return true;
+    }
+  }
+
+  return false;
 }

@@ -20,21 +20,21 @@ sort::sort(const std::list<word*> &w) {
   }
 }
 
-unsigned int sort::combination(const grid &g, const Dictionary &dict, std::list<solution*> &result) const {
+unsigned int sort::combination(const grid &g, const Dictionary &dict, std::list<solution*> &result) {
   std::list<unsigned int> constraints = g.getConstraints();
 
   // First, we need to know how many combinations should each constraint has
   std::list<unsigned int>::const_iterator cit = constraints.begin();
-  std::vector<unsigned int> index;
+  constraint_index = new std::vector<unsigned int>();
   std::vector<unsigned int> number;
 
   while (cit != constraints.end()) {
-    std::vector<unsigned int>::const_iterator it = std::find(std::begin(index), std::end(index), *cit);
-    if (it != index.end())
+    std::vector<unsigned int>::const_iterator it = std::find(std::begin(*constraint_index), std::end(*constraint_index), *cit);
+    if (it != constraint_index->end())
     {
-      number[it - index.begin()] += 1;
+      number[it - constraint_index->begin()] += 1;
     } else {
-      index.push_back(*cit);
+      constraint_index->push_back(*cit);
       number.push_back(1);
     }
     cit++;
@@ -42,11 +42,11 @@ unsigned int sort::combination(const grid &g, const Dictionary &dict, std::list<
 
   std::vector<std::vector<std::vector<word*>>> all_chosen;
   // Choose
-  for (unsigned int i = 0; i < index.size(); i++)
+  for (unsigned int i = 0; i < constraint_index->size(); i++)
   {
     std::vector<std::vector<word*>> temp;
     // First, we need to find given fields
-    int field = found_length(index[i]);
+    int field = found_length((*constraint_index)[i]);
     if (field != -1)
     {
       unsigned int choose_num = number[i];
@@ -64,11 +64,6 @@ unsigned int sort::combination(const grid &g, const Dictionary &dict, std::list<
       // Word with given length has no found, solution does not exist.
       return 0;
     }
-  }
-
-  for(unsigned int i = 0; i < all_chosen.size(); i++)
-  {
-    std::cout << i << ": " << all_chosen[i].size() << std::endl;
   }
 
   // Mix All Solutions
@@ -94,13 +89,13 @@ void sort::n_choose_m(unsigned int offset,
 }
 
 unsigned int sort::mixed_solutions(const std::vector<std::vector<std::vector<word*>>> &all_chosen,
-                           std::list<solution*> &s,
-                           const grid &g,
-                           const Dictionary &d) const
+                                   std::list<solution*> &s,
+                                   const grid &g,
+                                   const Dictionary &d) const
 {
   int size = all_chosen.size();
   std::vector<int> index(size, 0);
-  unsigned count = 0;
+  unsigned int count = 0;
 
   while (true) {
     // Stop when meet.
@@ -115,11 +110,11 @@ unsigned int sort::mixed_solutions(const std::vector<std::vector<std::vector<wor
        tmp.push_back(all_chosen[i][index[i]][j]);
 
     // Due to increase memory usage, check one when create one.
-    solution * so = new solution(tmp);
+    solution * so = new solution(tmp, constraint_index);
     if (so->is_valid(g, d)) {
+      count++;
       if (count_only) {
         delete so; // Delete directly
-        count++;
       } else {
         s.push_back(so);
       }
@@ -180,4 +175,8 @@ void sort::print() const {
 void sort::setFlags(bool solution_mode, bool count_mode) {
   one_solution = solution_mode;
   count_only = count_mode;
+}
+
+void sort::clear() {
+  delete constraint_index;
 }

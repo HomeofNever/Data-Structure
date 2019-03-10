@@ -28,7 +28,7 @@ public:
     const std::vector<std::vector<char>> &getMap() const { return map; }
     const std::list<unsigned int> &getConstraints() const { return constraints; };
     std::list<word*> getSearched() const { return searched; };
-    char getChar(unsigned int x, unsigned int y) const;;
+    char getChar(unsigned int x, unsigned int y) const;
     std::string getString(unsigned int x,
                           unsigned int y,
                           int type,

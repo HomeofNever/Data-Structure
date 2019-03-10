@@ -10,7 +10,8 @@
 
 class solution {
 public:
-    solution(const std::list<word*> &w): word_list(w) {};
+    solution(const std::list<word*> &w,
+             std::vector<unsigned int> * con): word_list(w), constraints(con) {};
     solution(const solution &solution): word_list(solution.word_list),
                                         map(solution.map) {};
 
@@ -19,11 +20,20 @@ public:
 
 private:
     std::list<word*> word_list;
+    std::vector<unsigned int> * constraints;
     grid map = grid();
 
     void generate_overlay(const grid &g);
     bool no_same_word() const;
     bool no_collapse() const;
+    bool no_invalid_words() const;
+
+    bool is_constraints(unsigned int c) const;
+
+    unsigned int word_recursive(unsigned int x,
+                                unsigned int y,
+                                int position,
+                                int offset) const;
 };
 
 #endif //INC_7TH_SOLUTION_H

@@ -15,14 +15,16 @@ class sort {
 public:
     sort(const std::list<word*> &w);
     sort(const sort &sort1): length(sort1.length), words(sort1.words) {};
+    ~sort(){ clear(); }
 
     void setFlags(bool solution_mode, bool count_mode);;
-    unsigned int combination(const grid &g, const Dictionary &d, std::list<solution*> &result) const;
+    unsigned int combination(const grid &g, const Dictionary &d, std::list<solution*> &result);
     void print() const;
 
 private:
     std::vector<unsigned int> length;
     std::vector<std::vector<word*>> words;
+    std::vector<unsigned int> * constraint_index; // Unique constraints
     bool one_solution = false;
     bool count_only = false;
 
@@ -37,6 +39,8 @@ private:
                          std::list<solution*> &s,
                          const grid &g,
                          const Dictionary &d) const;
+
+    void clear();
 };
 
 
