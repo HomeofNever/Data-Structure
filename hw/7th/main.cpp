@@ -50,30 +50,20 @@ int main(int argc, char *argv[]) {
     std::string gc = argv[5];
   }
 
-  std::list<word> w = g.search_word(dict);
+  g.search_word(dict);
+  std::list<word*> w = g.getSearched();
 
   sort s(w);
+  s.setFlags(one_solution, count_only);
+  std::list<solution*> valid;
+  unsigned int count = s.combination(g, dict, valid);
 
-  std::list<solution> so = s.combination(g.getConstraints());
-  std::cout << so.size() << std::endl;
-  std::list<solution> valid;
-
-  std::list<solution>::iterator itr = so.begin();
-  while (itr != so.end()) {
-    if ((*itr).is_valid(g, dict)) {
-      valid.push_back(*itr);
-      if (valid.size() >= 1 && one_solution) {
-        break;
-      }
-    }
-    itr++;
-  }
-
-  std::cout << "Number of solution(s): " << valid.size() << std::endl;
+  std::cout << "Number of solution(s): " << count << std::endl;
   if (!count_only){
-    std::list<solution>::iterator iter = valid.begin();
+    std::list<solution*>::iterator iter = valid.begin();
     while (iter != valid.end()) {
-      (*iter).print_map(std::cout);
+      (*iter)->print_map(std::cout);
+      delete *iter;
       iter++;
     }
   }

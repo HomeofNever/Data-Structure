@@ -10,10 +10,6 @@ const char NOTE_SYMBOL = '!';
 const char CONSTRAINT_SYMBOL = '+';
 const char PLACEHOLDER_SYMBOL = '#';
 
-bool ONE_SOLUTION = false;
-bool STOP_FLAG = false;
-bool COUNT_ONLY = false;
-
 grid::grid(std::ifstream &file) {
   std::string str;
   while (file >> str) {
@@ -90,17 +86,14 @@ std::string grid::getString(unsigned int x, unsigned int y, int type, unsigned i
   return str;
 }
 
-std::list<word> grid::search_word(const Dictionary &dict) const {
-  std::list<word> result;
-  search_recursive(0, 0, dict, result);
-
-  return result;
+void grid::search_word(const Dictionary &dict) {
+  search_recursive(0, 0, dict, searched);
 }
 
 void grid::search_recursive(unsigned int x,
                             unsigned int y,
                             const Dictionary &dict,
-                            std::list<word> &result) const {
+                            std::list<word*> &result) {
   // Current Letter
   if (isLegalIndex(x, y)) {
     // start char should be legal
@@ -115,11 +108,11 @@ void grid::search_recursive(unsigned int x,
         std::string down = getString(x, y, 1, d[i]);
 
         if (dict.search(c)) {
-          result.push_back(word(x, x + d[i] - 1, y, y, c));
+          result.push_back(new word(x, x + d[i] - 1, y, y, c));
         }
 
         if (dict.search(down)) {
-          result.push_back(word(x, x, y, y + d[i] - 1, down));
+          result.push_back(new word(x, x, y, y + d[i] - 1, down));
         }
       }
     } // Not a legal character
@@ -132,7 +125,6 @@ void grid::search_recursive(unsigned int x,
       search_recursive(0, y + 1, dict, result);
     } else if (y >= row()) {
       // The end of the grid
-      // std::cout << "Search Word Complete" << std::endl;
     }
   }
 }
@@ -149,4 +141,14 @@ grid &grid::operator=(const grid &grid1) {
   }
 
   return *this;
+}
+
+void grid::clear() {
+  map.clear();
+  constraints.clear();
+  std::list<word*>::iterator i = searched.begin();
+  while(i != searched.end()) {
+    delete *i;
+    i++;
+  }
 }

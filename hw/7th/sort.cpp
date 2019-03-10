@@ -6,22 +6,22 @@
 #include <algorithm>
 #include "sort.h"
 
-sort::sort(const std::list<word> &w) {
-  std::list<word>::const_iterator wb = w.begin();
+sort::sort(const std::list<word*> &w) {
+  std::list<word*>::const_iterator wb = w.begin();
   while (wb != w.end()) {
-    int l = found_length((*wb).length());
+    int l = found_length((*wb)->length());
     if (l != -1) {
       words[l].push_back(*wb);
     } else {
-      length.push_back((*wb).length());
-      words.push_back(std::vector<word>(1, *wb));
+      length.push_back((*wb)->length());
+      words.push_back(std::vector<word*>(1, *wb));
     }
     wb++;
   }
 }
 
-std::list<solution> sort::combination(const std::list<unsigned int> &constraints) const {
-  std::list<solution> s;
+unsigned int sort::combination(const grid &g, const Dictionary &dict, std::list<solution*> &result) const {
+  std::list<unsigned int> constraints = g.getConstraints();
 
   // First, we need to know how many combinations should each constraint has
   std::list<unsigned int>::const_iterator cit = constraints.begin();
@@ -40,29 +40,29 @@ std::list<solution> sort::combination(const std::list<unsigned int> &constraints
     cit++;
   }
 
-  std::vector<std::vector<std::vector<word>>> all_chosen;
+  std::vector<std::vector<std::vector<word*>>> all_chosen;
   // Choose
   for (unsigned int i = 0; i < index.size(); i++)
   {
-    std::vector<std::vector<word>> temp;
+    std::vector<std::vector<word*>> temp;
     // First, we need to find given fields
     int field = found_length(index[i]);
     if (field != -1)
     {
       unsigned int choose_num = number[i];
       if (choose_num <= words[field].size()){
-        std::vector<word> tmp;
-        std::vector<std::vector<word>> res;
+        std::vector<word*> tmp;
+        std::vector<std::vector<word*>> res;
         n_choose_m(0, choose_num, words[field], tmp, res);
 
         all_chosen.push_back(res);
       } else {
         // No result
-        return std::list<solution>();
+        return 0;
       }
     } else {
       // Word with given length has no found, solution does not exist.
-      return std::list<solution>();
+      return 0;
     }
   }
 
@@ -70,17 +70,16 @@ std::list<solution> sort::combination(const std::list<unsigned int> &constraints
   {
     std::cout << i << ": " << all_chosen[i].size() << std::endl;
   }
-  // Mix All Solutions
-  mixed_solutions(all_chosen, s);
 
-  return s;
+  // Mix All Solutions
+  return mixed_solutions(all_chosen, result, g, dict);
 }
 
 void sort::n_choose_m(unsigned int offset,
                       unsigned int m,
-                      const std::vector<word> &ls,
-                      std::vector<word> &tmp,
-                      std::vector<std::vector<word>> &result) const
+                      const std::vector<word*> &ls,
+                      std::vector<word*> &tmp,
+                      std::vector<std::vector<word*>> &result) const
 {
   if (m == 0) {
     result.push_back(tmp);
@@ -94,21 +93,39 @@ void sort::n_choose_m(unsigned int offset,
   }
 }
 
-void sort::mixed_solutions(const std::vector<std::vector<std::vector<word>>> &all_chosen,
-                           std::list<solution> &s) const
+unsigned int sort::mixed_solutions(const std::vector<std::vector<std::vector<word*>>> &all_chosen,
+                           std::list<solution*> &s,
+                           const grid &g,
+                           const Dictionary &d) const
 {
   int size = all_chosen.size();
   std::vector<int> index(size, 0);
+  unsigned count = 0;
 
   while (true) {
+    // Stop when meet.
+    if ((s.size() >= 1 || count >= 1) && one_solution) {
+      return count;
+    }
 
-    std::list<word> tmp;
+    std::list<word*> tmp;
     // current combination
     for (int i = 0; i < index.size(); i++)
      for (int j = 0; j < all_chosen[i][index[i]].size(); j++)
        tmp.push_back(all_chosen[i][index[i]][j]);
 
-    s.push_back(solution(tmp));
+    // Due to increase memory usage, check one when create one.
+    solution * so = new solution(tmp);
+    if (so->is_valid(g, d)) {
+      if (count_only) {
+        delete so; // Delete directly
+        count++;
+      } else {
+        s.push_back(so);
+      }
+    } else {
+      delete so;
+    }
 
     // find the rightmost array that has more
     // elements left after the current element
@@ -121,7 +138,7 @@ void sort::mixed_solutions(const std::vector<std::vector<std::vector<word>>> &al
     // no such array is found so no more
     // combinations left
     if (next < 0)
-      return;
+      break;
 
     // if found move to next element in that
     // array
@@ -133,6 +150,8 @@ void sort::mixed_solutions(const std::vector<std::vector<std::vector<word>>> &al
     for (int i = next + 1; i < size; i++)
       index[i] = 0;
   }
+
+  return count;
 }
 
 // -1 if no found
@@ -152,8 +171,13 @@ void sort::print() const {
   for (unsigned int i = 0; i < length.size(); i++) {
     std::cout << length[i] << ": ";
     for (unsigned int j = 0; j < words[i].size(); j++) {
-      std::cout << words[i][j].getWord() << " ";
+      std::cout << words[i][j]->getWord() << " ";
     }
     std::cout << std::endl;
   }
+}
+
+void sort::setFlags(bool solution_mode, bool count_mode) {
+  one_solution = solution_mode;
+  count_only = count_mode;
 }

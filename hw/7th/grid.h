@@ -17,6 +17,7 @@ public:
     grid(){};
     grid(std::ifstream &file);
     grid(const grid &grid1) {copy(grid1.map, grid1.constraints);}
+    ~grid(){ clear(); }
 
     grid& operator=(const grid &grid1);
 
@@ -26,15 +27,15 @@ public:
 
     const std::vector<std::vector<char>> &getMap() const { return map; }
     const std::list<unsigned int> &getConstraints() const { return constraints; };
+    std::list<word*> getSearched() const { return searched; };
     char getChar(unsigned int x, unsigned int y) const;;
-
     std::string getString(unsigned int x,
                           unsigned int y,
                           int type,
                           unsigned int length) const;
     bool isLegalIndex(unsigned int x, unsigned int y) const { return x < col() && y < row(); };
 
-    std::list<word> search_word(const Dictionary &dict) const;
+    void search_word(const Dictionary &dict);
 
     friend class solution; // Allow Solution class to Overlay
     void print() const;
@@ -42,15 +43,16 @@ public:
 private:
     std::vector<std::vector<char>> map;
     std::list<unsigned int> constraints;
+    std::list<word*> searched;
 
-    void clear() { map.clear(); constraints.clear(); }
+    void clear();
     void copy(const std::vector<std::vector<char>> &m,
               const std::list<unsigned int> &c) {map = m; constraints = c;}
     void setPoint(unsigned int x, unsigned int y, char z) { if (isLegalIndex(x, y)) map[y][x] = z;}
     void search_recursive(unsigned int x,
                           unsigned int y,
                           const Dictionary &dict,
-                          std::list<word> &result) const;
+                          std::list<word*> &result);
 };
 
 

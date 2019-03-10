@@ -10,7 +10,7 @@
 
 class solution {
 public:
-    solution(const std::list<word> &w): word_list(w) {};
+    solution(const std::list<word*> &w): word_list(w) {};
     solution(const solution &solution): word_list(solution.word_list),
                                         map(solution.map) {};
 
@@ -18,7 +18,7 @@ public:
     void print_map(std::ostream &output) const;
 
 private:
-    std::list<word> word_list;
+    std::list<word*> word_list;
     grid map = grid();
 
     void generate_overlay(const grid &g);
