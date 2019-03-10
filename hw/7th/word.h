@@ -21,7 +21,7 @@ public:
          _end_x(x2),
          _end_y(y2),
          _length(w.size()),
-         _position(y1 == y2){};
+         _position(x1 == x2){};
 
     const std::string &getWord() const {return theword;}
     unsigned int start_x() const {return _start_x;}

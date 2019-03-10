@@ -44,11 +44,15 @@ int main(int argc, char *argv[]) {
   std::string output = argv[4];
 
   bool count_only = output == "count_only";
+
+  std::string gc = "";
   // Maybe we have 5th？
   if (argc > 5)
   {
-    std::string gc = argv[5];
+    gc = argv[5];
   }
+
+  bool is_giant_components = gc == "gc";
 
   g.search_word(dict);
   std::list<word*> w = g.getSearched();
@@ -57,10 +61,25 @@ int main(int argc, char *argv[]) {
   s.setFlags(one_solution, count_only);
   std::list<solution*> valid;
   unsigned int count = s.combination(g, dict, valid);
+  std::list<solution*>::iterator iter;
+
+  // Extra credits
+  if (is_giant_components) {
+    iter = valid.begin();
+    while (iter != valid.end()) {
+      if (!(*iter)->is_giant_components()) {
+        delete (*iter);
+        count--;
+        iter = valid.erase(iter);
+      } else {
+        iter++;
+      }
+    }
+  }
 
   std::cout << "Number of solution(s): " << count << std::endl;
   if (!count_only){
-    std::list<solution*>::iterator iter = valid.begin();
+     iter = valid.begin();
     while (iter != valid.end()) {
       (*iter)->print_map(std::cout);
       delete *iter;

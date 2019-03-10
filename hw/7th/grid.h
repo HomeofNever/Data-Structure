@@ -34,6 +34,7 @@ public:
                           int type,
                           unsigned int length) const;
     bool isLegalIndex(unsigned int x, unsigned int y) const { return x < col() && y < row(); };
+    bool isAllBlocked() const;
 
     void search_word(const Dictionary &dict);
 

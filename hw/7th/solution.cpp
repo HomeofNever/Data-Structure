@@ -116,15 +116,26 @@ bool solution::no_invalid_words() const
   std::list<word*>::const_iterator cit = word_list.begin();
   while(cit != word_list.end()) {
     // Iterate over the path of words
+    unsigned int length = 0;
+
     if ((*cit)->position() == 0) {
-      for (int i = (*cit)->start_x(); i <= (*cit)->end_x(); i++) {
-        unsigned int length = word_recursive(i, (*cit)->start_y(), 1, 1) +
-                          word_recursive(i, (*cit)->start_y(), 1, -1);
-        if (length < 3) {
-          return false;
-        } else if (!is_constraints(length)) {
-          return false;
-        }
+      for (unsigned int i = (*cit)->start_x(); i <= (*cit)->end_x(); i++) {
+       length = word_recursive(i, (*cit)->start_y() - 1, 1, -1) +
+                word_recursive(i, (*cit)->start_y() + 1, 1, 1) + 1;
+      }
+    } else {
+      for (unsigned int i = (*cit)->start_y(); i <= (*cit)->end_y(); i++) {
+        length = word_recursive((*cit)->start_x() - 1, i, 0, -1) +
+                 word_recursive((*cit)->start_x() + 1, i, 0, +1) + 1;
+      }
+    }
+
+    // Single word is OK
+    if (length != 1){
+      if (length < 3) {
+        return false;
+      } else if (!is_constraints(length)) {
+        return false;
       }
     }
     cit++;
@@ -161,4 +172,25 @@ bool solution::is_constraints(unsigned int c) const
   }
 
   return false;
+}
+
+bool solution::is_giant_components() const {
+  grid m = map;
+
+  giant_recursive(word_list.front()->start_x(), word_list.front()->start_y(), m);
+
+
+  return m.isAllBlocked();
+}
+
+void solution::giant_recursive(unsigned int x,
+                               unsigned int y,
+                               grid &grid1) const {
+  if (grid1.getChar(x, y) && grid1.getChar(x, y) != '#') {
+    grid1.setPoint(x, y, '#');
+    giant_recursive(x + 1, y, grid1);
+    giant_recursive(x, y + 1, grid1);
+    giant_recursive(x - 1, y, grid1);
+    giant_recursive(x, y - 1, grid1);
+  }
 }

@@ -16,6 +16,8 @@ public:
                                         map(solution.map) {};
 
     bool is_valid(const grid &g, const Dictionary &d);
+    bool is_giant_components() const;
+
     void print_map(std::ostream &output) const;
 
 private:
@@ -34,6 +36,9 @@ private:
                                 unsigned int y,
                                 int position,
                                 int offset) const;
+    void giant_recursive(unsigned int x,
+                         unsigned int y,
+                         grid &grid1) const;
 };
 
 #endif //INC_7TH_SOLUTION_H
