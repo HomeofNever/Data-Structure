@@ -66,9 +66,12 @@ std::list<solution> sort::combination(const std::list<unsigned int> &constraints
     }
   }
 
+  for(unsigned int i = 0; i < all_chosen.size(); i++)
+  {
+    std::cout << i << ": " << all_chosen[i].size() << std::endl;
+  }
   // Mix All Solutions
   mixed_solutions(all_chosen, s);
-
 
   return s;
 }

@@ -41,6 +41,7 @@ void grid::print() const {
   std::list<unsigned int>::const_iterator cb = constraints.begin();
   while (cb != constraints.end()) {
     std::cout << *cb << " ";
+    cb++;
   }
   std::cout << std::endl;
 

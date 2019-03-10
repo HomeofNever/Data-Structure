@@ -22,7 +22,6 @@ int main(int argc, char *argv[]) {
   }
 
   Dictionary dict = Dictionary(in_dict_str);
-  // dict.print();
 
   // Open Grid File
   std::ifstream in_grid_str(argv[2]);
@@ -33,7 +32,6 @@ int main(int argc, char *argv[]) {
   }
 
   grid g = grid(in_grid_str);
-  // g.print();
 
   // Get Solution mode
   // one_solution / all_solution
@@ -55,7 +53,9 @@ int main(int argc, char *argv[]) {
   std::list<word> w = g.search_word(dict);
 
   sort s(w);
+
   std::list<solution> so = s.combination(g.getConstraints());
+  std::cout << so.size() << std::endl;
   std::list<solution> valid;
 
   std::list<solution>::iterator itr = so.begin();

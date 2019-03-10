@@ -37,4 +37,6 @@ bool word::collapse(const word &word1, const word &word2) {
       }
     }
   }
+
+  return false;
 }
