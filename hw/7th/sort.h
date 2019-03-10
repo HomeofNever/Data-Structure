@@ -14,7 +14,7 @@ class sort {
 public:
     sort(const std::list<word> &w);
     
-    std::list<solution> combination(std::list<unsigned int> &constraints) const;
+    std::list<solution> combination(const std::list<unsigned int> &constraints) const;
     void print() const;
 
 private:
@@ -22,6 +22,13 @@ private:
     std::vector<std::vector<word>> words;
 
     int found_length(unsigned int i) const;
+    void n_choose_m(unsigned int offset,
+                    unsigned int m,
+                    const std::vector<word> &ls,
+                    std::vector<word> &tmp,
+                    std::vector<std::vector<word>> &result) const;
+    void mixed_solutions(const std::vector<std::vector<std::vector<word>>> &all_chosen,
+                      std::list<solution> &s) const;
 };
 
 

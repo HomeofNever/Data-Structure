@@ -54,7 +54,8 @@ int main(int argc, char *argv[]) {
   std::list<word> w = g.search_word(dict);
 
   sort s(w);
-
+  std::list<solution> so = s.combination(g.getConstraints());
+  std::cout << so.size() << std::endl;
   
 
   return 0;
