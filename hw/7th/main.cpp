@@ -83,19 +83,18 @@ int main(int argc, char *argv[]) {
   dict.print();
   grid g = grid(map, constraints);
 
-  std::list<grid> result;
+  std::list<std::vector<std::vector<char>>> result;
   g.run(dict, result);
 
 
   std::cout << "Number of solution(s): " << result.size() << std::endl;
   if (!count_only){
-     std::list<grid>::const_iterator iter = result.begin();
-     std::vector<std::vector<char>> tmp;
+    std::list<std::vector<std::vector<char>>>::const_iterator iter = result.begin();
     while (iter != result.end()) {
-      (*iter).generate_overlay(tmp);
-      for (unsigned int i = 0; i < tmp.size(); i++) {
-        for (unsigned int j = 0; j < tmp[i].size(); j++) {
-          std::cout << tmp[i][j];
+      std::cout << "Board:" << std::endl;
+      for (unsigned int i = 0; i < (*iter).size(); i++) {
+        for (unsigned int j = 0; j < (*iter)[i].size(); j++) {
+          std::cout << (*iter)[i][j];
         }
         std::cout << std::endl;
       }

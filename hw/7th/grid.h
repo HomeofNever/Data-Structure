@@ -46,7 +46,7 @@ public:
 
     void generate_overlay(std::vector<std::vector<char>> &result) const;
     void run(const Dictionary &dict,
-             std::list<grid> &result);
+             std::list<std::vector<std::vector<char>>> &result);
 
     void print() const;
 
@@ -56,23 +56,21 @@ private:
     std::list<unsigned int> constraints;
     std::list<word*> searched;
     word * current_word = nullptr;
-    bool keep_current = false;
 
     void clear();
-    void clearWords();
     void copy(const grid &grid1);
     // void setPoint(unsigned int x, unsigned int y, char z) { if (isLegalIndex(x, y)) map[y][x] = z;}
     bool search_word(unsigned int l,
                      const Dictionary &dict,
-                     std::list<grid> &result);
+                     std::list<std::vector<std::vector<char>>> &result);
     void found_recursive(unsigned int x,
                          unsigned int y,
                          unsigned int length,
                          const Dictionary &dict,
                          bool &flag,
-                         std::list<grid> &result);
+                         std::list<std::vector<std::vector<char>>> &result);
     bool search_recursive(const Dictionary &dict,
-                          std::list<grid> &result);
+                          std::list<std::vector<std::vector<char>>> &result);
 
     void num_of_words(int x, int y, std::list<word*> &w) const;
 

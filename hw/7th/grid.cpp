@@ -94,16 +94,6 @@ void grid::clear() {
   }
 }
 
-
-
-void grid::clearWords() {
-  std::list<word*>::const_iterator i = searched.begin();
-  while(i != searched.end()) {
-    delete *i;
-    i++;
-  }
-}
-
 bool grid::isAllBlocked() const {
   for (int i = 0; i < map->size(); i++) {
     for (int j = 0; j < map[i].size(); j++) {
@@ -187,21 +177,19 @@ bool grid::is_constraints(unsigned int c) const {
 
 bool grid::search_word(unsigned int l,
                        const Dictionary &dict,
-                       std::list<grid> &result) {
+                       std::list<std::vector<std::vector<char>>> &result) {
   // If found the word, create a new grid and put that word into current, and return true
   bool flag = false;
   found_recursive(0, 0, l, dict, flag, result);
   // If no found, return false
 
-  keep_current = flag;
   return flag;
 }
 
 
-bool grid::search_recursive(const Dictionary &dict, std::list<grid> &result) {
+bool grid::search_recursive(const Dictionary &dict, std::list<std::vector<std::vector<char>>> &result) {
   // First grid
   if (current_word != nullptr) {
-    // Try validating current grid
     if (!is_valid(dict)) {
       // Wrong answer, exit...
       return false;
@@ -212,7 +200,6 @@ bool grid::search_recursive(const Dictionary &dict, std::list<grid> &result) {
   if (!constraints.empty()) {
     unsigned int current_con = constraints.front();
     // Find words matched constraints
-
     if (!search_word(current_con, dict, result)) {
       // Bad solution: unable to meet constraints
       // Do cleanup: This is the last node
@@ -221,8 +208,9 @@ bool grid::search_recursive(const Dictionary &dict, std::list<grid> &result) {
   }
 
   // Hey, this is the end/right answers
-  result.push_back(*this);
-
+  std::vector<std::vector<char>> r;
+  generate_overlay(r);
+  result.push_back(r);
   return true;
 }
 
@@ -232,7 +220,7 @@ void grid::found_recursive(unsigned int x,
                            unsigned int length,
                            const Dictionary &dict,
                            bool &flag,
-                           std::list<grid> &result) {
+                           std::list<std::vector<std::vector<char>>> &result) {
   // Current Letter
   if (isLegalIndex(x, y)) {
     // start char should be legal
@@ -250,16 +238,20 @@ void grid::found_recursive(unsigned int x,
         // New Branch
         if (c == (*d[i])) {
           grid g = *this;
-          g.getSearched().push_back(g.current_word);
-          g.setCurrent(new word(x, x + length, y, y, d[i]));
+          if (current_word != nullptr) {
+            g.searched.push_back(current_word);
+          }
+          g.setCurrent(new word(x, x + length - 1, y, y, d[i]));
           g.pop_const();
           condition = g.search_recursive(dict, result);
         }
 
         if (down == (*d[i])) {
           grid g = *this;
-          g.getSearched().push_back(g.current_word);
-          g.setCurrent(new word(x, x, y, y + length, d[i]));
+          if (current_word != nullptr) {
+            g.searched.push_back(current_word);
+          }
+          g.setCurrent(new word(x, x, y, y + length - 1, d[i]));
           g.pop_const();
           condition = g.search_recursive(dict, result);
         }
@@ -288,6 +280,7 @@ void grid::num_of_words(int x, int y, std::list<word *> &w) const {
       if ((*cit)->is_between(x, y)) {
         w.push_back(*cit);
       }
+      cit++;
     }
   }
 }
@@ -322,6 +315,7 @@ bool grid::surrounding(unsigned int x, unsigned int y, int position) const {
     if ((*itr)->position() == position) {
       return false;
     }
+    itr++;
   }
 
   return true;
@@ -370,7 +364,7 @@ void grid::overlay_by_words(word *i, std::vector<std::vector<char>> &result)
   unsigned int y1 = i->start_y();
   unsigned int y2 = i->end_y();
 
-  if (y1 == y2) {
+  if (i->position() == 0) {
     // x axis
     for (unsigned int j = x1; j <= x2; j++) {
       result[y1][j] = (*i->getWord())[j - x1];
@@ -383,8 +377,8 @@ void grid::overlay_by_words(word *i, std::vector<std::vector<char>> &result)
   }
 }
 
-void grid::run(const Dictionary &dict, std::list<grid> &result) {
-  if (search_recursive(dict, result)) {
-    keep_current = true;
-  }
+
+void grid::run(const Dictionary &dict,
+        std::list<std::vector<std::vector<char>>> &result) {
+  search_recursive(dict, result);
 }
