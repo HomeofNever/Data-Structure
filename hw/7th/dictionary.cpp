@@ -7,6 +7,7 @@
 #include "dictionary.h"
 
 unsigned int SHORTEST_LENGTH = 3;
+std::string * EMPTY_STRING = new std::string("");
 
 Dictionary::Dictionary(std::ifstream &file)
 {
@@ -14,7 +15,8 @@ Dictionary::Dictionary(std::ifstream &file)
   while (file >> str)
   {
     if (str.length() >= SHORTEST_LENGTH) {
-      list.push_back(str);
+      std::string * str_ptr = new std::string(str);
+      list.push_back(str_ptr);
     } else {
       std::cerr << "Word " << str << " is too short to add to the dictionary." << std::endl;
     }
@@ -37,24 +39,29 @@ void Dictionary::print() const
 
 void Dictionary::lengths()
 {
-    for (unsigned int i = 0; i < list.size(); i++)
-    {
-      alphabet[list[i][0] - 65].push_back(list[i].size());
-    }
+  // Push a zero vector at the front, as a placeholder if no result
+  length.push_back(0);
+  words.push_back(std::vector<std::string*>(0, EMPTY_STRING));
 
-    // Remove Duplicate
-    for (unsigned int i = 0; i < alphabet.size(); i++)
-    {
-      std::sort( alphabet[i].begin(), alphabet[i].end() );
-      alphabet[i].erase( unique( alphabet[i].begin(), alphabet[i].end() ), alphabet[i].end() );
+  for (unsigned int i = 0; i < list.size(); i++) {
+    int s = length_index(list[i]->size());
+    if (s == -1) {
+      length.push_back(list[i]->size());
+      words.push_back(std::vector<std::string*>(1, list[i]));
+    } else {
+      words[s].push_back(list[i]);
     }
+  }
 }
 
-const std::vector<unsigned int> & Dictionary::getLength(char x) const
+const std::vector<std::string*> & Dictionary::get_word_by_length(unsigned int i) const
 {
-  // A => 65
-  int i = x - 65;
-  return alphabet[i];
+  int s = length_index(i);
+  if (s == -1) {
+    return words[0];
+  } else {
+    return words[s];
+  }
 }
 
 bool Dictionary::search(std::string &str) const
@@ -65,5 +72,24 @@ bool Dictionary::search(std::string &str) const
   }
 
   return false;
+}
+
+int Dictionary::length_index(unsigned int i) const {
+  std::vector<unsigned int>::const_iterator itr = std::find(length.begin(), length.end(), i);
+
+  if (itr == length.end())
+  {
+    return -1;
+  }
+
+  return itr - length.begin();
+}
+
+void Dictionary::clear() {
+  for (unsigned int i = 0; i < list.size(); i++) {
+    delete list[i];
+  }
+
+  delete EMPTY_STRING;
 }
 

@@ -13,17 +13,21 @@
 class Dictionary {
 public:
     Dictionary(std::ifstream &file);
-    ~Dictionary(){}
+    ~Dictionary(){ clear(); }
 
     unsigned int size() const { return list.size(); }
-    const std::vector<unsigned int> & getLength(char x) const;
+    const std::vector<std::string*> & get_word_by_length(unsigned int i) const;
 
     void print() const;
     bool search(std::string &str) const;
 
 private:
-    std::vector<std::string> list;
-    std::vector<std::vector<unsigned int>> alphabet = std::vector<std::vector<unsigned int>>(26);
+    std::vector<std::string*> list;
+    std::vector<unsigned int> length;
+    std::vector<std::vector<std::string*>> words;
+
+    int length_index(unsigned int i) const;
+    void clear();
 
     void lengths();
 };

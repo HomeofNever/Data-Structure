@@ -105,9 +105,10 @@ unsigned int sort::mixed_solutions(const std::vector<std::vector<std::vector<wor
 
     std::list<word*> tmp;
     // current combination
-    for (int i = 0; i < index.size(); i++)
-     for (int j = 0; j < all_chosen[i][index[i]].size(); j++)
-       tmp.push_back(all_chosen[i][index[i]][j]);
+    for (int i = 0; i < index.size(); i++) {
+      for (int j = 0; j < all_chosen[i][index[i]].size(); j++)
+        tmp.push_back(all_chosen[i][index[i]][j]);
+    }
 
     // Limit memory usage, check one when create one.
     solution * so = new solution(tmp, constraint_index);
