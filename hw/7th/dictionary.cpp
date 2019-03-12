@@ -31,7 +31,7 @@ void Dictionary::print() const
   std::cout << "Dict Size: " << size() << std::endl;
   for (unsigned int i = 0; i < size(); i++)
   {
-    std::cout << list[i] << std::endl;
+    std::cout << (*list[i]) << std::endl;
   }
 
   std::cout << std::endl;
@@ -68,11 +68,15 @@ bool Dictionary::search(std::string &str) const
 {
   if (!str.empty())
   {
-    return std::find(std::begin(list), std::end(list), str) != std::end(list);
+    return std::find_if(std::begin(list), std::end(list), [str](const std::string * s1)
+    {
+        return *s1 == str;
+    }) != std::end(list);
   }
 
   return false;
 }
+
 
 int Dictionary::length_index(unsigned int i) const {
   std::vector<unsigned int>::const_iterator itr = std::find(length.begin(), length.end(), i);

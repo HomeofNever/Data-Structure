@@ -3,7 +3,6 @@
 #include <algorithm>
 #include "dictionary.h"
 #include "grid.h"
-#include "sort.h"
 
 const char NOTE_SYMBOL = '!';
 const char CONSTRAINT_SYMBOL = '+';
@@ -58,7 +57,7 @@ int main(int argc, char *argv[]) {
     }
   }
 
-  std::sort(std::begin((*constraints)), std::end((*constraints)), std::greater<unsigned int>());
+  constraints->sort(std::greater<unsigned int>());
 
   // Get Solution mode
   // one_solution / all_solution
@@ -84,40 +83,25 @@ int main(int argc, char *argv[]) {
   dict.print();
   grid g = grid(map, constraints);
 
-//  g.search_word(dict);
-//  std::list<word*> w = g.getSearched();
-//
-//  sort s(w);
-//  s.setFlags(one_solution, count_only);
-//  std::list<solution*> valid;
-//  unsigned int count = s.combination(g, dict, valid);
-//  std::list<solution*>::iterator iter;
-//
-//  // Extra credits
-//  if (is_giant_components) {
-//    iter = valid.begin();
-//    while (iter != valid.end()) {
-//      if (!(*iter)->is_giant_components()) {
-//        delete (*iter);
-//        count--;
-//        iter = valid.erase(iter);
-//      } else {
-//        iter++;
-//      }
-//    }
-//  }
-//
-//  std::cout << "Number of solution(s): " << count << std::endl;
-//  if (!count_only){
-//     iter = valid.begin();
-//    while (iter != valid.end()) {
-//      (*iter)->print_map(std::cout);
-//      delete *iter;
-//      iter++;
-//    }
-//  }
+  std::list<grid> result;
+  g.run(dict, result);
 
 
+  std::cout << "Number of solution(s): " << result.size() << std::endl;
+  if (!count_only){
+     std::list<grid>::const_iterator iter = result.begin();
+     std::vector<std::vector<char>> tmp;
+    while (iter != result.end()) {
+      (*iter).generate_overlay(tmp);
+      for (unsigned int i = 0; i < tmp.size(); i++) {
+        for (unsigned int j = 0; j < tmp[i].size(); j++) {
+          std::cout << tmp[i][j];
+        }
+        std::cout << std::endl;
+      }
+      iter++;
+    }
+  }
 
   delete map;
   delete constraints;

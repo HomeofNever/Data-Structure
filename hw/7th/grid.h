@@ -27,7 +27,7 @@ public:
 
     const std::vector<std::vector<char>> * getMap() const { return map; }
     const std::list<unsigned int> &getConstraints() const { return constraints; };
-    std::list<word*> getSearched() const { return searched; };
+    std::list<word*> getSearched() { return searched; };
     char getChar(unsigned int x, unsigned int y) const;
     std::string getString(unsigned int x,
                           unsigned int y,
@@ -39,10 +39,14 @@ public:
 
     bool is_valid(const Dictionary &d) const;
 
-    bool isLegalIndex(unsigned int x, unsigned int y) const { return x < col() && y < row(); };
+
+    bool isLegalIndex(int x, int y) const { return x >= 0 && x < col() && y >= 0 && y < row(); };
     bool isAllBlocked() const;
     bool is_constraints(unsigned int c) const;
 
+    void generate_overlay(std::vector<std::vector<char>> &result) const;
+    void run(const Dictionary &dict,
+             std::list<grid> &result);
 
     void print() const;
 
@@ -52,31 +56,34 @@ private:
     std::list<unsigned int> constraints;
     std::list<word*> searched;
     word * current_word = nullptr;
+    bool keep_current = false;
 
     void clear();
+    void clearWords();
     void copy(const grid &grid1);
     // void setPoint(unsigned int x, unsigned int y, char z) { if (isLegalIndex(x, y)) map[y][x] = z;}
     bool search_word(unsigned int l,
                      const Dictionary &dict,
-                     std::list<grid> &result) const;
+                     std::list<grid> &result);
     void found_recursive(unsigned int x,
                          unsigned int y,
                          unsigned int length,
                          const Dictionary &dict,
                          bool &flag,
-                         std::list<grid> &result) const;
-    void search_recursive(const Dictionary &dict,
-                          std::list<grid> &result) const;
-    unsigned int word_recursive(unsigned int x,
-                                unsigned int y,
-                                int position,
-                                int offset) const;
+                         std::list<grid> &result);
+    bool search_recursive(const Dictionary &dict,
+                          std::list<grid> &result);
+
+    void num_of_words(int x, int y, std::list<word*> &w) const;
 
     bool no_same_word() const;
     bool no_collapse() const;
     bool no_invalid_words() const;
 
-    void generate_overlay();
+    bool special_begin_end() const;
+    bool surrounding(unsigned int x, unsigned int y, int position) const;
+
+    static void overlay_by_words(word *i, std::vector<std::vector<char>> &result);
 };
 
 
