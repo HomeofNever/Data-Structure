@@ -24,21 +24,23 @@ bool solution::is_valid(const grid &g, const Dictionary &d)
   return false;
 }
 
-void solution::print_map(std::ostream &output) const
+void solution::print_map(std::ostream &output, const std::vector<std::vector<char>> &map) const
 {
   output << "Board:" << std::endl;
-  for (unsigned int i = 0; i < map.getMap().size(); i++) {
-    for (unsigned int j = 0; j < map.getMap()[i].size(); j++) {
-      output << map.getMap()[i][j];
+  std::vector<std::vector<char>> overlay;
+  generate_overlay(map, overlay);
+  for (unsigned int i = 0; i < overlay.size(); i++) {
+    for (unsigned int j = 0; j < overlay[i].size(); j++) {
+      output << overlay[i][j];
     }
     output << std::endl;
   }
 }
 
-void solution::generate_overlay(const grid &g)
+void solution::generate_overlay(const std::vector<std::vector<char>> &map,
+                                std::vector<std::vector<char>> &overlay) const
 {
-  std::vector<std::vector<bool>>overlay = std::vector<std::vector<bool>>(g.row(), std::vector<bool>(g.col(), false));
-  map = g;
+   overlay = std::vector<std::vector<char>>(map.size(), std::vector<char>(map[0].size(), '#'));
 
   for (std::list<word*>::const_iterator i = word_list.begin(); i != word_list.end(); i++)
   {
@@ -52,24 +54,13 @@ void solution::generate_overlay(const grid &g)
       // x axis
       for (unsigned int j = x1; j <= x2; j++)
       {
-        overlay[y1][j] = true;
+        overlay[y1][j] = (*i)->getWord()[j - x1];
       }
     } else {
       // y axis
       for (unsigned int j = y1; j <= y2; j++)
       {
-        overlay[j][x1] = true;
-      }
-    }
-  }
-
-  for (unsigned int i = 0; i < g.getMap().size(); i++) {
-    for (unsigned int j = 0; j < g.getMap()[i].size(); j++) {
-      if (overlay[i][j])
-      {
-        // Keep the same
-      } else {
-        map.setPoint(j, i, '#');
+        overlay[j][x1] = (*i)->getWord()[j - y1];
       }
     }
   }
@@ -130,14 +121,6 @@ bool solution::no_invalid_words() const
       }
     }
 
-    // Single word is OK
-    if (length != 1){
-      if (length < 3) {
-        return false;
-      } else if (!is_constraints(length)) {
-        return false;
-      }
-    }
     cit++;
   }
 
@@ -159,19 +142,6 @@ unsigned int solution::word_recursive(unsigned int x,
   } else {
     return 0;
   }
-}
-
-bool solution::is_constraints(unsigned int c) const
-{
-  for (int i = 0; i < constraints->size(); i++)
-  {
-    if ((*constraints)[i] == c)
-    {
-      return true;
-    }
-  }
-
-  return false;
 }
 
 bool solution::is_giant_components() const {

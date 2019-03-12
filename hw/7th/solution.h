@@ -11,26 +11,23 @@
 class solution {
 public:
     solution(const std::list<word*> &w,
-             std::vector<unsigned int> * con): word_list(w), constraints(con) {};
-    solution(const solution &solution): word_list(solution.word_list),
-                                        map(solution.map) {};
+             std::vector<unsigned int> * con): word_list(w) {};
+    solution(const std::list<word*> &w): word_list(w) {};
+    solution(const solution &solution): word_list(solution.word_list) {};
 
     bool is_valid(const grid &g, const Dictionary &d);
     bool is_giant_components() const;
 
-    void print_map(std::ostream &output) const;
+    void print_map(std::ostream &output, const std::vector<std::vector<char>> &map) const;
 
 private:
     std::list<word*> word_list;
-    std::vector<unsigned int> * constraints;
-    grid map = grid();
 
-    void generate_overlay(const grid &g);
+    void generate_overlay(const std::vector<std::vector<char>> &map,
+                          std::vector<std::vector<char>> &overlay) const;
     bool no_same_word() const;
     bool no_collapse() const;
     bool no_invalid_words() const;
-
-    bool is_constraints(unsigned int c) const;
 
     unsigned int word_recursive(unsigned int x,
                                 unsigned int y,

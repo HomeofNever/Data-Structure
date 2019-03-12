@@ -32,6 +32,8 @@ public:
     unsigned int length() const {return _length;}
     int position() const {return _position;}
 
+    bool is_between(unsigned int x, unsigned int y) const;
+
     void print() const;
 
     static bool same_word(const word &word1, const word &word2);
