@@ -18,7 +18,7 @@ public:
     ~sort(){ clear(); }
 
     void setFlags(bool solution_mode, bool count_mode);;
-    unsigned int combination(const grid &g, const Dictionary &d, std::list<solution*> &result);
+    unsigned int combination(grid * g, const Dictionary &d, std::list<solution*> &result);
     void print() const;
 
 private:
@@ -37,7 +37,7 @@ private:
 
     unsigned int mixed_solutions(const std::vector<std::vector<std::vector<word*>>> &all_chosen,
                          std::list<solution*> &s,
-                         const grid &g,
+                         grid * g,
                          const Dictionary &d) const;
 
     void clear();

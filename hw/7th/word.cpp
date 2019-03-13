@@ -19,8 +19,8 @@ bool word::same_word(const word &word1, const word &word2) {
 
 bool word::collapse(const word &word1, const word &word2) {
   if (word1.position() == word2.position()) {
-    return (!word1.is_between(word2.start_x(), word2.start_y())) &&
-           (!word2.is_between(word1.start_x(), word1.start_y()));
+    return (word1.is_between(word2.start_x(), word2.start_y())) ||
+           (word2.is_between(word1.start_x(), word1.start_y()));
   }
 
   return false;

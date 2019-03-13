@@ -20,8 +20,8 @@ sort::sort(const std::list<word*> &w) {
   }
 }
 
-unsigned int sort::combination(const grid &g, const Dictionary &dict, std::list<solution*> &result) {
-  std::list<unsigned int> constraints = g.getConstraints();
+unsigned int sort::combination(grid * g, const Dictionary &dict, std::list<solution*> &result) {
+  std::list<unsigned int> constraints = g->getConstraints();
 
   // First, we need to know how many combinations should each constraint has
   std::list<unsigned int>::const_iterator cit = constraints.begin();
@@ -90,7 +90,7 @@ void sort::n_choose_m(unsigned int offset,
 
 unsigned int sort::mixed_solutions(const std::vector<std::vector<std::vector<word*>>> &all_chosen,
                                    std::list<solution*> &s,
-                                   const grid &g,
+                                   grid * g,
                                    const Dictionary &d) const
 {
   int size = all_chosen.size();
@@ -110,8 +110,8 @@ unsigned int sort::mixed_solutions(const std::vector<std::vector<std::vector<wor
        tmp.push_back(all_chosen[i][index[i]][j]);
 
     // Limit memory usage, check one when create one.
-    solution * so = new solution(tmp, constraint_index);
-    if (so->is_valid(g, d)) {
+    solution * so = new solution(tmp, g);
+    if (so->is_valid(d)) {
       count++;
       if (count_only) {
         delete so; // Delete directly

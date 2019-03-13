@@ -31,7 +31,7 @@ int main(int argc, char *argv[]) {
     return 1;
   }
 
-  grid g = grid(in_grid_str);
+  grid * g = new grid(in_grid_str);
 
   // Get Solution mode
   // one_solution / all_solution
@@ -54,8 +54,8 @@ int main(int argc, char *argv[]) {
 
   bool is_giant_components = gc == "gc";
 
-  g.search_word(dict);
-  std::list<word*> w = g.getSearched();
+  g->search_word(dict);
+  std::list<word*> w = g->getSearched();
 
   sort s(w);
   s.setFlags(one_solution, count_only);
@@ -87,5 +87,7 @@ int main(int argc, char *argv[]) {
     }
   }
 
+
+  delete g;
   return 0;
 }
