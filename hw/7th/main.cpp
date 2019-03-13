@@ -4,6 +4,17 @@
 #include "grid.h"
 #include "sort.h"
 
+// Print Generated Map from 2D vector
+void print_map(std::vector<std::vector<char>> & map, std::ostream &output) {
+  output << "Board:" << std::endl;
+  for (unsigned int i = 0; i < map.size(); i++) {
+    for (unsigned int j = 0; j < map[i].size(); j++) {
+      output << map[i][j];
+    }
+    output << std::endl;
+  }
+}
+
 // ./a.out [dictionary file] [initial grid file] [solution mode] [output mode] [gc]
 int main(int argc, char *argv[]) {
   // No matter what happened, 4 parameters are required.
@@ -21,7 +32,7 @@ int main(int argc, char *argv[]) {
     return 1;
   }
 
-  Dictionary dict = Dictionary(in_dict_str);
+  Dictionary * dict = new Dictionary(in_dict_str);
 
   // Open Grid File
   std::ifstream in_grid_str(argv[2]);
@@ -31,7 +42,7 @@ int main(int argc, char *argv[]) {
     return 1;
   }
 
-  grid * g = new grid(in_grid_str);
+  grid * g = new grid(in_grid_str, dict);
 
   // Get Solution mode
   // one_solution / all_solution
@@ -54,42 +65,39 @@ int main(int argc, char *argv[]) {
 
   bool is_giant_components = gc == "gc";
 
-  g->search_word(dict);
-  std::list<word*> w = g->getSearched();
+  g->search_word();
 
-  sort s(w, g);
-  s.setFlags(one_solution, count_only);
+  sort s(g->getSearched(), g);
+  s.setFlags(one_solution, count_only, is_giant_components);
+
   std::list<solution*> valid;
-  s.combination(dict, valid);
-  unsigned int count = valid.size();
-  std::list<solution*>::iterator iter;
+  s.combination(valid);
 
-  // Extra credits
-  if (is_giant_components) {
-    iter = valid.begin();
-    while (iter != valid.end()) {
-      if (!(*iter)->is_giant_components()) {
-        delete (*iter);
-        count--;
-        iter = valid.erase(iter);
-      } else {
-        iter++;
-      }
-    }
+  unsigned int count = valid.size();
+
+  std::list<solution*>::iterator iter;
+  if (one_solution) {
+    count >= 1 ? count = 1 : count = 0;
   }
 
   std::cout << "Number of solution(s): " << count << std::endl;
-  if (!count_only){
-     iter = valid.begin();
+  if (!count_only) {
+    std::vector<std::vector<char>> tmp;
+    iter = valid.begin();
     while (iter != valid.end()) {
-      (*iter)->print_map(std::cout);
+      if (count != 0) {
+        (*iter)->generate_overlay(tmp);
+        print_map(tmp, std::cout);
+        count--;
+      }
       delete *iter;
       iter++;
     }
   }
 
-
+  // Clean up
   delete g;
+  delete dict;
 
   return 0;
 }

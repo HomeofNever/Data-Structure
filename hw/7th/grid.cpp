@@ -4,13 +4,15 @@
 
 #include <iostream>
 #include <list>
+#include <algorithm>
 #include "grid.h"
 
 const char NOTE_SYMBOL = '!';
 const char CONSTRAINT_SYMBOL = '+';
 const char PLACEHOLDER_SYMBOL = '#';
 
-grid::grid(std::ifstream &file) {
+grid::grid(std::ifstream &file, Dictionary *d) {
+  dict = d;
   std::string str;
   while (file >> str) {
     if (str.length() > 0) {
@@ -29,6 +31,9 @@ grid::grid(std::ifstream &file) {
       }
     }
   }
+
+  // Always in order...
+  constraints.sort(std::greater<unsigned int>());
 }
 
 void grid::print() const {
@@ -86,19 +91,19 @@ std::string grid::getString(unsigned int x, unsigned int y, int type, unsigned i
   return str;
 }
 
-void grid::search_word(const Dictionary &dict) {
+void grid::search_word() {
   search_recursive(0, 0, dict, searched);
 }
 
 void grid::search_recursive(unsigned int x,
                             unsigned int y,
-                            const Dictionary &dict,
+                            Dictionary * dict,
                             std::list<word*> &result) {
   // Current Letter
   if (isLegalIndex(x, y)) {
     // start char should be legal
     if (map[y][x] != PLACEHOLDER_SYMBOL) {
-      std::vector<unsigned int> d = dict.getLength(getChar(x, y));
+      std::vector<unsigned int> d = dict->getLength(getChar(x, y));
       // Check each of them
       for (unsigned int i = 0; i < d.size(); i++) {
         // Get Word in grid
@@ -107,11 +112,11 @@ void grid::search_recursive(unsigned int x,
         // Down?
         std::string down = getString(x, y, 1, d[i]);
 
-        if (dict.search(c)) {
+        if (dict->search(c)) {
           result.push_back(new word(x, x + d[i] - 1, y, y, c));
         }
 
-        if (dict.search(down)) {
+        if (dict->search(down)) {
           result.push_back(new word(x, x, y, y + d[i] - 1, down));
         }
       }
@@ -134,15 +139,6 @@ char grid::getChar(unsigned int x, unsigned int y) const {
   return '\0';
 }
 
-grid &grid::operator=(const grid &grid1) {
-  if (this != &grid1) {
-    clear();
-    copy(grid1.map, grid1.constraints);
-  }
-
-  return *this;
-}
-
 void grid::clear() {
   map.clear();
   constraints.clear();
@@ -151,16 +147,4 @@ void grid::clear() {
     delete *i;
     i++;
   }
-}
-
-bool grid::isAllBlocked() const {
-  for (int i = 0; i < map.size(); i++) {
-    for (int j = 0; j < map[i].size(); j++) {
-      if (map[i][j] != '#') {
-        return false;
-      }
-    }
-  }
-
-  return true;
 }

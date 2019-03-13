@@ -12,31 +12,35 @@ class solution {
 public:
     solution(const std::list<word*> &w,
             grid * grid2): word_list(w), grid1(grid2) {};
-    solution(const solution &solution): word_list(solution.word_list),
-                                        grid1(solution.grid1) {};
 
-    bool is_valid() const;
-    bool is_giant_components() const;
-
-    void print_map(std::ostream &output) const;
+    static bool is_valid(const std::list<word*> &word_list, grid *g);
+    static bool is_valid_last(const std::list<word*> &word_list, grid *g, bool giant = false);
+    void generate_overlay(std::vector<std::vector<char>> &overlay) const;
 
 private:
     std::list<word*> word_list;
     grid * grid1;
 
-    void generate_overlay(const std::vector<std::vector<char>> &map,
-                          std::vector<std::vector<char>> &overlay) const;
-    bool no_same_word() const;
-    bool no_collapse() const;
-    bool no_invalid_words() const;
+    static bool no_same_word(const std::list<word*> &word_list);
+    static bool no_collapse(const std::list<word*> &word_list);
+    static bool no_invalid_words(const std::list<word*> &word_list, grid *g);
 
-    bool special_begin_end(word * current_word) const;
-    bool surrounding(unsigned int x, unsigned int y, int position) const;
-    void num_of_words(int x, int y, std::list<word *> &w) const;
+    static bool is_giant_components(const std::list<word*> &word_list);
 
-    void giant_recursive(unsigned int x,
-                         unsigned int y,
-                         grid &grid1) const;
+    static bool special_begin_end(const std::list<word*> &word_list,
+                                  grid *g);
+    static bool surrounding(unsigned int x, unsigned int y, int position,
+                            const std::list<word*> &word_list,
+                            grid *g);
+    static bool position_secured(int position, const std::list<word*> &word_list);
+    static void num_of_words(unsigned int x, unsigned int y,
+                             std::list<word *> &w,
+                             const std::list<word*> &word_list,
+                             grid *g);
+
+    static void giant_recursive(word* current_word,
+                                std::list<std::string> &words,
+                                const std::list<word*> &word_list);
 };
 
 #endif //INC_7TH_SOLUTION_H
