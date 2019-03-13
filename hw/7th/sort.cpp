@@ -84,8 +84,8 @@ void sort::combination(const Dictionary &dict, std::list<solution*> &result) {
     }
   }
 
-  for (int i = 0; i < all_chosen.size(); i++) {
-    std::cout << (*constraint_index)[i] << ':' << all_chosen[i].size() << ' ';
+  for (unsigned int i = 0; i < all_chosen.size(); i++) {
+    std::cout << (*constraint_index)[i] << ": " << all_chosen[i].size() << " ";
   }
   std::cout << std::endl;
 
@@ -147,7 +147,6 @@ void sort::solution_recursive(unsigned int index,
                               const std::vector<std::list<std::list<word *>>> &all_chosen,
                               std::list<solution *> &s, const Dictionary &d) const {
   if (index < all_chosen.size()) {
-    std::cout << tmp.size() << std::endl;
     bool last = index == all_chosen.size() - 1;
     std::vector<std::list<word*>> current;
 
