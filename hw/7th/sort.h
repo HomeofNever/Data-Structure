@@ -13,18 +13,19 @@ class solution;
 
 class sort {
 public:
-    sort(const std::list<word*> &w);
+    sort(const std::list<word*> &w, grid * grid2);
     sort(const sort &sort1): length(sort1.length), words(sort1.words) {};
     ~sort(){ clear(); }
 
     void setFlags(bool solution_mode, bool count_mode);;
-    unsigned int combination(grid * g, const Dictionary &d, std::list<solution*> &result);
+    void combination(const Dictionary &d, std::list<solution*> &result);
     void print() const;
 
 private:
     std::vector<unsigned int> length;
     std::vector<std::vector<word*>> words;
-    std::vector<unsigned int> * constraint_index; // Unique constraints
+    std::vector<unsigned int> * constraint_index = nullptr; // Unique constraints
+    grid * grid1 = nullptr;
     bool one_solution = false;
     bool count_only = false;
 
@@ -33,12 +34,17 @@ private:
                     unsigned int m,
                     const std::vector<word*> &ls,
                     std::vector<word*> &tmp,
-                    std::vector<std::vector<word*>> &result) const;
+                    std::list<std::list<word*>> &result) const;
 
-    unsigned int mixed_solutions(const std::vector<std::vector<std::vector<word*>>> &all_chosen,
+    void mixed_solutions(const std::vector<std::list<std::list<word*>>> &all_chosen,
                          std::list<solution*> &s,
-                         grid * g,
                          const Dictionary &d) const;
+
+    void solution_recursive(unsigned int index,
+                            const std::vector<std::list<word*>> &tmp,
+                            const std::vector<std::list<std::list<word*>>> &all_chosen,
+                            std::list<solution*> &s,
+                            const Dictionary &d) const;
 
     void clear();
 };

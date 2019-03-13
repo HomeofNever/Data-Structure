@@ -15,7 +15,7 @@ public:
     solution(const solution &solution): word_list(solution.word_list),
                                         grid1(solution.grid1) {};
 
-    bool is_valid(const Dictionary &d) const;
+    bool is_valid() const;
     bool is_giant_components() const;
 
     void print_map(std::ostream &output) const;

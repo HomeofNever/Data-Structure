@@ -57,10 +57,11 @@ int main(int argc, char *argv[]) {
   g->search_word(dict);
   std::list<word*> w = g->getSearched();
 
-  sort s(w);
+  sort s(w, g);
   s.setFlags(one_solution, count_only);
   std::list<solution*> valid;
-  unsigned int count = s.combination(g, dict, valid);
+  s.combination(dict, valid);
+  unsigned int count = valid.size();
   std::list<solution*>::iterator iter;
 
   // Extra credits

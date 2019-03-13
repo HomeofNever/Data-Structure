@@ -6,7 +6,8 @@
 #include <algorithm>
 #include "sort.h"
 
-sort::sort(const std::list<word*> &w) {
+sort::sort(const std::list<word*> &w, grid * grid2) {
+  grid1 = grid2;
   std::list<word*>::const_iterator wb = w.begin();
   while (wb != w.end()) {
     int l = found_length((*wb)->length());
@@ -20,8 +21,8 @@ sort::sort(const std::list<word*> &w) {
   }
 }
 
-unsigned int sort::combination(grid * g, const Dictionary &dict, std::list<solution*> &result) {
-  std::list<unsigned int> constraints = g->getConstraints();
+void sort::combination(const Dictionary &dict, std::list<solution*> &result) {
+  std::list<unsigned int> constraints = grid1->getConstraints();
 
   // First, we need to know how many combinations should each constraint has
   std::list<unsigned int>::const_iterator cit = constraints.begin();
@@ -34,13 +35,30 @@ unsigned int sort::combination(grid * g, const Dictionary &dict, std::list<solut
     {
       number[it - constraint_index->begin()] += 1;
     } else {
-      constraint_index->push_back(*cit);
-      number.push_back(1);
+      // No such number, calculate insert location
+      if (!constraint_index->empty()) {
+        unsigned int num = 0;
+        std::vector<unsigned int>::iterator i = constraint_index->begin();
+        while (i != constraint_index->end()) {
+          if (*i < *cit) {
+            break;
+          }
+          num++;
+          i++;
+        }
+        constraint_index->insert(i, *cit);
+        std::vector<unsigned int>::iterator j = number.begin();
+        j += num;
+        number.insert(j, 1);
+      } else {
+        constraint_index->push_back(*cit);
+        number.push_back(1);
+      }
     }
     cit++;
   }
 
-  std::vector<std::vector<std::vector<word*>>> all_chosen;
+  std::vector<std::list<std::list<word*>>> all_chosen;
   // Choose
   for (unsigned int i = 0; i < constraint_index->size(); i++)
   {
@@ -52,32 +70,46 @@ unsigned int sort::combination(grid * g, const Dictionary &dict, std::list<solut
       unsigned int choose_num = number[i];
       if (choose_num <= words[field].size()){
         std::vector<word*> tmp;
-        std::vector<std::vector<word*>> res;
+        std::list<std::list<word*>> res;
         n_choose_m(0, choose_num, words[field], tmp, res);
 
         all_chosen.push_back(res);
       } else {
         // No result
-        return 0;
+        return;
       }
     } else {
       // Word with given length has no found, solution does not exist.
-      return 0;
+      return;
     }
   }
 
+  for (int i = 0; i < all_chosen.size(); i++) {
+    std::cout << (*constraint_index)[i] << ':' << all_chosen[i].size() << ' ';
+  }
+  std::cout << std::endl;
+
   // Mix All Solutions
-  return mixed_solutions(all_chosen, result, g, dict);
+  mixed_solutions(all_chosen, result, dict);
 }
 
 void sort::n_choose_m(unsigned int offset,
                       unsigned int m,
                       const std::vector<word*> &ls,
                       std::vector<word*> &tmp,
-                      std::vector<std::vector<word*>> &result) const
+                      std::list<std::list<word*>> &result) const
 {
   if (m == 0) {
-    result.push_back(tmp);
+    // @TODO no copy?
+    std::list<word*> j(tmp.begin(), tmp.end());
+    if (tmp.size() > 1) {
+      solution s = solution(j, grid1);
+      if (s.is_valid()) {
+        result.push_back(j);
+      }
+    } else {
+      result.push_back(j);
+    }
     return;
   }
 
@@ -88,65 +120,58 @@ void sort::n_choose_m(unsigned int offset,
   }
 }
 
-unsigned int sort::mixed_solutions(const std::vector<std::vector<std::vector<word*>>> &all_chosen,
+void sort::mixed_solutions(const std::vector<std::list<std::list<word*>>> &all_chosen,
                                    std::list<solution*> &s,
-                                   grid * g,
                                    const Dictionary &d) const
 {
-  int size = all_chosen.size();
-  std::vector<int> index(size, 0);
-  unsigned int count = 0;
-
-  while (true) {
-    // Stop when meet.
-    if ((s.size() >= 1 || count >= 1) && one_solution) {
-      return count;
-    }
-
-    std::list<word*> tmp;
-    // current combination
-    for (int i = 0; i < index.size(); i++)
-     for (int j = 0; j < all_chosen[i][index[i]].size(); j++)
-       tmp.push_back(all_chosen[i][index[i]][j]);
-
-    // Limit memory usage, check one when create one.
-    solution * so = new solution(tmp, g);
-    if (so->is_valid(d)) {
-      count++;
-      if (count_only) {
-        delete so; // Delete directly
-      } else {
+  if (all_chosen.size() > 1) {
+    std::vector<std::list<word*>> j(all_chosen[0].begin(), all_chosen[0].end());
+    solution_recursive(1, j, all_chosen, s, d);
+  } else {
+    // One Kind of Solution: Directly solve
+    std::list<std::list<word*>>::const_iterator itr = all_chosen.front().begin();
+    while (itr != all_chosen.front().end()) {
+      solution * so = new solution(*itr, grid1);
+      if (so->is_valid()) {
         s.push_back(so);
+      } else {
+        delete so;
       }
-    } else {
-      delete so;
+      itr++;
     }
-
-    // find the rightmost array that has more
-    // elements left after the current element
-    // in that array
-    int next = size - 1;
-    while (next >= 0 &&
-           (index[next] + 1 >= all_chosen[next].size()))
-      next--;
-
-    // no such array is found so no more
-    // combinations left
-    if (next < 0)
-      break;
-
-    // if found move to next element in that
-    // array
-    index[next]++;
-
-    // for all arrays to the right of this
-    // array current index again points to
-    // first element
-    for (int i = next + 1; i < size; i++)
-      index[i] = 0;
   }
+}
 
-  return count;
+void sort::solution_recursive(unsigned int index,
+                              const std::vector<std::list<word*>> &tmp,
+                              const std::vector<std::list<std::list<word *>>> &all_chosen,
+                              std::list<solution *> &s, const Dictionary &d) const {
+  if (index < all_chosen.size()) {
+    std::cout << tmp.size() << std::endl;
+    bool last = index == all_chosen.size() - 1;
+    std::vector<std::list<word*>> current;
+
+    for (unsigned int i = 0; i < tmp.size(); i++) {
+      for (std::list<std::list<word *>>::const_iterator j = all_chosen[index].begin();
+           j != all_chosen[index].end(); j++) {
+        std::list<word*> c;
+        c.insert( c.end(), tmp[i].begin(), tmp[i].end() );
+        c.insert( c.end(), j->begin(), j->end() );
+        // Limit memory usage, check one when create one.
+        solution * so = new solution(c, grid1);
+        if (so->is_valid()) {
+          if (last) {
+            s.push_back(so);
+          } else {
+            current.push_back(c);
+          }
+        } else {
+          delete so;
+        }
+      }
+    }
+    solution_recursive(index + 1, current, all_chosen, s, d);
+  }
 }
 
 // -1 if no found

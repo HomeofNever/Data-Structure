@@ -4,7 +4,7 @@
 
 #include "solution.h"
 
-bool solution::is_valid(const Dictionary &d) const {
+bool solution::is_valid() const {
   return no_same_word() && no_collapse() && no_invalid_words();
 }
 
