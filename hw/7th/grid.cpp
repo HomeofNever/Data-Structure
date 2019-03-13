@@ -36,26 +36,8 @@ grid::grid(std::ifstream &file, Dictionary *d) {
   constraints.sort(std::greater<unsigned int>());
 }
 
-void grid::print() const {
-  std::cout << "Map: " << row() << " x " << col() << std::endl;
-  std::cout << "Constraint: " << num_const() << std::endl;
-  std::list<unsigned int>::const_iterator cb = constraints.begin();
-  while (cb != constraints.end()) {
-    std::cout << *cb << " ";
-    cb++;
-  }
-  std::cout << std::endl;
-
-  for (unsigned int i = 0; i < map.size(); i++) {
-    for (unsigned int j = 0; j < map[i].size(); j++) {
-      std::cout << map[i][j];
-    }
-    std::cout << std::endl;
-  }
-
-  std::cout << std::endl;
-}
-
+// Get string by location and length
+// if there is # on the path or unable to reach, return empty
 std::string grid::getString(unsigned int x, unsigned int y, int type, unsigned int length) const {
   // Type 0: across, Type 1: Down
   std::string str;
@@ -91,14 +73,16 @@ std::string grid::getString(unsigned int x, unsigned int y, int type, unsigned i
   return str;
 }
 
+// Entry
 void grid::search_word() {
   search_recursive(0, 0, dict, searched);
 }
 
+// Recursively search all possible words in grid
 void grid::search_recursive(unsigned int x,
                             unsigned int y,
-                            Dictionary * dict,
-                            std::list<word*> &result) {
+                            Dictionary *dict,
+                            std::list<word *> &result) {
   // Current Letter
   if (isLegalIndex(x, y)) {
     // start char should be legal
@@ -134,17 +118,40 @@ void grid::search_recursive(unsigned int x,
   }
 }
 
+// Get char by location
 char grid::getChar(unsigned int x, unsigned int y) const {
   if (isLegalIndex(x, y)) { return map[y][x]; }
   return '\0';
 }
 
+// Clear all possible words when finished.
 void grid::clear() {
   map.clear();
   constraints.clear();
-  std::list<word*>::iterator i = searched.begin();
-  while(i != searched.end()) {
+  std::list<word *>::iterator i = searched.begin();
+  while (i != searched.end()) {
     delete *i;
     i++;
   }
+}
+
+// Debug
+void grid::print() const {
+  std::cout << "Map: " << row() << " x " << col() << std::endl;
+  std::cout << "Constraint: " << num_const() << std::endl;
+  std::list<unsigned int>::const_iterator cb = constraints.begin();
+  while (cb != constraints.end()) {
+    std::cout << *cb << " ";
+    cb++;
+  }
+  std::cout << std::endl;
+
+  for (unsigned int i = 0; i < map.size(); i++) {
+    for (unsigned int j = 0; j < map[i].size(); j++) {
+      std::cout << map[i][j];
+    }
+    std::cout << std::endl;
+  }
+
+  std::cout << std::endl;
 }

@@ -15,7 +15,11 @@ void print_map(std::vector<std::vector<char>> & map, std::ostream &output) {
   }
 }
 
-// ./a.out [dictionary file] [initial grid file] [solution mode] [output mode] [gc]
+// .--------------.-------------------.---------------------.-----------------.---------------.-------------.
+// | Program name |    Parameter 1    |     Parameter 2     |   Parameter 3   |  Parameter 4  | Parameter 5 |
+// :--------------+-------------------+---------------------+-----------------+---------------+-------------:
+// | ./a.out      | [dictionary file] | [initial grid file] | [solution mode] | [output mode] | [gc]        |
+// '--------------'-------------------'---------------------'-----------------'---------------'-------------'
 int main(int argc, char *argv[]) {
   // No matter what happened, 4 parameters are required.
   if (argc < 5)
@@ -65,11 +69,13 @@ int main(int argc, char *argv[]) {
 
   bool is_giant_components = gc == "gc";
 
+  // Search work
   g->search_word();
 
   sort s(g->getSearched(), g);
   s.setFlags(one_solution, count_only, is_giant_components);
 
+  // Get combinations
   std::list<solution*> valid;
   s.combination(valid);
 

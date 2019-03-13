@@ -10,21 +10,24 @@
 #include <vector>
 #include <string>
 
+// Parse Dict file
 class Dictionary {
 public:
     Dictionary(std::ifstream &file);
-    ~Dictionary(){}
 
+    // Getters
     unsigned int size() const { return list.size(); }
-    const std::vector<unsigned int> & getLength(char x) const;
-
-    void print() const;
+    const std::vector<unsigned int> &getLength(char x) const;
     bool search(std::string &str) const;
+
+    // Debug
+    void print() const;
 
 private:
     std::vector<std::string> list;
     std::vector<std::vector<unsigned int>> alphabet = std::vector<std::vector<unsigned int>>(26);
 
+    // Calculate Length
     void lengths();
 };
 

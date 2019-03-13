@@ -6,6 +6,7 @@
 #include <algorithm>
 #include "sort.h"
 
+// Receive all possible words and calculate constraints
 sort::sort(const std::list<word*> &w, grid * grid2) {
   grid1 = grid2;
   std::list<word*>::const_iterator wb = w.begin();
@@ -21,6 +22,7 @@ sort::sort(const std::list<word*> &w, grid * grid2) {
   }
 }
 
+// Combine and test if given set is a solution
 void sort::combination(std::list<solution*> &result) const {
   std::list<unsigned int> constraints = grid1->getConstraints();
 
@@ -43,11 +45,11 @@ void sort::combination(std::list<solution*> &result) const {
   }
 
   std::vector<std::list<std::list<word*>>> all_chosen;
-  // Choose
+  // Start Choosing n from constraints m
   for (unsigned int i = 0; i < constraint_index.size(); i++)
   {
     std::vector<std::vector<word*>> temp;
-    // First, we need to find given fields
+    // First, we need to find given constraints
     int field = found_length((constraint_index)[i]);
     if (field != -1)
     {
@@ -63,7 +65,8 @@ void sort::combination(std::list<solution*> &result) const {
         return;
       }
     } else {
-      // Word with given length has no found, solution does not exist.
+      // Word with given length has no found, solution does not exist
+      // Unable to fit constraints
       return;
     }
   }
@@ -72,6 +75,7 @@ void sort::combination(std::list<solution*> &result) const {
   mixed_solutions(all_chosen, result);
 }
 
+// Pop all possible combinations from m
 void sort::n_choose_m(unsigned int offset,
                       unsigned int m,
                       const std::vector<word*> &ls,
@@ -98,10 +102,12 @@ void sort::n_choose_m(unsigned int offset,
   }
 }
 
+// Mix all result given by n_choose_m process
 void sort::mixed_solutions(const std::vector<std::list<std::list<word*>>> &all_chosen,
                                    std::list<solution*> &s) const
 {
   if (all_chosen.size() > 1) {
+    // If more then one n_choose_m given by constraints
     std::vector<std::list<word*>> j(all_chosen[0].begin(), all_chosen[0].end());
     solution_recursive(1, j, all_chosen, s);
   } else {
@@ -117,11 +123,13 @@ void sort::mixed_solutions(const std::vector<std::list<std::list<word*>>> &all_c
   }
 }
 
+// Combine and validate solution set (n_choose_m) one by one
 void sort::solution_recursive(unsigned int index,
                               const std::vector<std::list<word*>> &tmp,
                               const std::vector<std::list<std::list<word *>>> &all_chosen,
                               std::list<solution *> &s) const {
   if (index < all_chosen.size()) {
+    // Last index need post-check
     bool last = index == all_chosen.size() - 1;
     std::vector<std::list<word*>> current;
 
@@ -161,12 +169,14 @@ int sort::found_length(unsigned int i) const {
   return -1;
 }
 
+// Set search flag
 void sort::setFlags(bool solution_mode, bool count_mode, bool is_giant) {
   one_solution = solution_mode;
   count_only = count_mode;
   giant = is_giant;
 }
 
+// Debug
 void sort::print() const {
   std::cout << "Lengths: " << std::endl;
   for (unsigned int i = 0; i < length.size(); i++) {
