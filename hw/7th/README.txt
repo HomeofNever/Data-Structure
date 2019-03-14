@@ -48,6 +48,7 @@ DESCRIPTION OF YOUR ADDTIONAL PUZZLES/DICTIONARIES:
 Briefly explain the design of the puzzles or dictionaries and what
 makes them "interesting" test cases (or why they aren't interesting).
 
+file: dict.txt and puzzle.txt
 I make this one for testing nyt1_mini exception and gc extra credit:
 by adding a word next to each other in dictionary, the one next one should not/also be considered.
 Adding a new constraint also help sometimes.
