@@ -174,7 +174,7 @@ double distanceEarth(double lat1d, double lon1d, double lat2d, double lon2d) {
  * @param loadfile File to read from
  */
 void loadConnections(ADJ_TYPE& adj_lists, std::ifstream& loadfile){
-    ID_TYPE a, b;
+    ID_TYPE a = 0, b = 0;
     while (loadfile >> a >> b) {
         adj_lists[a].push_back(b);
     }
@@ -186,8 +186,8 @@ void loadConnections(ADJ_TYPE& adj_lists, std::ifstream& loadfile){
  * @param loadfile File to read from
  */
 void loadLocations(GEO_TYPE& locations, std::ifstream& loadfile){
-    ID_TYPE id;
-    double latitude, longitude;
+    ID_TYPE id = 0;
+    double latitude = 0.00, longitude = 0.00;
     while (loadfile >> id >> latitude >> longitude) {
         COORD_TYPE c = COORD_TYPE(latitude, longitude);
         locations[id] = c;

@@ -20,7 +20,6 @@ own, as described in "Academic Integrity for Homework" handout.
 ESTIMATE OF # OF HOURS SPENT ON THIS ASSIGNMENT: 10
 
 
-
 ORDER NOTATION ANALYSIS:
 Consider the following variables and give the complexity along with a short
 justification for each of the functions below:
@@ -31,21 +30,23 @@ d: The total number of users with degree >= 1
 m: The total number of connections
 p: The number of users that a function will print out
 
-loadConnections():
+* Define q as the number of friends one user have.
 
-loadLocations():
+loadConnections(O(m * log m)): Iterate over the connections in the file, and insert into the map (worst case)
 
-printAllUsersWithinDistance():
+loadLocations(O(l * log(l))): Iterate over users that provided locations, and insert into the map (worst case)
 
-printDegreesHistogram():
+printAllUsersWithinDistance(O(l)): Iterate over users with locations and calculate locations
 
-printDegreesOfAll():
+printDegreesHistogram(O(n)): Iterate over all users and identify if their degrees >= 1
 
-printFriendsWithDegree():
+printDegreesOfAll(O(n)): Iterate over all users and collect degrees
 
-printFriendsWithinDistance():
+printFriendsWithDegree(O(q * log(n))): Go through each friends and find in the adj_list; then collect their degrees
 
-printUsersWithinIDRange():
+printFriendsWithinDistance(O(q * log(n))): Go through each friends and find in the adj_list; then calculate distances
+
+printUsersWithinIDRange(O(n)): Iterate over all users and calculate if it is in offset
 
 
 MISC. COMMENTS TO GRADER:  
