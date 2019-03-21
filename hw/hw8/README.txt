@@ -46,11 +46,13 @@ printFriendsWithDegree(O(q * log(n))): Go through each friends and find in the a
 
 printFriendsWithinDistance(O(q * log(n))): Go through each friends and find in the adj_list; then calculate distances
 
-printUsersWithinIDRange(O(n)): Iterate over all users and calculate if it is in offset
+printUsersWithinIDRange(O(n)): Iterate over all users(worst case) and calculate if it is in offset
 
 
 MISC. COMMENTS TO GRADER:  
-(optional, please be concise!)
+
+Since I cannot add extra function, in order to prevent int overflow, I copy the if code to calculate the diff
+in function printUsersWithinIDRange(). I hope this is not considered as bad code style.
 
 
 

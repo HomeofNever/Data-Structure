@@ -206,6 +206,7 @@ void loadLocations(GEO_TYPE& locations, std::ifstream& loadfile){
 void printAllUsersWithinDistance(const GEO_TYPE& locations, std::ofstream& outfile,
                                  const ID_TYPE& start_id, double max_distance){
     GEO_TYPE::const_iterator self = locations.find(start_id);
+    // User not exist
     if (self == locations.end()) {
       outfile << "User ID " << start_id << " does not have a recorded location." << std::endl;
       return;
@@ -229,9 +230,9 @@ void printAllUsersWithinDistance(const GEO_TYPE& locations, std::ofstream& outfi
         i++;
     }
 
+    // Print
     if (tmp.empty()) {
       outfile << "There are no users within " << max_distance << " km of user " << start_id << std::endl;
-
     } else {
       outfile << "User IDs within " << max_distance <<  " km of user " << start_id << ":" << std::endl;
       std::map<double, std::list<ID_TYPE>>::const_iterator j = tmp.begin();
@@ -262,6 +263,7 @@ void printDegreesHistogram(const ADJ_TYPE& adj_lists, std::ofstream& outfile){
 
   while (i != adj_lists.end()) {
     ID_TYPE user_num = i->second.size();
+    // Degree to
     if (user_num >= 1) {
       num++;
       std::map<ID_TYPE , ID_TYPE >::iterator j = n.find(user_num);
@@ -274,6 +276,7 @@ void printDegreesHistogram(const ADJ_TYPE& adj_lists, std::ofstream& outfile){
     i++;
   }
 
+  // Print
   std::map<ID_TYPE, ID_TYPE>::const_iterator k = n.begin();
   outfile << "Histogram for " << num << " users:" << std::endl;
   while (k != n.end()) {
@@ -301,6 +304,7 @@ void printDegreesOfAll(const ADJ_TYPE& adj_lists, std::ofstream& outfile){
     i++;
   }
 
+  // Print
   outfile << "Degrees for "<< tmp.size() <<" users:" << std::endl;
   std::map<ID_TYPE, ID_TYPE>::const_iterator j = tmp.begin();
   while (j != tmp.end()) {
@@ -310,7 +314,6 @@ void printDegreesOfAll(const ADJ_TYPE& adj_lists, std::ofstream& outfile){
 }
 
 /**
- * "User 1 has 1 friend(s) with degree 1: 2"
  * Prints all friends of a particular user who have a particular degree.
  * Sorted by user ID (from smallest to largest).
  * @param adj_lists Adjacency lists structure
@@ -340,6 +343,7 @@ void printFriendsWithDegree(const ADJ_TYPE& adj_lists, std::ofstream& outfile,
     friends++;
   }
 
+  // Print
   if (tmp.empty()) {
     outfile << "User " << start_id <<" has 0 friend(s) with degree " << degree << std::endl;
   } else {
@@ -397,6 +401,7 @@ void printFriendsWithinDistance(const ADJ_TYPE& adj_lists, const GEO_TYPE& locat
     friends++;
   }
 
+  // Print
   if (tmp.empty()) {
     outfile << "There are no friends within " << max_distance << " km of user " << start_id << std::endl;
   } else {
@@ -437,24 +442,53 @@ void printUsersWithinIDRange(std::ofstream& outfile, ADJ_TYPE::const_iterator be
                              ADJ_TYPE::const_iterator end,
                              ADJ_TYPE::const_iterator start_it, unsigned int offset){
   std::list<ID_TYPE> tmp;
+  ADJ_TYPE::const_iterator before = start_it;
+  ADJ_TYPE::const_iterator after = start_it;
+  unsigned int diff = 0;
+
   if (start_it != end) {
-    while (begin != end) {
-      if (start_it != begin) {
-        unsigned int diff = begin->first > start_it->first ?
-                            begin->first - start_it->first : start_it->first - begin->first;
-        if (diff <= offset) {
-          if (!begin->second.empty()) {
-            tmp.push_back(begin->first);
-          }
+    // Before
+    while (before != begin) {
+      diff = before->first > start_it->first ?
+                          before->first - start_it->first : start_it->first - before->first;
+      if (diff <= offset) {
+        if (!before->second.empty()) {
+          tmp.push_back(before->first);
         }
+      } else {
+        break;
       }
-      begin++;
+      before--;
+    }
+
+    // Begin (special case)
+    diff = begin->first > start_it->first ? begin->first - start_it->first : start_it->first - begin->first;
+    if (diff <= offset) {
+      if (!begin->second.empty()) {
+        tmp.push_back(begin->first);
+      }
+    }
+
+    // After
+    while (after != end) {
+      unsigned int diff = after->first > start_it->first ?
+                          after->first - start_it->first : start_it->first - after->first;
+      if (diff <= offset) {
+        if (!after->second.empty()) {
+          tmp.push_back(after->first);
+        }
+      } else {
+        break;
+      }
+      after++;
     }
   } else {
     outfile << "There is no user with the requested ID" << std::endl;
     return;
   }
 
+  tmp.sort();
+  // Print
   if (tmp.empty()) {
     outfile << "There are no users with an ID within +/-" << offset << " of " << start_it->first << std::endl;
   } else {
