@@ -442,37 +442,44 @@ void printUsersWithinIDRange(std::ofstream& outfile, ADJ_TYPE::const_iterator be
                              ADJ_TYPE::const_iterator end,
                              ADJ_TYPE::const_iterator start_it, unsigned int offset){
   std::list<ID_TYPE> tmp;
-  ADJ_TYPE::const_iterator before = start_it;
-  ADJ_TYPE::const_iterator after = start_it;
-  unsigned int diff = 0;
-
   if (start_it != end) {
+    unsigned int diff = 0;
+    ADJ_TYPE::const_iterator before = start_it;
+    ADJ_TYPE::const_iterator after = start_it;
+    // Prepare
+    after++;
+
     // Before
-    while (before != begin) {
-      diff = before->first > start_it->first ?
-                          before->first - start_it->first : start_it->first - before->first;
-      if (diff <= offset) {
-        if (!before->second.empty()) {
-          tmp.push_back(before->first);
-        }
-      } else {
-        break;
-      }
+    if (before != begin) {
+      // If it is the begin, we need to skip over
+      // To avoid undefined behavior
       before--;
+      while (before != begin) {
+        diff = start_it->first - before->first;
+        if (diff <= offset) {
+          if (!before->second.empty()) {
+            tmp.push_back(before->first);
+          }
+        } else {
+          break;
+        }
+        before--;
+      }
     }
 
     // Begin (special case)
-    diff = begin->first > start_it->first ? begin->first - start_it->first : start_it->first - begin->first;
-    if (diff <= offset) {
-      if (!begin->second.empty()) {
-        tmp.push_back(begin->first);
+    if (begin != start_it) {
+      diff = start_it->first - begin->first;
+      if (diff <= offset) {
+        if (!begin->second.empty()) {
+          tmp.push_back(begin->first);
+        }
       }
     }
 
     // After
     while (after != end) {
-      unsigned int diff = after->first > start_it->first ?
-                          after->first - start_it->first : start_it->first - after->first;
+      diff = after->first - start_it->first;
       if (diff <= offset) {
         if (!after->second.empty()) {
           tmp.push_back(after->first);

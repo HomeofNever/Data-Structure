@@ -32,21 +32,21 @@ p: The number of users that a function will print out
 
 * Define q as the number of friends one user have.
 
-loadConnections(O(m * log m)): Iterate over the connections in the file, and insert into the map (worst case)
+loadConnections(): O(m * log(m)), Iterate over the connections in the file, and insert into the map (worst case)
 
-loadLocations(O(l * log(l))): Iterate over users that provided locations, and insert into the map (worst case)
+loadLocations(): O(l * log(l)), Iterate over users that provided locations, and insert into the map (worst case)
 
-printAllUsersWithinDistance(O(l)): Iterate over users with locations and calculate locations
+printAllUsersWithinDistance(): O(l), Iterate over users with locations and calculate locations, and print
 
-printDegreesHistogram(O(n)): Iterate over all users and identify if their degrees >= 1
+printDegreesHistogram(): O(n + p), Iterate over all users and identify if their degrees >= 1
 
-printDegreesOfAll(O(n)): Iterate over all users and collect degrees
+printDegreesOfAll(): O(n + p), Iterate over all users and collect degrees, and print
 
-printFriendsWithDegree(O(q * log(n))): Go through each friends and find in the adj_list; then collect their degrees
+printFriendsWithDegree(): O((q * log(n)) + p), Go through each friends and find in the adj_list; then collect their degrees, and print
 
-printFriendsWithinDistance(O(q * log(n))): Go through each friends and find in the adj_list; then calculate distances
+printFriendsWithinDistance(): O((q * log(n)) + p), Go through each friends and find in the adj_list; then calculate distances, and print
 
-printUsersWithinIDRange(O(n)): Iterate over all users(worst case) and calculate if it is in offset
+printUsersWithinIDRange(): O(n + p), Iterate over all users(worst case) and calculate if it is in offset
 
 
 MISC. COMMENTS TO GRADER:  
