@@ -32,7 +32,7 @@ p: The number of users that a function will print out
 
 * Define q as the number of friends one user have.
 
-loadConnections(): O(m * log(m)), Iterate over the connections in the file, and insert into the map (worst case)
+loadConnections(): O(m * log(n)), Iterate over the connections in the file, and insert into the map(# of user) (worst case)
 
 loadLocations(): O(l * log(l)), Iterate over users that provided locations, and insert into the map (worst case)
 
@@ -51,7 +51,7 @@ printUsersWithinIDRange(): O(n + p), Iterate over all users(worst case) and calc
 
 MISC. COMMENTS TO GRADER:  
 
-Since I cannot add extra function, in order to prevent int overflow, I copy the if code to calculate the diff
+Since I cannot add extra function, in order to prevent int overflow, I copy the "if code" to calculate the diff
 in function printUsersWithinIDRange(). I hope this is not considered as bad code style.
 
 
