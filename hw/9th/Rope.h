@@ -19,7 +19,7 @@ public:
 	Node* right;
 	Node* parent;
 	int weight;
-	std::string value;
+	std::string value = "";
 
 	static int sum(Node * n);
 	char getChar(unsigned int i) const;

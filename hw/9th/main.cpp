@@ -35,7 +35,107 @@ void StudentTests(){
    * THESE TESTS SHOULD NOT CAUSE A CRASH.
    */
   std::cout << "***Student tests begun" << std::endl;
-  //assert(0 && "STUDENT TESTS NOT YET WRITTEN!");
+  std::cout << "_________________________________" << std::endl;
+  std::cout << "***Student tests***" << std::endl;
+  // Operator++ Test
+  std::cout << "***Student tests: Operator++ Test Finished***"
+            << std::endl;
+  // Index Test
+  std::cout << "***Student tests: Index Test Finished***"
+            << std::endl;
+  // Concat Test
+  std::cout << "***Student tests: Concat Test Finished***"
+            << std::endl;
+  // Report Test
+  Rope R1(IndexTestRope());
+  std::string SR1 = "";
+  char SR2;
+  R1.report(1, 1, SR1);
+  R1.index(1, SR2);
+  std::string SR3(1, SR2);
+  assert(SR1 == SR3);
+  std::cout << "***Student tests: Report Test Finished***"
+            << std::endl;
+  std::cout << "*******************************" << std::endl;
+  // Split Test
+  // Copy constructor & assignment Test
+  // Test i = 0
+  Rope T1(IndexTestRope());
+  Rope T2;
+  T1.split(0, T2);
+  T1.print_strings(std::cout);
+  T2.print_strings(std::cout);
+  std::string s1 = "Hello my name is Simon";
+  std::string s2 = "";
+  assert(SAME(T1,s1));
+  assert(SAME(T2,s2));
+  std::cout << "***Student tests: Split Test i = 0 Finished***"
+            << std::endl;
+  Rope C1(T2);// Empty rope
+  C1.print_strings(std::cout);
+  std::string rs2="";
+  assert(C1.expose_root() == T2.expose_root());// Both are NULL
+  assert(C1.size() == T2.size());
+  std::cout << "***Student tests: Empty Rope Copy test passed" << std::endl;
+  Rope C2;
+  C2 = C1;
+  C2.print_strings(std::cout);
+  assert(C1.expose_root() == C2.expose_root());
+  assert(C1.size() == C2.size());
+  std::cout << "***Student tests: Empty Rope Assignment test passed" << std::endl;
+  std::cout << "*******************************" << std::endl;
+  Rope T3(IndexTestRope());
+  Rope T4;
+  T3.split(7, T4);
+  T3.print_strings(std::cout);
+  T4.print_strings(std::cout);
+  std::string s3 = "Hello m";
+  std::string s4 = "y name is Simon";
+  assert(SAME(T3,s3));
+  assert(SAME(T4,s4));
+  std::cout << "***Student tests: Split Test i = 7 Finished***"
+            << std::endl;
+  std::cout << "*******************************" << std::endl;
+  Rope T5(IndexTestRope());
+  Rope T6;
+  T5.split(1, T6);
+  T5.print_strings(std::cout);
+  T6.print_strings(std::cout);
+  std::string s5 = "H";
+  std::string s6 = "ello my name is Simon";
+  assert(SAME(T5,s5));
+  assert(SAME(T6,s6));
+  std::cout << "***Student tests: Split Test i = 1 Finished***"
+            << std::endl;
+  Rope C3(T5);// Empty rope
+  C3.print_strings(std::cout);
+  assert(C3.expose_root() != T5.expose_root());// Both are NULL
+  assert(C3.size() == T5.size());
+  std::cout << "***Student tests: Single Rope Copy test passed" << std::endl;
+  Rope C4;
+  C4 = C3;
+  C4.print_strings(std::cout);
+  assert(C4.expose_root() != C3.expose_root());
+  assert(C4.size() == C3.size());
+  std::cout << "***Student tests: Single Rope Assignment test passed" << std::endl;
+  std::cout << "*******************************" << std::endl;
+  Rope T7(IndexTestRope());
+  Rope T8;
+  T7.split(21, T8);
+  T7.print_strings(std::cout);
+  T8.print_strings(std::cout);
+  std::string s7 = "Hello my name is Simo";
+  std::string s8 = "n";
+  assert(SAME(T7,s7));
+  assert(SAME(T8,s8));
+  std::cout << "***Student tests: Split Test i = 21 Finished***"
+            << std::endl;
+  std::cout << "***Student tests: Split Test Finished***"
+            << std::endl;
+  std::cout << "***Student tests: Copy & Assignment Test Finished***"
+            << std::endl;
+  std::cout << "*******************************" << std::endl;
+
 }
 
 //Used to compare a string and a rope that should be the same.
