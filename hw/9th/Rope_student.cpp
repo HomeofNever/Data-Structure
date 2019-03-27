@@ -191,17 +191,22 @@ void Rope::concat(const Rope& r){
 
 // Similar to concat, but not copying
 void Rope::move(Node *n) {
-  Node * new_root = new Node();
-  new_root->left = root;
+  // The Rope ptr maybe nullptr
   if (root) {
-    // The Rope ptr maybe nullptr
-    root->parent = new_root;
-  }
-  new_root->right = n;
-  n->parent = new_root;
-  new_root->weight = Node::sum(root);
+    Node * new_root = new Node();
+    new_root->left = root;
 
-  root = new_root;
+    root->parent = new_root;
+    new_root->right = n;
+    n->parent = new_root;
+    new_root->weight = Node::sum(root);
+
+    root = new_root;
+  } else {
+    // We just set this as our new root
+    root = n;
+  }
+
   size_ += Node::sum(n);
 }
 
@@ -323,10 +328,14 @@ Rope& Rope::split(int i, Rope& rhs){
           par = par->parent;
           rhs.move(par->right);
           par->right = nullptr;
+          // Re-calculate weight of parents
+          par->weight = Node::sum(par->left);
         }
       }
 
+      // Adjust left tree's member
       size_ = left_size;
+      root->weight = Node::sum(root->left);
       return *this;
     } else {
       std::cerr << "Position should not be the root node" << std::endl;
