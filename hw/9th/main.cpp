@@ -21,7 +21,7 @@ Node* ConcatTestRopeLeft();
 Node* ConcatTestRopeRight();
 
 int main(){
-  BasicTests();
+  // BasicTests();
   std::cout << "***Basic tests passed." << std::endl;
   StudentTests();
   std::cout << "***Student tests passed." << std::endl;
@@ -35,103 +35,80 @@ void StudentTests(){
    * THESE TESTS SHOULD NOT CAUSE A CRASH.
    */
   std::cout << "***Student tests begun" << std::endl;
-  std::cout << "_________________________________" << std::endl;
-  std::cout << "***Student tests***" << std::endl;
+
   // Operator++ Test
-  std::cout << "***Student tests: Operator++ Test Finished***"
-            << std::endl;
+  Rope O1(IndexTestRope());
+  std::string str = "Hello my name is Simon";
+  std::string compare;
+  for(rope_iterator it = O1.begin(); it!= O1.end(); it++) {
+    if (!it.value().empty()) {
+      compare.append(it.value());
+    }
+  }
+  assert(str == compare);
+
+  // Concat test
+  std::string str2 = "Hello my name i";
+  std::string compare2;
+  Rope O2(ConcatTestRopeLeft());
+  Rope O3(ConcatTestRopeRight());
+  O2.concat(O3);
+  for(rope_iterator it = O2.begin(); it!= O2.end(); it++) {
+    if (!it.value().empty()) {
+      compare2.append(it.value());
+    }
+  }
+
+  assert(str2 == compare2);
+
+  std::cout << "***Operator++ Test Finished***" << std::endl;
+
+  // Concat and split Test
+  std::cout << "***Begin Concat Test" << std::endl;
+  Rope co1(IndexTestRope());
+  Rope co2;
+  Rope co3;
+  co1.split(21, co2);
+  co1.print_strings(std::cout);
+  co2.print_strings(std::cout);
+  std::cout << "-- Split lhs" << std::endl;
+  co1.split(7, co3);
+  co3.print_strings(std::cout);
+  std::cout << "-- Before concat:" << std::endl;
+  co3.print_strings(std::cout);
+  co3.concat(co1);
+  co3.concat(co2);
+  std::cout << "-- After concat:" << std::endl;
+  co3.print_strings(std::cout);
+  std::string str_ = "y name is SimoHello mn";
+  std::string str3;
+
+  assert(co3.report(0, 21, str3) && str3 == str_);
+
   // Index Test
-  std::cout << "***Student tests: Index Test Finished***"
-            << std::endl;
-  // Concat Test
-  std::cout << "***Student tests: Concat Test Finished***"
-            << std::endl;
-  // Report Test
-  Rope R1(IndexTestRope());
-  std::string SR1 = "";
-  char SR2;
-  R1.report(1, 1, SR1);
-  R1.index(1, SR2);
-  std::string SR3(1, SR2);
-  assert(SR1 == SR3);
-  std::cout << "***Student tests: Report Test Finished***"
-            << std::endl;
-  std::cout << "*******************************" << std::endl;
-  // Split Test
-  // Copy constructor & assignment Test
-  // Test i = 0
-  Rope T1(IndexTestRope());
-  Rope T2;
-  T1.split(0, T2);
-  T1.print_strings(std::cout);
-  T2.print_strings(std::cout);
-  std::string s1 = "Hello my name is Simon";
-  std::string s2 = "";
-  assert(SAME(T1,s1));
-  assert(SAME(T2,s2));
-  std::cout << "***Student tests: Split Test i = 0 Finished***"
-            << std::endl;
-  Rope C1(T2);// Empty rope
-  C1.print_strings(std::cout);
-  std::string rs2="";
-  assert(C1.expose_root() == T2.expose_root());// Both are NULL
-  assert(C1.size() == T2.size());
-  std::cout << "***Student tests: Empty Rope Copy test passed" << std::endl;
-  Rope C2;
-  C2 = C1;
-  C2.print_strings(std::cout);
-  assert(C1.expose_root() == C2.expose_root());
-  assert(C1.size() == C2.size());
-  std::cout << "***Student tests: Empty Rope Assignment test passed" << std::endl;
-  std::cout << "*******************************" << std::endl;
-  Rope T3(IndexTestRope());
-  Rope T4;
-  T3.split(7, T4);
-  T3.print_strings(std::cout);
-  T4.print_strings(std::cout);
-  std::string s3 = "Hello m";
-  std::string s4 = "y name is Simon";
-  assert(SAME(T3,s3));
-  assert(SAME(T4,s4));
-  std::cout << "***Student tests: Split Test i = 7 Finished***"
-            << std::endl;
-  std::cout << "*******************************" << std::endl;
-  Rope T5(IndexTestRope());
-  Rope T6;
-  T5.split(1, T6);
-  T5.print_strings(std::cout);
-  T6.print_strings(std::cout);
-  std::string s5 = "H";
-  std::string s6 = "ello my name is Simon";
-  assert(SAME(T5,s5));
-  assert(SAME(T6,s6));
-  std::cout << "***Student tests: Split Test i = 1 Finished***"
-            << std::endl;
-  Rope C3(T5);// Empty rope
-  C3.print_strings(std::cout);
-  assert(C3.expose_root() != T5.expose_root());// Both are NULL
-  assert(C3.size() == T5.size());
-  std::cout << "***Student tests: Single Rope Copy test passed" << std::endl;
-  Rope C4;
-  C4 = C3;
-  C4.print_strings(std::cout);
-  assert(C4.expose_root() != C3.expose_root());
-  assert(C4.size() == C3.size());
-  std::cout << "***Student tests: Single Rope Assignment test passed" << std::endl;
-  std::cout << "*******************************" << std::endl;
-  Rope T7(IndexTestRope());
-  Rope T8;
-  T7.split(21, T8);
-  T7.print_strings(std::cout);
-  T8.print_strings(std::cout);
-  std::string s7 = "Hello my name is Simo";
-  std::string s8 = "n";
-  assert(SAME(T7,s7));
-  assert(SAME(T8,s8));
-  std::cout << "***Student tests: Split Test i = 21 Finished***"
-            << std::endl;
-  std::cout << "***Student tests: Split Test Finished***"
-            << std::endl;
+  Rope i1(IndexTestRope());
+  char si1;
+  assert(i1.index(0,si1));
+  assert(si1 == 'H');
+  assert(!i1.index(22, si1)); // Should return false
+  std::cout << "***Index Test Finished" << std::endl;
+
+  // Report Exception Test
+  Rope ro1(IndexTestRope());
+  ro1.print_strings(std::cout);
+
+  std::string str4;
+  assert(!ro1.report(5, 4, str4));// i > j
+  assert(!ro1.report(1, 22, str4));// out of range
+  std::cout << "***Report Test Finished" << std::endl;
+
+
+  std::cout << "***Assignment Test" << std::endl;
+  Rope * as1 = new Rope(IndexTestRope());
+  Rope as2(*as1);
+  as1->print_strings(std::cout);
+  delete as1;
+  as2.print_strings(std::cout);
   std::cout << "***Student tests: Copy & Assignment Test Finished***"
             << std::endl;
   std::cout << "*******************************" << std::endl;
@@ -143,12 +120,9 @@ void StudentTests(){
 bool SAME(const Rope& r, const std::string& s){
   std::cout << "Comparing string \"" << s << "\" to Rope:" << std::endl;
   r.print(std::cout);
-  std::cout << s.length() << " " << r.size() << std::endl;
   assert(r.size() == (int)s.length() && "ERROR: ROPE SIZE DOES NOT MATCH STRING SIZE");
   char c;
   for(unsigned int i=0; i<s.size(); i++){
-    r.index(i,c);
-    std::cout << c << "  " << s[i] << std::endl;
     assert(r.index(i,c) && c == s[i] && "MISMATCH BETWEEN A CHARACTER IN ROPE AND STRING USING INDEX");
   }
   /*

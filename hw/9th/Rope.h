@@ -73,10 +73,13 @@ private:
 	Node * copy_node(Node *n);
 
 	void move(Node *n);
+	int getIndex(int i, Node *& n) const;
 
 private:
 	int size_ = 0;
 	Node *root = nullptr;
+
+	void leaf_recursive(Node *n, int &total, std::string &s, int &i, int& j, int &l) const;
 };
 
 bool is_leaf(Node* p);

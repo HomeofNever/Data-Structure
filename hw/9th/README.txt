@@ -29,7 +29,10 @@ of the following operations two ways: 1) with a balanced Rope, 2) with an
 extremely unbalanced Rope. Explain what you considered an extremely 
 unbalanced rope for the string "Hello my name is Simon".
 
+Extremely Unbalanced rope:
+
 Copy Constructor:
+1)
 
 Construct from Node*:
 
@@ -48,7 +51,11 @@ TESTING & DEBUGGING STRATEGY:
 Briefly describe the tests in your StudentTests() function.
 How did you test the "corner cases" of your implementation?
 
+- use GDB to go step by step when something goes wrong
+- write error message when encounter exceptions
 - Observe print() result
+- write test cases for each function
+
 
 
 MISC. COMMENTS TO GRADER:  
