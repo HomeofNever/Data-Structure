@@ -156,28 +156,7 @@ bool Rope::index(int i, char &c) const {
     return false;
   }
 
-  Node * result;
-  int index = getIndex(i, result);
-
-  if (index != -1) {
-    c = result->getChar(index);
-
-    return true;
-  } else {
-    std::cerr << "Error when getting index" << std::endl;
-  }
-}
-
-// Get node and index from given index of string
-int Rope::getIndex(int i, Node *&n) const {
-  // Not a valid index
-  if (i >= size() || i < 0) {
-    n = nullptr;
-    return -1;
-  }
-
-  n = root;
-
+  Node *n = root;
   // Go deep into the leaf
   while (!is_leaf(n)) {
     if (i < n->weight) {
@@ -190,9 +169,10 @@ int Rope::getIndex(int i, Node *&n) const {
     }
   }
 
-  return i;
-}
+  c = n->getChar(i);
 
+  return true;
+}
 
 //Add the other rope (r)'s string to the end of my string
 void Rope::concat(const Rope &r) {
@@ -231,7 +211,7 @@ void Rope::move(Node *n) {
       root->parent = new_root;
       new_root->right = n;
       n->parent = new_root;
-      new_root->weight = Node::sum(root);
+      new_root->weight = size_;
 
       root = new_root;
     } else {
@@ -256,35 +236,13 @@ bool Rope::report(int i, int j, std::string &s) const {
   }
 
   s = "";
-  int t = 0;
-  int l = j - i + 1;
-  leaf_recursive(root, t, s, i, j, l);
-
+  for (; i <= j; i++) {
+    char c;
+    index(i, c);
+    s += c;
+  }
 
   return true;
-}
-
-
-void Rope::leaf_recursive(Node * n, int &total, std::string &s, int &i, int &j, int &l) const {
-  if (n && l > 0) {
-    if (is_leaf(n)) {
-      int future = total + n->weight;
-      if (future >= i) {
-        // It is part of the string
-        int begin = i - total;
-        begin = begin > 0 ? begin : 0;
-        std::string tmp = n->value.substr(begin, l);
-        s.append(tmp);
-        total += tmp.size();
-        l -= tmp.size();
-      } else {
-        total += n->weight;
-      }
-    } else {
-      leaf_recursive(n->left, total, s, i, j, l);
-      leaf_recursive(n->right, total, s, i, j, l);
-    }
-  }
 }
 
 // Used to Split a Node at given index
@@ -294,14 +252,9 @@ void Node::split(int index) {
     Node *l = new Node();
     Node *r = new Node();
 
-    // Assign value
-    for (int i = 0; i < index; i++) {
-      l->value += value[i];
-    }
+    l->value = value.substr(0, index);
     l->weight = l->value.size();
-    for (int j = index; j < value.size(); j++) {
-      r->value += value[j];
-    }
+    r->value = value.substr(index, value.size());
     r->weight = r->value.size();
 
     // Connect Nodes
@@ -333,8 +286,6 @@ Rope &Rope::split(int i, Rope &rhs) {
     return *this;
   }
 
-  int index = i - 1;
-
   // First, we need to find where the index is.
   Node *n = root;
   int left_size = i;
@@ -356,15 +307,50 @@ Rope &Rope::split(int i, Rope &rhs) {
     n = n->right;
   }
 
-  Node * result;
-  getIndex(index, result);
+  Node *parent_final = nullptr;
 
   rhs = Rope();
-  for (rope_iterator itr = rope_iterator(result); itr != end(); itr++) {
-    if (itr.ptr_->right) {
-      rhs.move(itr.ptr_->right);
-      itr.ptr_->right = nullptr;
-      itr.ptr_->weight = Node::sum(itr.ptr_->left);
+  if (n->parent) {
+    // We should have a parent
+    if (n->parent->left == n) {
+      // We are on the left
+      // Find the first parent on its right
+      while (n->parent && n->parent->right != n) {
+        n = n->parent;
+      }
+
+      // Cut the right
+      parent_final = n->parent;
+      rhs.move(n);
+      parent_final->right = nullptr;
+    } else {
+      // We are on the right
+      // We need to cut ourselves directly
+      parent_final = n->parent;
+      rhs.move(n);
+      parent_final->right = nullptr;
+    }
+  } else {
+    std::cerr << "Position should not be the root node" << std::endl;
+    return *this;
+  }
+
+  // For the rest of the right, cut and move
+  if (parent_final) {
+    while (parent_final->parent) {
+      Node *tmp = parent_final->parent;
+      if (tmp && tmp->right != parent_final) {
+        // Move to the parent first
+        parent_final = tmp;
+        if (parent_final->right) {
+          rhs.move(parent_final->right);
+        }
+        parent_final->right = nullptr;
+        // Re-calculate member
+        parent_final->weight = Node::sum(parent_final->left);
+      } else {
+        parent_final = tmp;
+      }
     }
   }
 

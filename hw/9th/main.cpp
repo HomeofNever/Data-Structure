@@ -21,7 +21,7 @@ Node* ConcatTestRopeLeft();
 Node* ConcatTestRopeRight();
 
 int main(){
-  // BasicTests();
+  BasicTests();
   std::cout << "***Basic tests passed." << std::endl;
   StudentTests();
   std::cout << "***Student tests passed." << std::endl;
@@ -34,7 +34,6 @@ void StudentTests(){
    * CONSIDER CORNER CASES, ETC.
    * THESE TESTS SHOULD NOT CAUSE A CRASH.
    */
-  std::cout << "***Student tests begun" << std::endl;
 
   // Operator++ Test
   Rope O1(IndexTestRope());
@@ -61,7 +60,7 @@ void StudentTests(){
 
   assert(str2 == compare2);
 
-  std::cout << "***Operator++ Test Finished***" << std::endl;
+  std::cout << "***Operator++ Test Finished" << std::endl;
 
   // Concat and split Test
   std::cout << "***Begin Concat Test" << std::endl;
@@ -84,6 +83,21 @@ void StudentTests(){
   std::string str3;
 
   assert(co3.report(0, 21, str3) && str3 == str_);
+
+  // Root is the leaf
+  Node * rn = new Node();
+  rn->value = "Hello My Name is Michael";
+  rn->weight = rn->value.size();
+
+  Rope rope_rn(rn);
+  rope_rn.print_strings(std::cout);
+
+  Rope parts;
+  rope_rn.split(6, parts);
+  rope_rn.print(std::cout);
+  parts.print(std::cout);
+
+  std::cout << "***Split test passed" << std::endl;
 
   // Index Test
   Rope i1(IndexTestRope());
@@ -170,7 +184,6 @@ void BasicTests(){
   r5.print_strings(std::cout);
   assert(SAME(r4,s5));
   assert(SAME(r5,s6));
-  std::cout << "***Split test passed" << std::endl;
 
   //Copy & Assignment tests
   Rope r9(IndexTestRope());
