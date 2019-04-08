@@ -13,7 +13,7 @@ typedef std::map<std::string, std::string> ACTORS_TYPES;
 class actors {
 public:
     // Accessor
-    std::string getActor(std::string &id) const { return actors.find(id)->second; }
+    std::string getActor(const std::string &id) const { return actors.find(id)->second; }
 
     // Mutator
     bool addActor(std::string &id, std::string &name) { return actors.insert(std::make_pair(id, name)).second; }

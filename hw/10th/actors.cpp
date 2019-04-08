@@ -11,4 +11,6 @@ void actors::print() const {
        i++) {
     std::cout << i->first << " - " << i->second << std::endl;
   }
+
+  std::cout << "  " << "Total: " << actors.size() << std::endl;
 }
