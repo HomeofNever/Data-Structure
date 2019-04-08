@@ -5,6 +5,7 @@
 #include <iostream>
 #include "actors.h"
 
+// Print all actors within Map
 void actors::print() const {
   for (ACTORS_TYPES::const_iterator i = actors.begin();
        i != actors.end();

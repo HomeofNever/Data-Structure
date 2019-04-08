@@ -12,14 +12,16 @@
 
 typedef std::vector<std::string> listType;
 
+// Class that describe how a movie will be
 class movie {
 public:
+    // Constructors
     movie(){}
     movie(std::string &t, std::string &y, std::string &l):
           title(t), yearOfRelease(y), length(l) {};
     ~movie(){};
 
-    // Accessor
+    // Accessors
     std::string getTitle() const { return title; }
     std::string getYearOfRelease() const { return yearOfRelease; }
     std::string getLength() const { return length; }
@@ -27,12 +29,13 @@ public:
     listType getActorList() const { return actorList; }
     listType getRoleList() const { return roleList; }
 
-    // Mutator
+    // Mutators
     void addGenre(std::string &genre) { genreList.push_back(genre); }
     void addActor(std::string &actor) { actorList.push_back(actor); }
     void addRole(std::string &role) { roleList.push_back(role); }
 
     // Friends
+    // Let Query Access and Generate Queries directly
     friend class query;
 
     // Output

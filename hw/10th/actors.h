@@ -9,7 +9,6 @@
 #include <map>
 typedef std::map<std::string, std::string> ACTORS_TYPES;
 
-
 class actors {
 public:
     // Accessor

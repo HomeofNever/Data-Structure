@@ -7,6 +7,7 @@
 #include <algorithm>
 #include "query.h"
 
+// (0..3)C3 All possible solutions
 const std::vector<std::vector<int>> POSSIBLE_COMBINATION =
         std::vector<std::vector<int>>{
                 {0, 0, 0},
@@ -18,8 +19,10 @@ const std::vector<std::vector<int>> POSSIBLE_COMBINATION =
                 {0, 1, 1},
                 {1, 1, 1}
         };
+// Seed for hash function
 const unsigned int SEED = 1315423911;
 
+// Hash Function str->int
 unsigned int query::doHash(const std::string &str) {
   //  This implementation comes from
   //  http://www.partow.net/programming/hashfunctions/
@@ -31,6 +34,7 @@ unsigned int query::doHash(const std::string &str) {
   return hash;
 }
 
+// Generate Partial Query String of List fields
 void query::getQueryWithoutList(movie *m, std::vector<std::string> &ls) {
   for (int i = 0; i < POSSIBLE_COMBINATION.size(); i++) {
     std::string tmp;
@@ -44,6 +48,7 @@ void query::getQueryWithoutList(movie *m, std::vector<std::string> &ls) {
   }
 }
 
+// Generate all possible query strings
 void query::getQueryOfLists(movie *m, std::vector<std::string> &ls) {
   std::string genre, actor, role;
   appendList(m->genreList, genre);
@@ -59,6 +64,7 @@ void query::getQueryOfLists(movie *m, std::vector<std::string> &ls) {
   }
 }
 
+// Generate all possible query string of single fields
 void query::getQueries(movie *m, std::list<std::string*> &q) {
   std::vector<std::string> singleField, listField;
   getQueryWithoutList(m, singleField);
@@ -73,6 +79,7 @@ void query::getQueries(movie *m, std::list<std::string*> &q) {
   }
 }
 
+// Turn list into string
 void query::appendList(const listType &list, std::string &str) {
   str = "";
   str += std::to_string(list.size());
@@ -81,6 +88,7 @@ void query::appendList(const listType &list, std::string &str) {
   }
 }
 
+// PlaceHolder or Actual Value Helper
 void query::insert(int s, std::string &str,
                    const std::string &field,
                    const std::string &placeHolder) {

@@ -7,6 +7,7 @@
 
 #define SEPARATOR " - "
 
+// Print Keys intstead of actors
 void movie::debug_print() const {
   std::cout << title << SEPARATOR
             << yearOfRelease << SEPARATOR
@@ -31,12 +32,12 @@ void movie::debug_print() const {
   std::cout << std::endl;
 }
 
-/*
-DS_VI:Curse_of_the_Recursion
-2102
-120
-1 Horror
-3 Ben_Bitdiddle (Unknown_Role) Buster_Holzbauer (Unknown_Role) Alyssa_P_Hacker (Unknown_Role)
+/* Sample Output
+  DS_VI:Curse_of_the_Recursion
+  2102
+  120
+  1 Horror
+  3 Ben_Bitdiddle (Unknown_Role) Buster_Holzbauer (Unknown_Role) Alyssa_P_Hacker (Unknown_Role)
  */
 void movie::print(actors &actor_list) const {
   std::cout << title << std::endl
