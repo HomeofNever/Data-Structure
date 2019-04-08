@@ -20,15 +20,6 @@ const std::vector<std::vector<int>> POSSIBLE_COMBINATION =
         };
 const unsigned int SEED = 1315423911;
 
-query::query(std::string &l) {
-  if (!l.empty()) {
-    str = l;
-    // doHash();
-  } else {
-    std::cerr << "Get Empty String as Query!" << std::endl;
-  }
-}
-
 unsigned int query::doHash(const std::string &str) {
   //  This implementation comes from
   //  http://www.partow.net/programming/hashfunctions/
@@ -43,9 +34,12 @@ unsigned int query::doHash(const std::string &str) {
 void query::getQueryWithoutList(movie *m, std::vector<std::string> &ls) {
   for (int i = 0; i < POSSIBLE_COMBINATION.size(); i++) {
     std::string tmp;
-    insert(POSSIBLE_COMBINATION[i][0], tmp, m->title);
-    insert(POSSIBLE_COMBINATION[i][1], tmp, m->yearOfRelease);
-    insert(POSSIBLE_COMBINATION[i][2], tmp, m->length);
+    insert(POSSIBLE_COMBINATION[i][0],
+            tmp, m->title, UNKNOWN_SINGLE_FIELD);
+    insert(POSSIBLE_COMBINATION[i][1],
+            tmp, m->yearOfRelease, UNKNOWN_SINGLE_FIELD);
+    insert(POSSIBLE_COMBINATION[i][2],
+            tmp, m->length, UNKNOWN_SINGLE_FIELD);
     ls.push_back(tmp);
   }
 }
@@ -58,9 +52,9 @@ void query::getQueryOfLists(movie *m, std::vector<std::string> &ls) {
 
   for (int i = 0; i < POSSIBLE_COMBINATION.size(); i++) {
     std::string tmp;
-    insert(POSSIBLE_COMBINATION[i][0], tmp, genre);
-    insert(POSSIBLE_COMBINATION[i][1], tmp, actor);
-    insert(POSSIBLE_COMBINATION[i][2], tmp, role);
+    insert(POSSIBLE_COMBINATION[i][0], tmp, genre, UNKNOWN_LIST_FIELD);
+    insert(POSSIBLE_COMBINATION[i][1], tmp, actor, UNKNOWN_LIST_FIELD);
+    insert(POSSIBLE_COMBINATION[i][2], tmp, role, UNKNOWN_LIST_FIELD);
     ls.push_back(tmp);
   }
 }
@@ -87,11 +81,13 @@ void query::appendList(const listType &list, std::string &str) {
   }
 }
 
-void query::insert(int s, std::string &str, std::string &field) {
+void query::insert(int s, std::string &str,
+                   const std::string &field,
+                   const std::string &placeHolder) {
   if (s) {
     str += field;
   } else {
-    str += UNKNOWN_LIST_FIELD;
+    str += placeHolder;
   }
   str += HASH_SEPARATOR;
 }

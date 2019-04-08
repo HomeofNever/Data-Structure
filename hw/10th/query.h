@@ -12,8 +12,8 @@
 
 #define HASH_SEPARATOR "-"
 #define DEFAULT_QUERY "DEFAULT_QUERY"
-#define UNKNOWN_SINGLE_FIELD "?"
-#define UNKNOWN_LIST_FIELD "0"
+const std::string UNKNOWN_SINGLE_FIELD = "?";
+const std::string UNKNOWN_LIST_FIELD  = "0";
 
 // Query String should be `title-year-runtime`
 // + `-#ofGenre{...Genres}`
@@ -40,7 +40,9 @@ private:
     static void getQueryWithoutList(movie *m, std::vector<std::string> &ls);
     static void getQueryOfLists(movie *m, std::vector<std::string> &ls);
 
-    static void insert(int s, std::string &str, std::string &field);
+    static void insert(int s, std::string &str,
+                       const std::string &field,
+                       const std::string &placeHolder);
     static void appendList(const listType &list, std::string &str);
 };
 
