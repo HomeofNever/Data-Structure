@@ -46,41 +46,37 @@ public:
         }
     }
 
-    void pop()
-    {
-        assert( !m_heap.empty() );
-        m_heap[0] = m_heap.back();
-        m_heap.pop_back();
-        // Start from 1
-        int index = 1;
+    void percolate_down(int index) {
         while (true) {
-            int left = index * 2;
-            int right = index * 2 + 1;
-            int real_index = index - 1;
-            int real_left = left - 1;
-            int real_right = right - 1;
+            int left = index * 2 + 1;
+            int right = index * 2 + 2;
 
             int larger = index;
-            int real_larger = real_index;
-            if (real_left < m_heap.size() && m_heap[real_left] < m_heap[real_larger]) {
-                real_larger = real_left;
+            if (left < m_heap.size() && m_heap[left] < m_heap[larger]) {
                 larger = left;
             }
 
-            if (real_right < m_heap.size() && m_heap[real_right] < m_heap[real_larger]) {
-                real_larger = real_right;
+            if (right < m_heap.size() && m_heap[right] < m_heap[larger]) {
                 larger = right;
             }
 
-            if (real_larger != real_index) {
-                T tmp = m_heap[real_larger];
-                m_heap[real_larger] = m_heap[real_index];
-                m_heap[real_index] = tmp;
+            if (larger != index) {
+                T tmp = m_heap[larger];
+                m_heap[larger] = m_heap[index];
+                m_heap[index] = tmp;
                 index = larger;
             } else {
                 break;
             }
         }
+    }
+
+    void pop()
+    {
+        assert( !m_heap.empty() );
+        m_heap[0] = m_heap.back();
+        m_heap.pop_back();
+        percolate_down(0);
     }
 
     int size() { return m_heap.size(); }
@@ -120,16 +116,67 @@ public:
 
 };
 
+template <class T>
+void down( int index, int size, std::vector<T> & v )
+{
+    while (true) {
+        int left = index * 2 + 1;
+        int right = index * 2 + 2;
+
+        int larger = index;
+        if (left < size && v[left] > v[larger]) {
+            larger = left;
+        }
+
+        if (right < size && v[right] > v[larger]) {
+            larger = right;
+        }
+
+        if (larger != index) {
+            T tmp = v[larger];
+            v[larger] = v[index];
+            v[index] = tmp;
+            index = larger;
+        } else {
+            break;
+        }
+    }
+}
 
 template <class T>
 void heap_sort( std::vector<T> & v )
 {
-    priority_queue<T> tmp = priority_queue<T>(v);
-
-    for (auto i = v.begin(); i != v.end(); i++) {
-        *i = tmp.top();
-        tmp.pop();
+  int heap_size = 0;
+  // Turn it to tree
+  while (heap_size != v.size()) {
+    if (heap_size != 0) {
+      int current = heap_size;
+      // Find until reach the root
+      while (current != 0) {
+        int parent = (current - 1) / 2;
+        if (v[parent] < v[current]) {
+          T tmp = v[parent];
+          v[parent] = v[current];
+          v[current] = tmp;
+        }
+        current = parent;
+      }
     }
+
+    heap_size++;
+  }
+
+  // Output
+  int output = v.size() - 1;
+  while (output >= 0) {
+    T tmp = v[output];
+    v[output] = v[0];
+    v[0] = tmp;
+    output--;
+    heap_size--;
+
+    down(0, heap_size, v);
+  }
 }
 
 #endif //INC_11TH_PRIORITY_QUEUE_H
