@@ -130,6 +130,7 @@ int main(int argc, char** argv) {
   std::string str;
   while (std::cin >> str) {
     if (str == QUIT) {
+      // Clean up Pointers
       delete_movies(m);
       delete h;
       break;
