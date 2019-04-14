@@ -36,10 +36,12 @@ private:
 
     void resize();
 
-    unsigned int findIndex(std::string &str) const;
+    unsigned int findIndex(const std::string &str) const;
+    static unsigned int findIndex(const std::string &str, const TABLE_TYPE &table);
 
     // Helpers
-    bool is_legal_index(int i) const { return i >= 0 && i < table_size(); }
+    static bool is_legal_index(int i, const TABLE_TYPE &t) { return i >= 0 && i < t.size(); }
+    bool is_legal_index(int i) const { return is_legal_index(i, table); }
     unsigned int table_size() const { return table.size(); }
     double ratio() const { return (float)size_ / (float)table_size(); }
     bool should_resize() const { return ratio() > occupancy; };

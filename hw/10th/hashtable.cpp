@@ -39,35 +39,19 @@ void hashtable::resize() {
   unsigned int table_size = resize_size();
   TABLE_TYPE new_table = TABLE_TYPE(table_size);
   for (TABLE_TYPE::const_iterator i = table.begin(); i != table.end(); i++) {
-    unsigned int hash = query::getHash(i->first);
-    unsigned int index = hash % table_size;
-
-    if (new_table[index].first.empty()) {
-      new_table[index] = *i;
-    } else {
-      while (true) {
-        while (index >= 0 &&
-               index < table_size &&
-               !new_table[index].first.empty()) {
-          index++;
-        }
-
-        if (index >= 0 && index < table_size) {
-          new_table[index] = *i;
-          break;
-        } else {
-          // Reach the end, restart from 0
-          index = 0;
-        }
-      }
+    if (i->first.empty()) {
+      continue; // Jump Over Empty Space
     }
+
+    unsigned int index = findIndex(i->first, new_table);
+    new_table[index] = *i;
   }
 
   table = new_table;
 }
 
-// Find location of a given query should be
-unsigned int hashtable::findIndex(std::string &str) const {
+// Find location of a given query should be by Given HashTable
+unsigned int hashtable::findIndex(const std::string &str, const TABLE_TYPE &table) {
   unsigned int hash = query::getHash(str);
   unsigned int index = hash % table.size();
 
@@ -76,13 +60,13 @@ unsigned int hashtable::findIndex(std::string &str) const {
     return index;
   } else {
     while (true) {
-      while (is_legal_index(index) &&
+      while (is_legal_index(index, table) &&
              ((!(table[index].first == str)) &&
               (!table[index].first.empty()))) {
         index++;
       }
 
-      if (is_legal_index(index)) {
+      if (is_legal_index(index, table)) {
         return index;
       } else {
         // Reach the end, restart from 0
@@ -90,4 +74,9 @@ unsigned int hashtable::findIndex(std::string &str) const {
       }
     }
   }
+}
+
+// Driver Function
+unsigned int hashtable::findIndex(const std::string &str) const {
+  return findIndex(str, table);
 }
