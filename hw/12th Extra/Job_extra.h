@@ -4,10 +4,11 @@
 #include <ctime>    //Needed for std::time_t
 #include <iostream>    //Needed for std::ostream
 #include <vector>
-#include "TimeQueue.h"
-#include "UrgentQueue.h"
+#include "ElegantQueue.h"
 
 class Job{
+    friend bool compareTime(const Job& first, const Job& second);
+    friend bool comparePriotity(const Job& first, const Job& second);
 public:
     Job(int pri, std::time_t time);
     Job(const Job& j);
@@ -17,17 +18,16 @@ public:
     void removeFromUrgent();
     void removeFromTime();
 
-    //Both queue classes will need access.
-    friend class UrgentQueue;
-    friend class TimeQueue;
+    friend class ElegantQueue;
+
 private:
     int job_id;
     int priority;
     std::time_t timestamp; 
-    UrgentQueue* priority_ptr; //Pointer to my UrgentQueue object
-    TimeQueue* time_ptr; //Pointer to my TimeQueue object
-    uq_hook urgent_hook; //location in the UrgentQueue heap
-    tq_hook time_hook; //location in the TimeQueue heap
+    ElegantQueue* priority_ptr; //Pointer to my UrgentQueue object
+    ElegantQueue* time_ptr; //Pointer to my TimeQueue object
+    hook urgent_hook; //location in the UrgentQueue heap
+    hook time_hook; //location in the TimeQueue heap
 
 };
 

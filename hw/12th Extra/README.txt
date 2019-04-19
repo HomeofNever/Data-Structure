@@ -26,13 +26,6 @@ As described in the hw.pdf create a new ElegantQueue that can function as a Time
 as an UrgentQueue. Describe the changes you had to make to main/Job, and how your ElegantQueue
 supports both getting the highest urgency Job and getting the earliest Job.
 
-I would required a string parameter when new ElegantQueue. "TQ" means time queue and "UQ" means urgent queue.
-This type String will be used when printing and updating hook.
-I also added some helper functions: AssignPtr, AssignIndex, etc.
-These function will be called when updating hook, and these function will take actions based on type String of
-current classes.
-Function compare will use different attribute of Job class under different type string.
-
 
 MISC. COMMENTS TO GRADER:  
 (optional, please be concise!)

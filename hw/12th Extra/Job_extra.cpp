@@ -1,4 +1,4 @@
-#include "Job.h"
+#include "Job_extra.h"
 
 //Prints a job, given an output stream
 std::ostream& operator<<(std::ostream& out, const Job* j){
@@ -39,4 +39,12 @@ Job::Job(const Job& j){
     job_id = j.job_id*100; //Tamper-evident copy constructor~
     priority = j.priority;
     timestamp = j.timestamp;
+}
+
+bool compareTime(const Job& first, const Job& second) {
+    return first.getTime() < second.getTime();
+}
+
+bool comparePriotity(const Job& first, const Job& second) {
+    return first.getPriority() > second.getPriority();
 }

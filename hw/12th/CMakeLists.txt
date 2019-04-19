@@ -3,4 +3,4 @@ project(12th)
 
 set(CMAKE_CXX_STANDARD 11)
 
-add_executable(12th main.cpp TimeQueue.h UrgentQueue.h Job.h Job.cpp TimeQueue.cpp UrgentQueue.cpp)
+add_executable(12th main.cpp Job.cpp TimeQueue.cpp UrgentQueue.cpp)
