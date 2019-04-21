@@ -30,32 +30,34 @@ void list_test(const std::string* input_data, int input_count, const std::string
 
     output_count = lst.size();
   } else if (operation == "remove_dups_same_order") {
-    for (list_type::iterator i = lst.begin(); i != lst.end(); i++) {
-      for (list_type::iterator j = ++i; j != lst.end(); j++) {
+    for (list_type::iterator i = lst.begin(); i != (lst.end()--); i++) {
+      list_type::iterator j = i;
+      j++;
+      for (; j != lst.end(); j++) {
         if (*i == *j) {
           j = lst.erase(j);
         }
       }
     }
 
+    output_count = 0;
     list_type::const_iterator i = lst.begin();
-    for (int j = 0; j < input_count; j++) {
-      output_data[j] = *i;
-      i++;
-    }
 
-    output_count = lst.size();
+    for (list_type::const_iterator itr = lst.begin(); itr != lst.end(); itr++) {
+      output_data[output_count] = *itr;
+      output_count++;
+    }
   } else if (operation == "remove_dups_any_order") {
     lst.sort();
     lst.unique();
+    output_count = 0;
     list_type::const_iterator i = lst.begin();
 
-    for (int j = 0; j < input_count; j++) {
-      output_data[j] = *i;
-      i++;
+    for (list_type::const_iterator itr = lst.begin(); itr != lst.end(); itr++) {
+      output_data[output_count] = *itr;
+      output_count++;
     }
 
-    output_count = lst.size();
   } else if (operation == "mode") {
     lst.sort();
     int current_count = 1;
