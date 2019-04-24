@@ -37,10 +37,10 @@ void hash_table_test(const std::string* input_data, int input_count, const std::
     output_count = 0;
     for (int i = 0; i < input_count; i++) {
       hashtable_type::iterator itr = ht.find(input_data[i]);
-      if (itr != ht.end()) {
+      if (itr != ht.end() && itr->second != 0) {
         output_data[output_count] = itr->first;
         output_count++;
-        ht.erase(itr);
+        itr->second = 0;
       }
     }
   } else if (operation == "remove_dups_any_order") {

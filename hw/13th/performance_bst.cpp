@@ -38,11 +38,11 @@ void bst_test(const std::string* input_data, int input_count, const std::string 
   } else if (operation == "remove_dups_same_order") {
     output_count = 0;
     for (int i = 0; i < input_count; i++) {
-      bst_type::iterator itr = mp.find(output_data[i]);
-      if (itr != mp.end()) {
+      bst_type::iterator itr = mp.find(input_data[i]);
+      if (itr != mp.end() && itr->second != 0) {
         output_data[output_count] = itr->first;
         output_count++;
-        mp.erase(itr);
+        itr->second = 0;
       }
     }
   } else if (operation == "remove_dups_any_order") {

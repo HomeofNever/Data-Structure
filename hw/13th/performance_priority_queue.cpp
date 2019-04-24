@@ -17,8 +17,6 @@ void priority_queue_test(const std::string *input_data, int input_count, const s
 
   // HINT: declare your priority_queue like this:
   std::priority_queue<std::string, std::vector<std::string> > pq(input_data, input_data + input_count);
-  for (int i = 0; i < input_count; i++)
-    pq.push(input_data[i]);
 
   if (operation == "sort") {
     for (int i = 0; i < input_count; i++) {
@@ -26,7 +24,7 @@ void priority_queue_test(const std::string *input_data, int input_count, const s
       pq.pop();
     }
 
-    output_count = pq.size();
+    output_count = input_count;
   } else if (operation == "remove_dups_same_order") {
     output_count = 0;
     std::cerr << "Error: Operation does not support." << std::endl;
