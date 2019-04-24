@@ -41,6 +41,32 @@ public:
       return true;
     }
 
+    bool HasARightAngle() {
+      for (int i = 0; i < _points.size(); i++) {
+        if (RightAngle(Angle(
+                _points[i], _points[(i+1) % _points.size()], _points[(i+2) % _points.size()]
+        ))) {
+          return true;
+        }
+      }
+
+      return false;
+    };
+
+    bool HasAllEqualAngles() {
+      double angle = -1;
+      for (int i = 0; i < _points.size(); i++) {
+        if (angle == -1) {
+          angle = Angle(_points[i], _points[(i + 1) % _points.size()], _points[(i + 2) % _points.size()]);
+        }else {
+          if (angle != Angle(_points[i], _points[(i + 1) % _points.size()], _points[(i + 2) % _points.size()])) {
+            return false;
+          }
+        }
+      }
+      return true;
+    }
+
 protected:
     std::string _name;
     std::vector<Point> _points;
@@ -64,7 +90,17 @@ public:
     }
 };
 
-class IsoscelesTriangle : public Triangle {
+class RightTriangle : virtual public Triangle {
+public:
+    RightTriangle(const std::string &name, const std::vector<Point> &points): Triangle(name, points) {
+      if (!HasARightAngle()) {
+        std::cerr << "No 90 found" << std::endl;
+        throw 1;
+      }
+    }
+};
+
+class IsoscelesTriangle : virtual public Triangle {
 public:
     IsoscelesTriangle(const std::string &name, const std::vector<Point> &points): Triangle (name, points) {
       if (!hasEqSide()) {
@@ -74,9 +110,19 @@ public:
     }
 };
 
+class IsoscelesRightTriangle : public RightTriangle, public IsoscelesTriangle {
+public:
+    IsoscelesRightTriangle(const std::string &name, const std::vector<Point> &points) :
+      RightTriangle(name, points), IsoscelesTriangle(name, points), Triangle(name, points) {
+      // Nothing
+    }
+};
+
+
 class EquilateralTriangle : public IsoscelesTriangle {
 public:
-    EquilateralTriangle(const std::string &name, const std::vector<Point> &points): IsoscelesTriangle (name, points) {
+    EquilateralTriangle(const std::string &name, const std::vector<Point> &points):
+      IsoscelesTriangle (name, points), Triangle(name, points) {
       if (!HasAllEqualSides()) {
         std::cerr << "Not All Sides are the same" << std::endl;
         throw 3;
@@ -105,9 +151,9 @@ public:
 
     bool all90() {
       for (int i = 0; i < _points.size(); i++) {
-        if (!EqualAngles(Angle(
+        if (!RightAngle(Angle(
                 _points[i], _points[(i+1) % _points.size()], _points[(i+2) % _points.size()]
-        ), 90)) {
+        ))) {
           return false;
         }
       }
