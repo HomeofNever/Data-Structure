@@ -10,13 +10,14 @@
 
 // defined in performance.cpp
 void usage();
+typedef std::priority_queue<std::string, std::vector<std::string>, std::greater<std::string>> prt_type;
 
 
 void priority_queue_test(const std::string *input_data, int input_count, const std::string &operation,
                          std::string *output_data, int &output_count) {
 
   // HINT: declare your priority_queue like this:
-  std::priority_queue<std::string, std::vector<std::string> > pq(input_data, input_data + input_count);
+  prt_type pq(input_data, input_data + input_count);
 
   if (operation == "sort") {
     for (int i = 0; i < input_count; i++) {

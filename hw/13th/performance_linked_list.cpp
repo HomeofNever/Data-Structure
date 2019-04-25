@@ -33,15 +33,16 @@ void list_test(const std::string* input_data, int input_count, const std::string
     for (list_type::iterator i = lst.begin(); i != (lst.end()--); i++) {
       list_type::iterator j = i;
       j++;
-      for (; j != lst.end(); j++) {
+      for (; j != lst.end();) {
         if (*i == *j) {
           j = lst.erase(j);
+        } else {
+          j++;
         }
       }
     }
 
     output_count = 0;
-    list_type::const_iterator i = lst.begin();
 
     for (list_type::const_iterator itr = lst.begin(); itr != lst.end(); itr++) {
       output_data[output_count] = *itr;
@@ -51,7 +52,6 @@ void list_test(const std::string* input_data, int input_count, const std::string
     lst.sort();
     lst.unique();
     output_count = 0;
-    list_type::const_iterator i = lst.begin();
 
     for (list_type::const_iterator itr = lst.begin(); itr != lst.end(); itr++) {
       output_data[output_count] = *itr;
